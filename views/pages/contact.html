@@ -1,0 +1,115 @@
+<form id="contactForm" name="contactForm" class="form">
+  <header><h2>{{resource.contact}}</h2></header>
+  <div class="row">
+    <label class="col s12 m6 required {{errors.name.invalid}}">
+      {{resource.fullname}}
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="{{contact.name}}"
+        maxlength="100"
+        required="true"
+        onblur="requiredOnBlur(event)"
+        placeholder="{{resource.fullname}}"
+      />
+      {% if errors.country %}
+      <span class="span-error">{{errors.name.message}}</span>
+      {% endif %}
+    </label>
+    <label class="col s12 m6 required {{errors.country.invalid}}">
+      {{resource.country}}
+      <input
+        type="text"
+        id="country"
+        name="country"
+        value="{{contact.country}}"
+        maxlength="100"
+        required
+        onblur="requiredOnBlur(event)"
+        placeholder="{{resource.country}}"
+      />
+      {% if errors.country %}
+      <span class="span-error">{{errors.country.message}}</span>
+      {% endif %}
+    </label>
+    <label class="col s12 m6 required {{errors.company.invalid}}">
+      {{resource.company}}
+      <input
+        type="text"
+        id="company"
+        name="company"
+        value="{{contact.company}}"
+        maxlength="100"
+        required
+        onblur="requiredOnBlur(event)"
+        placeholder="{{resource.company}}"
+      />
+      {% if errors.country %}
+      <span class="span-error">{{errors.country.message}}</span>
+      {% endif %}
+    </label>
+    <label class="col s12 m6 required {{errors.jobTitle.invalid}}">
+      {{resource.job_title}}
+      <input
+        type="text"
+        id="jobTitle"
+        name="jobTitle"
+        value="{{contact.jobTitle}}"
+        maxlength="100"
+        required
+        onblur="requiredOnBlur(event)"
+        placeholder="{{resource.job_title}}"
+      />
+      {% if errors.jobTitle %}
+      <span class="span-error">{{errors.jobTitle.message}}</span>
+      {% endif %}
+    </label>
+    <label class="col s12 m6 required {{errors.email.invalid}}">
+      {{resource.email}}
+      <input
+        type="text"
+        id="email"
+        name="email"
+        value="{{contact.email}}"
+        data-type="email"
+        maxlength="120"
+        required
+        onblur="emailOnBlur(event)"
+        placeholder="{{resource.email}}"
+      />
+      {% if errors.email %}
+      <span class="span-error">{{errors.email.message}}</span>
+      {% endif %}
+    </label>
+    <label class="col s12 m6 required {{errors.phone.invalid}}">
+      {{resource.phone}}
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        value="{{contact.phone}}"
+        maxlength="17"
+        required
+        onfocus="phoneOnFocus(event)"
+        onblur="phoneOnBlur(event)"
+        placeholder="{{resource.phone}}"
+      />
+      {% if errors.phone %}
+      <span class="span-error">{{errors.phone.message}}</span>
+      {% endif %}
+    </label>
+    <label class="col s12 m12 textarea-container required {{errors.message.invalid}}">
+      {{resource.message}}
+      <textarea id="message" name="message" rows="6" maxlength="600" required onblur="requiredOnBlur(event)" placeholder="{{resource.message}}">
+{{contact.message}}</textarea
+      >
+      {% if errors.message %}
+      <span class="span-error">{{errors.message.message}}</span>
+      {% endif %}
+    </label>
+  </div>
+  <footer>
+    <button type="submit" id="btnSubmit" name="btnSubmit" onclick="submitFormData(event)">{{resource.submit}}</button>
+  </footer>
+</form>

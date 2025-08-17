@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="theme-color" content="#fff" />
+    <meta name="color-scheme" content="light" />
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
+    <link rel="stylesheet" href="/fonts/Roboto/font.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>CMS Backoffice</title>
+  </head>
+  <body id="sysBody" class="full-header top-menu">
+    {% include "partials/common.html" %}
+    <div id="root">
+      <div id="pageContainer" class="central-full">
+        <form id="verifyAccountForm" name="verifyAccountForm" class="form" novalidate autocomplete="off" method="post">
+          <div class="view-body row">
+            <img class="logo" src="/images/logo.png" alt="logo" />
+            <h2>{{resource.signup}}</h2>
+            <div class="message alert-info">{{message}}<span onclick="clearMessage(event)"></span></div>
+            <a id="btnSignin" href="/login">{{resource.button_signin}}</a>
+            <a id="btnHome" href="/">{{resource.button_home}}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="/static/script.js"></script>
+  </body>
+</html>

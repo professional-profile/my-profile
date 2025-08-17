@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="theme-color" content="#fff" />
+    <meta name="color-scheme" content="light" />
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
+    <link rel="stylesheet" href="/fonts/Roboto/font.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <!--
+    manifest.json provides metadata used when your web app is installed on a
+    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="/manifest.json" />
+    <title>CMS Backoffice</title>
+  </head>
+  <body id="sysBody" class="full-header top-menu">
+    {% include "partials/common.html" %}
+    <div id="root">
+      <div id="pageContainer" class="central-full">
+        <form id="signupForm" name="signupForm" class="form" novalidate autocomplete="off" method="post">
+          <div class="view-body row">
+            <img class="logo" src="/images/logo.png" alt="logo" />
+            <h2>{{resource.signup}}</h2>
+            <div class="message alert-error">{{message}}<span onclick="clearMessage(event)"></span></div>
+            <label class="col s12 required {{errors.username.invalid}}">
+              {{resource.username}}
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="{{user.username}}"
+                maxlength="100"
+                required
+                placeholder="{{resource.placeholder_username}}"
+              />
+            </label>
+            <label class="col s12 required {{errors.email.invalid}}">
+              {{resource.email}}
+              <input type="text" id="email" name="email" value="{{user.email}}" maxlength="100" required placeholder="{{resource.placeholder_email}}" />
+            </label>
+            <label class="col s12 required {{errors.password.invalid}}">
+              {{resource.password}}
+              <input
+                type="text"
+                id="password"
+                name="password"
+                value="{{user.password}}"
+                maxlength="100"
+                required
+                placeholder="{{resource.placeholder_password}}"
+              />
+            </label>
+            <label class="col s12 required">
+              {{resource.confirm_password}}
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value=""
+                maxlength="100"
+                required
+                placeholder="{{resource.placeholder_confirm_password}}"
+              />
+            </label>
+            <button type="submit" id="btnSignup" name="btnSignup" onclick="signup(event)">{{resource.button_signup}}</button>
+            <a id="btnSignin" href="/login">{{resource.button_signin}}</a>
+            <a id="btnHome" href="/">{{resource.button_home}}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      const resource = {
+        success_sign_up: "{{resource.success_sign_up}}",
+        fail_sign_up: "{{resource.fail_sign_up}}",
+
+        error_required: "{{resource.error_required}}",
+        error_email: "{{resource.error_email}}",
+        error_password: "{{resource.error_password}}",
+        error_equal: "{{resource.error_equal}}",
+
+        error_400: "{{resource.error_400}}",
+        error_network: "{{resource.error_network}}",
+        error_response_body: "{{resource.error_response_body}}",
+        error_submit_failed: "{{resource.error_submit_failed}}",
+      }
+      function getResource() {
+        return resource
+      }
+    </script>
+    <script src="/static/script.js"></script>
+    <script>
+      "use strict"
+      function signup(e) {
+        e.preventDefault()
+        const resource = getResource()
+        const target = e.target
+        const form = target.form
+        const eleMessage = form.querySelector(".message")
+        const txtUsername = getElement(form, "username")
+        const username = txtUsername.value
+        if (username === "") {
+          const label = getLabel(txtUsername)
+          const msg = format(resource.error_required, label)
+          showErrorMessage(eleMessage, msg)
+          return
+        }
+        const txtEmail = getElement(form, "email")
+        const emailLabel = getLabel(txtEmail)
+        const email = txtEmail.value
+        if (email === "") {
+          const msg = format(resource.error_required, emailLabel)
+          showErrorMessage(eleMessage, msg)
+          return
+        }
+        if (!isEmail(email)) {
+          const msg = format(resource.error_email, emailLabel)
+          showErrorMessage(eleMessage, msg)
+          return
+        }
+        const txtPassword = getElement(form, "password")
+        const passwordLabel = getLabel(txtPassword)
+        const password = txtPassword.value
+        if (password === "") {
+          const msg = format(resource.error_required, passwordLabel)
+          showErrorMessage(eleMessage, msg)
+          return
+        }
+        if (!resources.password.test(password)) {
+          const msg = format(resource.error_password, passwordLabel)
+          showErrorMessage(eleMessage, msg)
+          return
+        }
+        const txtConfirmPassword = getElement(form, "confirmPassword")
+        const confirmPassword = txtConfirmPassword.value
+        if (confirmPassword !== password) {
+          const label = getLabel(txtConfirmPassword)
+          const msg = format(resource.error_equal, label, passwordLabel)
+          showErrorMessage(eleMessage, msg)
+          return
+        }
+        const url = getCurrentURL()
+        const user = { username, email, password }
+        showLoading()
+        fetch(url, {
+          method: "POST",
+          headers: getHttpHeaders(),
+          body: JSON.stringify(user),
+        })
+          .then((response) => {
+            if (response.ok) {
+              showInfoMessage(eleMessage, resource.success_sign_up)
+            } else {
+              if (response.status === 409 || response.status === 422) {
+                response
+                  .json()
+                  .then((errors) => {
+                    if (Array.isArray(errors) && errors && errors.length > 0) {
+                      showErrorMessage(eleMessage, "" + errors[0].message)
+                    } else {
+                      showErrorMessage(eleMessage, resource.fail_sign_up)
+                    }
+                  })
+                  .catch((err) => handleError(err, resource.error_response_body))
+              } else {
+                console.error("Error: ", response.statusText)
+                alertError(resource.error_submit_failed, response.statusText)
+              }
+            }
+          })
+          .catch((err) => handleError(err, resource.error_network))
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<div>
+  <header><h2>{{resource.news}}</h2></header>
+  <div>
+    <form id="articlesForm" name="articlesForm" class="form" novalidate>
+      <span class="hidden-message">{{message}}</span>
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group inline advance-search">
+        <label class="col s12 m6">
+          {{resource.published_at_from}}
+          <input
+            type="datetime-local"
+            id="publishedAt_min"
+            name="publishedAt_min"
+            data-field="publishedAt.min"
+            value="{{datetimeToString(filter.publishedAt.min)}}"
+            step=".010"
+          />
+        </label>
+        <label class="col s12 m6">
+          {{resource.published_at_to}}
+          <input
+            type="datetime-local"
+            id="publishedAt_max"
+            name="publishedAt_max"
+            data-field="publishedAt.max"
+            value="{{datetimeToString(filter.publishedAt.max)}}"
+            step=".010"
+          />
+        </label>
+      </section>
+      <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+    </form>
+    <form>
+      <ul class="row list card-grid">
+        {% for item in list %}
+        <li class="col s12 m6 l4 xl3 card">
+          <section>
+            <div class="cover" style="background-image: url('{{ item.thumbnail }}')"></div>
+            <a href="/news/{{ item.id }}" onclick="navigate(event)">{{ item.title }}</a>
+            <p>{{ item.publishedAt }}</p>
+            <p>{{ item.description }}</p>
+          </section>
+        </li>
+        {% endfor %}
+      </ul>
+    </form>
+  </div>
+</div>
