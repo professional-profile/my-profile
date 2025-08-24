@@ -1,5 +1,5 @@
 "use strict"
-var resources = /** @class */ (function () {
+var resources = (function () {
   function resources() {}
   resources.load = function (pageBody) {}
   resources.autoCollapse = false
@@ -16,7 +16,7 @@ var resources = /** @class */ (function () {
   resources.password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
   resources.url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
   resources.digit = /^\d+$/
-  resources.amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/ // const regExp = /\d+\.\d+/;
+  resources.amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/
   resources.digitAndDash = /^[0-9-]*$/
   resources.digitAndChar = /^\w*\d*$/
   resources.checkNumber = /^\d{0,8}$/
@@ -75,13 +75,13 @@ function getHeaders() {
   var lang = getLang()
   if (lang) {
     if (token && token.length > 0) {
-      return { "Content-Language": lang, Authorization: "Bearer " + token } // Include the JWT
+      return { "Content-Language": lang, Authorization: "Bearer " + token }
     } else {
       return { "Content-Language": lang }
     }
   } else {
     if (token && token.length > 0) {
-      return { Authorization: "Bearer " + token } // Include the JWT
+      return { Authorization: "Bearer " + token }
     } else {
       return {}
     }
@@ -284,7 +284,6 @@ function setReadOnly(form) {
         for (var j = 1; j < arguments.length; j++) {
           if (arguments[j] === name_1) {
             skip = true
-            // continue; has bugs => why?
           }
         }
       }
@@ -369,14 +368,7 @@ function registerEvents(form) {
         var parent_1 = ele.parentElement
         var required = ele.getAttribute("required")
         if (parent_1) {
-          if (
-            parent_1.nodeName === "LABEL" &&
-            // tslint:disable-next-line:triple-equals
-            required != null &&
-            required !== undefined &&
-            required != "false" &&
-            !parent_1.classList.contains("required")
-          ) {
+          if (parent_1.nodeName === "LABEL" && required != null && required !== undefined && required != "false" && !parent_1.classList.contains("required")) {
             parent_1.classList.add("required")
           } else if (parent_1.classList.contains("form-group") || parent_1.classList.contains("field")) {
             var firstChild = parent_1.firstChild

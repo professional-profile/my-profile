@@ -25,6 +25,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/change-password", ctx.password.renderChangePassword)
   app.post("/change-password", json(), ctx.password.changePassword)
 
+  app.get("/profiles", ctx.menu.build, ctx.user.search)
+  app.get("/profiles/:id", ctx.menu.build, ctx.user.view)
+
   app.get("/news", ctx.menu.build, ctx.article.search)
   app.get("/news/:id", ctx.menu.build, ctx.article.view)
 

@@ -342,7 +342,7 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
       if (nodeName === "INPUT" && type !== null) {
         nodeName = type.toUpperCase()
       }
-      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT") {
+      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && ele.getAttribute("data-skip") !== "true") {
         switch (type) {
           case "checkbox":
             if (id && name !== id) {
@@ -411,7 +411,28 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
       }
     }
   }
+  form.querySelectorAll(".chip-list").forEach((divChip) => {
+    const name = divChip.getAttribute("data-name")
+    if (name && name.length > 0) {
+      const v = getChipsByElement(divChip)
+      setValue(obj, name, v)
+    }
+  })
   return obj
+}
+function getChips(chipId: string): string[] {
+  const container = document.getElementById(chipId)
+  return getChipsByElement(container)
+}
+function getChipsByElement(container?: Element | null): string[] {
+  if (container) {
+    return Array.from(container.querySelectorAll<HTMLElement>(".chip")).map((chip) => {
+      const v = chip.getAttribute("data-value")
+      return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
 }
 
 function removeMessage(ele?: Element | null): boolean {
@@ -496,6 +517,30 @@ function setInputValue(form: HTMLFormElement | null | undefined, name: string, v
     }
   }
   return false
+}
+
+function checkAll(target: HTMLInputElement, name: string) {
+  const form = target.form
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i] as HTMLInputElement
+      if (ele.name === name) {
+        ele.checked = target.checked
+      }
+    }
+  }
+}
+function getCheckboxValues(form: HTMLFormElement | null | undefined, name: string): string[] {
+  const v: string[] = []
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i] as HTMLInputElement
+      if (ele.name === name && ele.checked) {
+        v.push(ele.value)
+      }
+    }
+  }
+  return v
 }
 
 function getHttpHeaders(): any {

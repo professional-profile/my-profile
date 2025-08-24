@@ -48,16 +48,13 @@ function selectOnChange(ele, attr) {
     ele.setAttribute(at, ele.value)
   }
 }
-//detect Ctrl + [a, v, c, x]
 function detectCtrlKeyCombination(e) {
-  // list all CTRL + key combinations
   var forbiddenKeys = new Array("v", "a", "x", "c")
   var key
   var isCtrl
   var browser = navigator.appName
   if (browser == "Microsoft Internet Explorer") {
     key = e.keyCode
-    // IE
     if (e.ctrlKey) {
       isCtrl = true
     } else {
@@ -66,12 +63,10 @@ function detectCtrlKeyCombination(e) {
   } else {
     if (browser == "Netscape") {
       key = e.which
-      // firefox, Netscape
       if (e.ctrlKey) isCtrl = true
       else isCtrl = false
     } else return true
   }
-  // if ctrl is pressed check if other key is in forbidenKeys array
   if (isCtrl) {
     var chr = String.fromCharCode(key).toLowerCase()
     for (var i = 0; i < forbiddenKeys.length; i++) {
@@ -335,20 +330,17 @@ function decodeFromForm(form, currencySymbol) {
       if (nodeName === "INPUT" && type !== null) {
         nodeName = type.toUpperCase()
       }
-      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT") {
+      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && ele.getAttribute("data-skip") !== "true") {
         switch (type) {
           case "checkbox":
             if (id && name_1 !== id) {
-              // obj[name] = !obj[name] ? [] : obj[name];
-              val = valueOf(obj, name_1) // val = obj[name];
+              val = valueOf(obj, name_1)
               if (!val) {
                 val = []
               }
               if (ele.checked) {
                 val.push(ele.value)
-                // obj[name].push(ele.value);
               } else {
-                // tslint:disable-next-line: triple-equals
                 val = val.filter(function (item) {
                   return item != ele.value
                 })
@@ -370,7 +362,7 @@ function decodeFromForm(form, currencySymbol) {
           case "datetime-local":
             if (ele.value.length > 0) {
               try {
-                val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
+                val = new Date(ele.value)
               } catch (err) {
                 val = null
               }
@@ -402,14 +394,35 @@ function decodeFromForm(form, currencySymbol) {
           v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
           val = isNaN(v) ? null : parseFloat(v)
         }
-        setValue(obj, name_1, val) // obj[name] = val;
+        setValue(obj, name_1, val)
       }
     }
   }
   for (var i = 0; i < len; i++) {
     _loop_1(i)
   }
+  form.querySelectorAll(".chip-list").forEach(function (divChip) {
+    var name = divChip.getAttribute("data-name")
+    if (name && name.length > 0) {
+      var v = getChipsByElement(divChip)
+      setValue(obj, name, v)
+    }
+  })
   return obj
+}
+function getChips(chipId) {
+  var container = document.getElementById(chipId)
+  return getChipsByElement(container)
+}
+function getChipsByElement(container) {
+  if (container) {
+    return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
+      var v = chip.getAttribute("data-value")
+      return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
 }
 function removeMessage(ele) {
   if (ele) {
@@ -493,6 +506,29 @@ function setInputValue(form, name, value) {
   }
   return false
 }
+function checkAll(target, name) {
+  var form = target.form
+  if (form) {
+    for (var i = 0; i < form.length; i++) {
+      var ele = form[i]
+      if (ele.name === name) {
+        ele.checked = target.checked
+      }
+    }
+  }
+}
+function getCheckboxValues(form, name) {
+  var v = []
+  if (form) {
+    for (var i = 0; i < form.length; i++) {
+      var ele = form[i]
+      if (ele.name === name && ele.checked) {
+        v.push(ele.value)
+      }
+    }
+  }
+  return v
+}
 function getHttpHeaders() {
   var token = getToken()
   var lang = getLang()
@@ -525,6 +561,12 @@ function getHttpHeaders() {
 function getConfirmMessage(ele, resource) {
   var confirmMsg = ele.getAttribute("data-message")
   return confirmMsg ? confirmMsg : resource.msg_confirm_save
+}
+function deleteFields(obj, fields) {
+  var l = fields.length
+  for (var i = 0; i < l; i++) {
+    delete obj[fields[i]]
+  }
 }
 function submitFormData(e) {
   e.preventDefault()

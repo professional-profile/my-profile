@@ -40,9 +40,19 @@
     <script src="/static/validator.js"></script>
     <script src="/static/form.js"></script>
     <script src="/static/search.js"></script>
+    <script src="/static/chip.js"></script>
     <script src="/static/layout.js"></script>
     <script>
       window.onload = function () {
+        var pageBody = document.getElementById("pageBody")
+        if (pageBody) {
+          pageBody.querySelectorAll("script").forEach(function (oldScript) {
+            var scriptId = oldScript.getAttribute("id")
+            if (scriptId && scriptId.length > 0) {
+              cacheScript.set(scriptId, "Y")
+            }
+          })
+        }
         setTimeout(function () {
           var _a
           var page = document.getElementById("pageContainer")
@@ -56,6 +66,11 @@
               if (msg && msg.length > 0) {
                 toast(msg)
               }
+            }, 0)
+          }
+          if (pageBody) {
+            setTimeout(function () {
+              resources.load(pageBody)
             }, 0)
           }
           var sysNav = document.getElementById("sysNav")

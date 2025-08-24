@@ -1,4 +1,13 @@
 window.onload = function () {
+  const pageBody = document.getElementById("pageBody")
+  if (pageBody) {
+    pageBody.querySelectorAll("script").forEach((oldScript) => {
+      const scriptId = oldScript.getAttribute("id")
+      if (scriptId && scriptId.length > 0) {
+        cacheScript.set(scriptId, "Y")
+      }
+    })
+  }
   setTimeout(function () {
     const page = document.getElementById("pageContainer")
     if (page) {
@@ -11,6 +20,11 @@ window.onload = function () {
         if (msg && msg.length > 0) {
           toast(msg)
         }
+      }, 0)
+    }
+    if (pageBody) {
+      setTimeout(function () {
+        resources.load(pageBody)
       }, 0)
     }
     const sysNav = document.getElementById("sysNav") as HTMLElement
@@ -33,5 +47,5 @@ window.onload = function () {
         }
       }
     }
-  }, 50)
+  }, 0)
 }

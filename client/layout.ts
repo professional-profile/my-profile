@@ -106,6 +106,7 @@ function toggleMenuItem(e: Event) {
     parent.classList.toggle("open")
   }
 }
+const cacheScript = new Map<string, string>()
 function navigate(e: Event, ignoreLang?: boolean) {
   e.preventDefault()
   const target = e.target as HTMLElement
@@ -137,6 +138,40 @@ function navigate(e: Event, ignoreLang?: boolean) {
                 const span = link.querySelector("span")
                 const title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url)
+                pageBody.querySelectorAll("script").forEach((oldScript) => {
+                  const isInitScript = oldScript.getAttribute("data-init-script")
+                  if (isInitScript === "true") {
+                    const newScript = document.createElement("script")
+                    if (oldScript.src) {
+                      // external script
+                      newScript.src = oldScript.src
+                    } else {
+                      // inline script
+                      newScript.textContent = oldScript.textContent
+                    }
+                    document.body.appendChild(newScript)
+                    oldScript.remove()
+                  } else {
+                    const scriptId = oldScript.getAttribute("id")
+                    if (scriptId && scriptId.length > 0) {
+                      const loaded = cacheScript.get(scriptId)
+                      if (!loaded) {
+                        cacheScript.set(scriptId, "Y")
+                        const newScript = document.createElement("script")
+                        newScript.id = scriptId
+                        if (oldScript.src) {
+                          // external script
+                          newScript.src = oldScript.src
+                        } else {
+                          // inline script
+                          newScript.textContent = oldScript.textContent
+                        }
+                        document.body.appendChild(newScript)
+                        oldScript.remove()
+                      }
+                    }
+                  }
+                })
                 afterLoaded(pageBody)
                 setTimeout(function () {
                   resources.load(pageBody)

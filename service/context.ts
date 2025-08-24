@@ -20,6 +20,7 @@ import { JobController, useJobController } from "./job"
 import { PasswordController } from "./password"
 import { getResourceByLang } from "./resources"
 import { SignUpController } from "./signup"
+import { UserController, useUserController } from "./user"
 
 resources.createValidator = createValidator
 resources.check = check
@@ -40,6 +41,7 @@ export interface ApplicationContext {
   signin: SigninController
   signup: SignUpController
   password: PasswordController
+  user: UserController
   content: ContentController
   article: ArticleController
   job: JobController
@@ -120,12 +122,13 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   )
   const password = new PasswordController(passwordService, logger.error)
 
+  const user = useUserController(db, logger.error)
   const content = useContentController(db, ["vi"], menuItemsLoader)
   const article = useArticleController(db)
   const job = useJobController(db)
   const contact = useContactController(db, logger.error)
 
-  return { health, log, middleware, menu, signin, signup, password, content, article, job, contact }
+  return { health, log, middleware, menu, signin, signup, password, user, content, article, job, contact }
 }
 
 function generate(): string {
