@@ -68,9 +68,61 @@ export class UserController {
         if (!user) {
           renderError404(req, res, resource)
         } else {
+          const x = {
+            userId: "77c35c38c3554ea6906730dbcfeca0f2",
+            id: "77c35c38c3554ea6906730dbcfeca0f2",
+            username: "minhduc1405",
+            displayName: "Duc Nguyen",
+            email: "minhduc1405@gmail.com",
+            lookingFor: ["friends", "football team", "room mate", "basketball team"],
+            interests: ["money", "basketball", "football"],
+            gallery: [
+              { url: "https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/77c35c38c3554ea6906730dbcfeca0f2_d8Z1-zIut", type: "image" },
+              { url: "https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/77c35c38c3554ea6906730dbcfeca0f2_4LrDMmb-f.mp4", type: "video" },
+              { type: "youtube", url: "https://www.youtube.com/embed/UYBRXOxVDIA" },
+              { url: "https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/77c35c38c3554ea6906730dbcfeca0f2_45jv6Ewm8", type: "image" },
+              { url: "https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/77c35c38c3554ea6906730dbcfeca0f2_wh4r6Wzm2", type: "image" },
+              {
+                source: null,
+                url: "https://storage.googleapis.com/go-firestore-rest-api.appspot.com/gallery/77c35c38c3554ea6906730dbcfeca0f2_Os3wTEtrY",
+                type: "image",
+              },
+            ],
+            coverURL: "https://storage.googleapis.com/go-firestore-rest-api.appspot.com/cover/77c35c38c3554ea6906730dbcfeca0f2_dHIRtsb92_1500x500 (1).jpg",
+            bio: "i'm programer ac",
+            skills: [
+              { hirable: true, skill: "GO" },
+              { hirable: true, skill: "Java" },
+              { hirable: true, skill: "nodejs" },
+              { hirable: true, skill: "Javascripts" },
+              { hirable: true, skill: "Reactjs" },
+              { hirable: true, skill: "Angular" },
+              { hirable: false, skill: "Vuejs" },
+            ],
+            occupation: "Developer",
+            imageURL: "https://storage.googleapis.com/go-firestore-rest-api.appspot.com/image/77c35c38c3554ea6906730dbcfeca0f2_IFGjoPlXj_png.png",
+            familyName: "Nguyen",
+            givenName: "Duc",
+            links: {
+              facebook: "facebook",
+              linkedin: "linkedin",
+              instagram: "instagram",
+              twitter: "twitter",
+              skype: "skype",
+              dribble: "dribble",
+              google: "google",
+            },
+            achievements: [
+              { subject: "Star Performer 2023", description: "I got Star Performer 2023", highlight: true },
+              { subject: "Star Performer 2024", description: "I got Star Performer 2024" },
+            ],
+            facebookLink: "https://www.facebook.com/minhduc1405",
+            linkedinLink: "https://www.linkedin.com/in/duc-nguyen-437240239/",
+            xlink: "https://x.com/minhduc1405",
+          }
           render(req, res, "user", {
             resource,
-            user: escape(user),
+            user: escape(x),
           })
         }
       })
