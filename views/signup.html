@@ -94,85 +94,89 @@
     </script>
     <script src="/static/script.js"></script>
     <script>
-      "use strict"
       function signup(e) {
         e.preventDefault()
-        const resource = getResource()
-        const target = e.target
-        const form = target.form
-        const eleMessage = form.querySelector(".message")
-        const txtUsername = getElement(form, "username")
-        const username = txtUsername.value
+        var resource = getResource()
+        var target = e.target
+        var form = target.form
+        var eleMessage = form.querySelector(".message")
+        var txtUsername = getElement(form, "username")
+        var username = txtUsername.value
         if (username === "") {
-          const label = getLabel(txtUsername)
-          const msg = format(resource.error_required, label)
+          var label = getLabel(txtUsername)
+          var msg = format(resource.error_required, label)
           showErrorMessage(eleMessage, msg)
           return
         }
-        const txtEmail = getElement(form, "email")
-        const emailLabel = getLabel(txtEmail)
-        const email = txtEmail.value
+        var txtEmail = getElement(form, "email")
+        var emailLabel = getLabel(txtEmail)
+        var email = txtEmail.value
         if (email === "") {
-          const msg = format(resource.error_required, emailLabel)
+          var msg = format(resource.error_required, emailLabel)
           showErrorMessage(eleMessage, msg)
           return
         }
         if (!isEmail(email)) {
-          const msg = format(resource.error_email, emailLabel)
+          var msg = format(resource.error_email, emailLabel)
           showErrorMessage(eleMessage, msg)
           return
         }
-        const txtPassword = getElement(form, "password")
-        const passwordLabel = getLabel(txtPassword)
-        const password = txtPassword.value
+        var txtPassword = getElement(form, "password")
+        var passwordLabel = getLabel(txtPassword)
+        var password = txtPassword.value
         if (password === "") {
-          const msg = format(resource.error_required, passwordLabel)
+          var msg = format(resource.error_required, passwordLabel)
           showErrorMessage(eleMessage, msg)
           return
         }
         if (!resources.password.test(password)) {
-          const msg = format(resource.error_password, passwordLabel)
+          var msg = format(resource.error_password, passwordLabel)
           showErrorMessage(eleMessage, msg)
           return
         }
-        const txtConfirmPassword = getElement(form, "confirmPassword")
-        const confirmPassword = txtConfirmPassword.value
+        var txtConfirmPassword = getElement(form, "confirmPassword")
+        var confirmPassword = txtConfirmPassword.value
         if (confirmPassword !== password) {
-          const label = getLabel(txtConfirmPassword)
-          const msg = format(resource.error_equal, label, passwordLabel)
+          var label = getLabel(txtConfirmPassword)
+          var msg = format(resource.error_equal, label, passwordLabel)
           showErrorMessage(eleMessage, msg)
           return
         }
-        const url = getCurrentURL()
-        const user = { username, email, password }
+        var url = getCurrentURL()
+        var user = { username: username, email: email, password: password }
         showLoading()
         fetch(url, {
           method: "POST",
           headers: getHttpHeaders(),
           body: JSON.stringify(user),
         })
-          .then((response) => {
+          .then(function (response) {
+            hideLoading()
             if (response.ok) {
               showInfoMessage(eleMessage, resource.success_sign_up)
             } else {
               if (response.status === 409 || response.status === 422) {
                 response
                   .json()
-                  .then((errors) => {
+                  .then(function (errors) {
                     if (Array.isArray(errors) && errors && errors.length > 0) {
                       showErrorMessage(eleMessage, "" + errors[0].message)
                     } else {
                       showErrorMessage(eleMessage, resource.fail_sign_up)
                     }
                   })
-                  .catch((err) => handleError(err, resource.error_response_body))
+                  .catch(function (err) {
+                    return handleError(err, resource.error_response_body)
+                  })
               } else {
                 console.error("Error: ", response.statusText)
                 alertError(resource.error_submit_failed, response.statusText)
               }
             }
           })
-          .catch((err) => handleError(err, resource.error_network))
+          .catch(function (err) {
+            return handleError(err, resource.error_network)
+          })
       }
     </script>
   </body>

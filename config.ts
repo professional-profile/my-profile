@@ -22,7 +22,7 @@ export const config = {
     size: "size",
   },
   db: {
-    connectionString: "postgres://postgres:abcd1234@localhost/cms",
+    connectionString: "postgres://postgres:abcd1234@localhost/my-profile",
   },
   auth: {
     token: {
@@ -42,7 +42,6 @@ export const config = {
       id: "id",
       username: "username",
       email: "email",
-      userType: "userType",
     },
     account: {
       displayName: "displayname",
@@ -56,7 +55,6 @@ export const config = {
     db: {
       user: "users",
       password: "passwords",
-      id: "user_id",
       username: "username",
       status: "status",
       successTime: "success_time",
@@ -65,11 +63,11 @@ export const config = {
       lockedUntilTime: "locked_until_time",
     },
     query: `
-      select u.user_id, u.username, u.display_name, email, u.status, u.max_password_age, 
+      select u.id, u.username, u.display_name, email, u.status, u.max_password_age, 
         p.password, p.success_time, p.fail_time, p.fail_count, p.locked_until_time, p.changed_time
       from users u
       inner join passwords p
-        on u.user_id = p.user_id
+        on u.id = p.id
       where username = $1`,
     expires: 500,
     template: {
@@ -78,7 +76,6 @@ export const config = {
     },
   },
   map: {
-    user_id: "id",
     display_name: "displayName",
     max_password_age: "maxPasswordAge",
     success_time: "successTime",
@@ -98,17 +95,10 @@ export const config = {
     fields: {
       maxPasswordAge: "max_password_age",
       contact: "email",
-      id: "user_id",
     },
     map2: {
       firstName: "surname",
       lastName: "givenName",
-    },
-    track: {
-      createdAt: "created_at",
-      createdBy: "created_by",
-      updatedAt: "updated_at",
-      updatedBy: "updated_by",
     },
     url: "http://localhost:8084/verify-account",
     template: {
@@ -133,7 +123,6 @@ Nếu đường link đó không hoạt động, hãy sao chép đường link �
       password: "passwords",
     },
     fields: {
-      id: "user_id",
       contact: "email",
       changedTime: "changed_time",
       failCount: "fail_count",
