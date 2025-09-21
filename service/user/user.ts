@@ -1,7 +1,7 @@
 import { Attributes, Filter, Result, SearchResult } from "onecore"
 
 export interface User {
-  userId: string
+  id: string
   username: string
   email?: string
   phone?: string
@@ -47,8 +47,7 @@ export interface UserService {
 }
 
 export const userModel: Attributes = {
-  userId: {
-    column: "user_id",
+  id: {
     key: true,
     match: "equal",
     length: 40,

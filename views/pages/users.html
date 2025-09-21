@@ -31,7 +31,7 @@
       {% for user in list %}
       <li class="col s12 m6 l4 xl3 img-item">
         <img src="{{user.imageURL}}" alt="user" class="round-border" />
-        <a href="/profiles/{{user.userId}}">{{user.displayName}}</a>
+        <a href="/profiles/{{user.id}}">{{user.email}}</a>
         <button class="btn-detail"></button>
         <p>{{user.email}}</p>
       </li>

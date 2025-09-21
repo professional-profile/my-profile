@@ -66,7 +66,7 @@ export class SqlUserRepository implements UserRepository {
       }
       const user = users[0]
       const q = `select role_id from user_roles where user_id = ${this.db.param(1)}`
-      return this.db.query<UserRole>(q, [user.userId], this.roleMap).then((roles) => {
+      return this.db.query<UserRole>(q, [user.id], this.roleMap).then((roles) => {
         if (roles && roles.length > 0) {
           user.roles = roles.map((i) => i.roleId)
         }
@@ -81,7 +81,7 @@ export class SqlUserRepository implements UserRepository {
       return Promise.resolve(-1)
     }
     stmts.push(stmt)
-    insertUserRoles(stmts, user.userId, user.roles, this.db.param)
+    insertUserRoles(stmts, user.id, user.roles, this.db.param)
     return this.db.execBatch(stmts)
   }
   update(user: User): Promise<number> {
@@ -91,8 +91,8 @@ export class SqlUserRepository implements UserRepository {
       return Promise.resolve(-1)
     }
     const query = `delete from user_roles where user_id = ${this.db.param(1)}`
-    stmts.push({ query, params: [user.userId] })
-    insertUserRoles(stmts, user.userId, user.roles, this.db.param)
+    stmts.push({ query, params: [user.id] })
+    insertUserRoles(stmts, user.id, user.roles, this.db.param)
     return this.db.execBatch(stmts)
   }
   patch(user: User): Promise<number> {
