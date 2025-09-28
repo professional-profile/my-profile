@@ -14,9 +14,6 @@ export class UserUseCase extends GenericUseCase<User, string> implements UserSer
   search(filter: UserFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<User>> {
     return this.repo.search(filter, limit, page, fields)
   }
-  assign(id: string, roles: string[]): Promise<number> {
-    return this.repo.assign(id, roles)
-  }
 }
 
 export function useUserController(db: DB, log: Log): UserController {

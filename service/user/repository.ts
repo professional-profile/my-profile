@@ -40,9 +40,8 @@ export class SqlUserRepository implements UserRepository {
     return this.find(filter, limit, page, fields)
   }
   load(id: string): Promise<User | null> {
-    return this.db.query<User>(`select * from users where id = ${this.db.param(1)}`, [id], this.map).then((users) => {
-      return !users || users.length === 0 ? null : users[0]
-    })
+    const query = `select * from users where id = ${this.db.param(1)}`
+    return this.db.query<User>(query, [id], this.map).then((users) => (users && users.length > 0 ? users[0] : null))
   }
   create(user: User): Promise<number> {
     const stmts: Statement[] = []
@@ -69,7 +68,7 @@ export class SqlUserRepository implements UserRepository {
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = []
-    stmts.push({ query: `delete from users where user_id = ${this.db.param(1)}`, params: [id] })
+    stmts.push({ query: `delete from users where id = ${this.db.param(1)}`, params: [id] })
     return this.db.execBatch(stmts)
   }
   assign(id: string, roles: string[]): Promise<number> {
