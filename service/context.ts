@@ -14,7 +14,6 @@ import { check } from "types-validation"
 import { createValidator } from "xvalidators"
 import { ArticleController, useArticleController } from "./article"
 import { SigninController } from "./authentication"
-import { ContactController, useContactController } from "./contact"
 import { ContentController, useContentController } from "./content"
 import { JobController, useJobController } from "./job"
 import { PasswordController } from "./password"
@@ -45,7 +44,6 @@ export interface ApplicationContext {
   content: ContentController
   article: ArticleController
   job: JobController
-  contact: ContactController
 }
 
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config): ApplicationContext {
@@ -126,9 +124,8 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const content = useContentController(db, ["vi"], menuItemsLoader)
   const article = useArticleController(db)
   const job = useJobController(db)
-  const contact = useContactController(db, logger.error)
 
-  return { health, log, middleware, menu, signin, signup, password, user, content, article, job, contact }
+  return { health, log, middleware, menu, signin, signup, password, user, content, article, job }
 }
 
 function generate(): string {

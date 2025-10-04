@@ -33,7 +33,6 @@ export class SqlUserRepository implements UserRepository {
     this.update = this.update.bind(this)
     this.patch = this.patch.bind(this)
     this.delete = this.delete.bind(this)
-    this.assign = this.assign.bind(this)
   }
 
   search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
@@ -44,24 +43,18 @@ export class SqlUserRepository implements UserRepository {
     return this.db.query<User>(query, [id], this.map).then((users) => (users && users.length > 0 ? users[0] : null))
   }
   create(user: User): Promise<number> {
-    const stmts: Statement[] = []
     const stmt = buildToInsert(user, "users", userModel, this.db.param)
     if (!stmt) {
       return Promise.resolve(-1)
     }
-    stmts.push(stmt)
-    insertUserRoles(stmts, user.id, user.roles, this.db.param)
-    return this.db.execBatch(stmts, true)
+    return this.db.exec(stmt.query, stmt.params)
   }
   update(user: User): Promise<number> {
-    const stmts: Statement[] = []
     const stmt = buildToUpdate(user, "users", userModel, this.db.param)
     if (!stmt) {
       return Promise.resolve(-1)
     }
-    stmts.push({ query: `delete from user_roles where user_id = ${this.db.param(1)}`, params: [user.id] })
-    insertUserRoles(stmts, user.id, user.roles, this.db.param)
-    return this.db.execBatch(stmts, true)
+    return this.db.exec(stmt.query, stmt.params)
   }
   patch(user: User): Promise<number> {
     return this.update(user)
@@ -69,15 +62,6 @@ export class SqlUserRepository implements UserRepository {
   delete(id: string): Promise<number> {
     const stmts: Statement[] = []
     stmts.push({ query: `delete from users where id = ${this.db.param(1)}`, params: [id] })
-    return this.db.execBatch(stmts)
-  }
-  assign(id: string, roles: string[]): Promise<number> {
-    const stmts: Statement[] = []
-    const query = `delete from user_roles where user_id = ${this.db.param(1)}`
-    stmts.push({ query, params: [id] })
-    if (roles && roles.length > 0) {
-      insertUserRoles(stmts, id, roles, this.db.param)
-    }
     return this.db.execBatch(stmts)
   }
 }

@@ -44,7 +44,7 @@ export const config = {
       email: "email",
     },
     account: {
-      displayName: "displayname",
+      displayName: "display_name",
     },
     userStatus: {
       activated: "A",
@@ -55,6 +55,7 @@ export const config = {
     db: {
       user: "users",
       password: "passwords",
+      id: "id",
       username: "username",
       status: "status",
       successTime: "success_time",
@@ -76,6 +77,7 @@ export const config = {
     },
   },
   map: {
+    id: "id",
     display_name: "displayName",
     max_password_age: "maxPasswordAge",
     success_time: "successTime",
