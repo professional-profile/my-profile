@@ -33,6 +33,7 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   }
   if (obj) {
     obj.menu = res.locals.menu
+    obj.account = res.locals.account
     obj.checked = checked
     obj.datetimeToString = datetimeToString
     obj.formatLongDateTime = formatLongDateTime

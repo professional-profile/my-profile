@@ -64,8 +64,8 @@ export interface UserFilter extends Filter {
   email?: string
   phone?: string
   dateOfBirth?: DateRange
-  interests: string[]
-  skills: Skill[]
+  interests?: string[]
+  skills?: Skill[]
 }
 
 export interface UserRepository {

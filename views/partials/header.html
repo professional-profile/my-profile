@@ -35,8 +35,10 @@
             <li onclick="changeMode(event)" data-dark="{{resource.dark_mode}}" data-light="{{resource.light_mode}}">
               <i class="material-icons">timelapse</i><span>{{resource.dark_mode}}</span>
             </li>
+            {% if account %}
             <hr style="margin: 0px" />
-            <li><i class="material-icons">account_circle</i><a href="/settings">kaka</a></li>
+            <li><i class="material-icons">account_circle</i><a href="/my-profile">{{account.username}}</a></li>
+            {% endif %}
             <hr style="margin: 0px" />
             <li><i class="material-icons">exit_to_app</i><button>Sign out</button></li>
           </ul>

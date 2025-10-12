@@ -1,0 +1,118 @@
+<div class="profile view-container">
+  <form id="userForm" name="userForm">
+    <header class="border-bottom-highlight">
+      <div class="cover-image">
+        <img src="https://pre00.deviantart.net/6ecb/th/pre/f/2013/086/3/d/facebook_cover_1_by_alphacid-d5zfrww.jpg" alt="cover" />
+        <div class="contact-group">
+          <button id="btnPhone" name="btnPhone" class="btn-phone"></button><button id="btnEmail" name="btnEmail" class="btn-email"></button>
+        </div>
+        <button id="btnFollow" name="btnFollow" class="btn-follow">Follow</button>
+      </div>
+      <button id="btnCamera" name="btnCamera" class="btn-camera"></button>
+      <div class="avatar-wrapper">
+        <img class="avatar" src="https://avatars.githubusercontent.com/u/37324393?v=4" alt="avatar" />
+        <img class="profile-status" src="/static/online.svg" alt="status" />
+      </div>
+      <div class="profile-title">
+        <h4>{{user.displayName}}</h4>
+        <p>https://github.com/minhduc140583</p>
+      </div>
+      <div class="profile-followers">
+        <p><i class="material-icons highlight">group</i> 7 followers</p>
+        <p><i class="material-icons highlight">group_add</i> 10 following</p>
+      </div>
+    </header>
+    <div class="row list card-grid">
+      <div class="col m12 l4">
+        <div class="card">
+          <header>
+            <i class="material-icons highlight">account_box</i>Basic Info
+            <button type="button" id="btnBasicInfo" name="btnBasicInfo" class="btn-edit"></button>
+          </header>
+          <p>Developer Programmer</p>
+          <p>TMA</p>
+        </div>
+        <div class="card">
+          <header>
+            <i class="material-icons highlight">local_mall</i>Skills
+            <button type="button" id="btnSkill" name="btnSkill" class="btn-edit"></button>
+          </header>
+          <section>
+            <p>javascripts<i hidden="" class="star highlight"></i></p>
+            <p>reactjs<i hidden="" class="star highlight"></i></p>
+            <p>ruby<i hidden="" class="star highlight"></i></p>
+            <p>Scala<i class="star highlight"></i></p>
+            <p>git<i class="star highlight"></i></p>
+            <hr />
+            <p class="description"><i class="star highlight"></i></p>
+          </section>
+        </div>
+        <div class="card">
+          <header>
+            <i class="material-icons highlight">find_in_page</i>Looking for<button
+              type="button"
+              id="btnLookingFor"
+              name="btnLookingFor"
+              class="btn-edit"
+            ></button>
+          </header>
+          <section>
+            {{generateTags(user.lookingFor, true)}}
+            <p>friends</p>
+            <p>football team</p>
+            <p>room mate</p>
+            <p>basketball team</p>
+          </section>
+        </div>
+        <div class="card">
+          <header>
+            <i class="material-icons highlight">chat</i>Social
+            <button type="button" id="btnSocial" name="btnSocial" class="btn-edit"></button>
+          </header>
+          <div>
+            <a href="https://facebookcom/minhduc" title="facebook" target="_blank" rel="noreferrer"><i class="fa fa-facebook"></i><span>facebook</span></a>
+            <a href="https://linkedin.com/minhduc1405" title="Linked in" target="_blank" rel="noreferrer"
+              ><i class="fa fa-linkedin"></i><span>Linked in</span></a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="col m12 l8">
+        <div class="card border-bottom-highlight">
+          <header><i class="material-icons highlight">person</i>About<button type="button" id="btnBio" name="btnBio" class="btn-edit"></button></header>
+          <p>i'm programer ac</p>
+        </div>
+        <div class="card border-bottom-highlight">
+          <header>
+            <i class="material-icons highlight">flash_on</i>Interests
+            <button type="button" id="btnInterest" name="btnInterest" class="btn-edit"></button>
+          </header>
+          <section class="row">
+            {{generateTags(user.interests, true)}}
+            <span class="col s4">money</span><span class="col s4">basketball</span><span class="col s4">football</span>
+          </section>
+        </div>
+        <div class="card border-bottom-highlight">
+          <header>
+            <i class="material-icons highlight">beenhere</i>Achievements<button
+              type="button"
+              id="btnAchievement"
+              name="btnAchievement"
+              class="btn-edit"
+            ></button>
+          </header>
+          <section>
+            <h3>Star Performer 2023<i class="star highlight float-right"></i></h3>
+            <p class="description">I got Star Performer 2023</p>
+            <hr />
+          </section>
+          <section>
+            <h3>Star Performer 2024</h3>
+            <p class="description">I got Star Performer 2024</p>
+            <hr />
+          </section>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
