@@ -64,7 +64,7 @@ export class ArticleController {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
         const search = getSearch(req.url)
-        render(req, res, "news", {
+        render(req, res, "my-articles", {
           resource,
           limits: resources.limits,
           filter,
@@ -89,7 +89,7 @@ export class ArticleController {
           renderError404(req, res, resource)
         } else {
           article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-          render(req, res, "article", { resource, article })
+          render(req, res, "my-article", { resource, article })
         }
       })
       .catch((err) => renderError500(req, res, resource, err))

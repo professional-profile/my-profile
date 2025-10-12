@@ -80,7 +80,7 @@ export class JobController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const id = req.params["id"]
+    const id = req.params.id
     this.jobService
       .load(id)
       .then((job) => {

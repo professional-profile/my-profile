@@ -7,12 +7,11 @@ create table articles (
   tags character varying[],
   thumbnail varchar(400),
   high_thumbnail varchar(400),
+  author_id varchar(40),
   status char(1),
-  created_by varchar(40),
-  created_at timestamptz,
-  updated_by varchar(40),
-  updated_at timestamptz
+  created_at timestamptz
 );
+
 
 insert into articles (id,title,description,content,published_at,tags,thumbnail,high_thumbnail,status) values
 	 ('20240722001','FPT to Bolster Growth among Francophone Community, Emphasizing Workforce Development','FPT Corporation recently hosted the FPT Francophone Day, a dynamic networking and culture exchange platform for the French-speaking community in Vietnam. The event also marked the inauguration of FPT Francophone Association, highlighting the IT firm’s commitment to fostering its French-proficient professionals and nurturing opportunities for business and culture exchange.','<p>
@@ -98,7 +97,7 @@ insert into articles (id,title,description,content,published_at,tags,thumbnail,h
   Nanning, Suzhou, and Dalian. The IT firm is currently a strategic partner with leading Chinese firms in the automotive and semiconductor industries
   and actively collaborates with universities to develop a strong local talent pool.
 </p>
-<p>FPT’s new office is located at Zhonggeng Global Creative Center, Lane 166, Minhong Road, Minhang District, Shanghai 201102, China.</p>','2024-08-26 16:49:52.453+07','{}','https://fptsoftware.com/-/media/project/fpt-software/global/fpt_shanghai.webp','https://fptsoftware.com/-/media/project/fpt-software/global/fpt_shanghai.webp','A'),
+<p>FPT’s new office is located at Zhonggeng Global Creative Center, Lane 166, Minhong Road, Minhang District, Shanghai 201102, China.</p>','2024-08-26 16:49:52.453+07','{Shanghai,"FPT China","new office"}','https://fptsoftware.com/-/media/project/fpt-software/global/fpt_shanghai.webp','https://fptsoftware.com/-/media/project/fpt-software/global/fpt_shanghai.webp','A'),
 	 ('20240819001','FPT Software and Meerana Technologies Partner to Drive Digital Transformation in UAE','This partnership aims to expand FPT Software’s footprint in the region and address the market needs across various sectors, including Utilities, BFSI, Logistics, Transportation, and more.','<p>
   Global IT services provider FPT Software recently announced a strategic partnership with Meerana Technologies, an emerging provider of smart IT
   solutions. This collaboration not only strengthens FPT Software’s presence in the United Arab Emirates but also aligns with FPT Software’s vision of
@@ -172,7 +171,7 @@ insert into articles (id,title,description,content,published_at,tags,thumbnail,h
   climate change by providing more plant-based food at their dining premises. Launched in 2018, the campaign has helped prevent over 3.3 million lbs
   of animal products from being served at more than 50 institutions in India. Starting in 2023, the Green Tuesday Initiative extended its operation to
   Vietnam, one of the world’s top five most vulnerable countries to climate change.
-</p>','2024-07-17 17:08:14.069+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/green-tuesday-initiative.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/green-tuesday-initiative.webp','A'),
+</p>','2024-07-17 17:08:14.069+07','{"Meerana Technologies",Meerana,UAE}','https://fptsoftware.com/-/media/project/fpt-software/fso/green-tuesday-initiative.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/green-tuesday-initiative.webp','A'),
 	 ('20240930001','FPT Software Wins Job Creation Award at ESGBusiness Awards 2024','This recognition highlights FPT Software''s commitment to nurturing top talent and fostering diverse and inclusive workplaces across the global IT industry.','<figure>
   <img src="https://fptsoftware.com/-/media/project/fpt-software/fso/1.webp"></img>
 </figure>
@@ -636,3 +635,5 @@ insert into articles (id,title,description,content,published_at,tags,thumbnail,h
   With sustainability at the heart of its operation, the Environmental Policy reflects FPT''s consistent strategy of aligning company growth with
   social responsibility, while also delivering a greater impact for its customers, accompanying them in their green transformation journey.
 </p>','2024-05-30 17:25:05.967+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/fpt-issues-first-ever-environmental-policy.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/fpt-issues-first-ever-environmental-policy.webp','A');
+
+update articles set created_at = published_at, status = 'P', author_id = '241Wmn_JTF';

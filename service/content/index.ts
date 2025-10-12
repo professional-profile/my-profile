@@ -35,7 +35,7 @@ export class ContentController {
     this.view = this.view.bind(this)
   }
   view(req: Request, res: Response) {
-    let id = req.params["id"]
+    let id = req.params.id
     let lang = req.params["lang"]
     if (!id && !lang) {
       id = "home"
