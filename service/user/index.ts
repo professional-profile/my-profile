@@ -1,6 +1,7 @@
 import { GenericUseCase, Log, SearchResult } from "onecore"
 import { DB, SearchBuilder } from "query-core"
 import { UserController } from "./controller"
+import { buildQuery } from "./query"
 import { SqlUserRepository } from "./repository"
 import { User, UserFilter, userModel, UserRepository, UserService } from "./user"
 
@@ -17,7 +18,7 @@ export class UserUseCase extends GenericUseCase<User, string> implements UserSer
 }
 
 export function useUserController(db: DB, log: Log): UserController {
-  const builder = new SearchBuilder<User, UserFilter>(db.query, "users", userModel, db.driver)
+  const builder = new SearchBuilder<User, UserFilter>(db.query, "users", userModel, db.driver, buildQuery)
   const repo = new SqlUserRepository(builder.search, db)
   const service = new UserUseCase(repo)
   return new UserController(service, log)

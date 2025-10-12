@@ -20,6 +20,7 @@ import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Job, JobFilter, jobModel, JobRepository, JobService } from "./job"
+import { buildQuery } from "./query"
 export * from "./job"
 
 export class SqlJobRepository extends Repository<Job, string> implements JobRepository {
@@ -95,7 +96,7 @@ export class JobController {
 }
 
 export function useJobController(db: DB): JobController {
-  const builder = new SearchBuilder<Job, JobFilter>(db.query, "jobs", jobModel, db.driver)
+  const builder = new SearchBuilder<Job, JobFilter>(db.query, "jobs", jobModel, db.driver, buildQuery)
   const repository = new SqlJobRepository(db)
   const service = new JobUseCase(builder.search, repository)
   return new JobController(service)

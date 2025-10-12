@@ -20,6 +20,7 @@ import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
+import { buildQuery } from "./query"
 export * from "./article"
 
 export class SqlArticleRepository extends Repository<Article, string> implements ArticleRepository {
@@ -94,7 +95,7 @@ export class ArticleController {
 }
 
 export function useArticleController(db: DB): ArticleController {
-  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "articles", articleModel, db.driver)
+  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "articles", articleModel, db.driver, buildQuery)
   const repository = new SqlArticleRepository(db)
   const service = new ArticleUseCase(builder.search, repository)
   return new ArticleController(service)
