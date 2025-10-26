@@ -1,6 +1,6 @@
 import { Authenticator } from "authen-service"
 import { Request, Response } from "express"
-import { handleError } from "express-ext"
+import { handleError, query } from "express-ext"
 import { Attributes, Log, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource } from "../resources"
@@ -38,7 +38,7 @@ export class SigninController {
     res.render("signin", {
       resource,
       user: {
-        username: "kaka",
+        username: "minhduc",
         password: "Password1!",
       },
       message: "Enter login",
@@ -47,7 +47,7 @@ export class SigninController {
   submit(req: Request, res: Response) {
     const resource = getResource(req)
     const user: User = req.body
-    console.log("user " + JSON.stringify(user))
+    console.log("User = " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true)
     if (errors.length > 0) {
       console.log("Login error: " + JSON.stringify(errors))
@@ -56,11 +56,31 @@ export class SigninController {
       this.authenticator
         .authenticate(user)
         .then((result) => {
-          console.log("Result " + JSON.stringify(result))
-          if (result.status === 1) {
-            res.status(200).json(result.user).end()
+          if (result.status == 1 && result.user) {
+            const account = result.user
+            const token = account.token
+            account.token = undefined
+
+            console.log("Login successfully with token " + token)
+            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: 15 * 60 * 1000 })
+            let redirectUrl = query(req, "redirectUrl")
+            if (!redirectUrl || redirectUrl == "") {
+              redirectUrl = "news"
+            }
+            res.send(`
+              <html>
+                <body>
+                  <script>
+                    sessionStorage.setItem('token', ${JSON.stringify(token)});
+                    window.location.href = '/${redirectUrl}';
+                  </script>
+                </body>
+              </html>
+            `)
           } else {
-            res.status(403).json(result).end()
+            let key: string | undefined = map["" + result.status]
+            const message = key ? resource[key] : resource.fail_authentication
+            res.render("signin", { resource, user, message })
           }
         })
         .catch((err) => handleError(err, res, this.log))

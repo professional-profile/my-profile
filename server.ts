@@ -1,4 +1,5 @@
 import { merge } from "config-plus"
+import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express, { NextFunction, Request, Response } from "express"
 import { MiddlewareLogger } from "express-ext"
@@ -15,18 +16,36 @@ import { useContext } from "./service/context"
 import { resources } from "./service/template"
 
 const prefix = "Bearer "
+
 export class TokenVerifier {
-  constructor(private secret: string, private account: string) {
+  constructor(private secret: string, private account: string, private token: string) {
     this.verify = this.verify.bind(this)
   }
+
   verify(req: Request, res: Response, next: NextFunction) {
-    const data = req.headers["authorization"]
-    if (data && data.startsWith(prefix)) {
-      const token = data.substring(prefix.length)
+    let token: string | undefined
+    if (req.cookies) {
+      token = req.cookies[this.token]
+      if (token) {
+        console.log("Token from cookie: " + token)
+      }
+    }
+
+    if (!token || token.length === 0) {
+      let data = req.headers["authorization"]
+      if (data && data.startsWith(prefix)) {
+        token = data.substring(prefix.length)
+        console.log("Token from bearer token: " + token)
+      }
+    }
+
+    if (token && token.length > 0) {
       verify(token, this.secret, (err, decoded) => {
         if (err) {
+          console.log("Token verification error: " + err.message)
           next()
         } else {
+          console.log("Decoded token: " + JSON.stringify(decoded))
           res.locals[this.account] = decoded
           next()
         }
@@ -61,8 +80,8 @@ app.set("view engine", "html")
 const logger = createLogger(cfg.log)
 resources.log = logger.error
 
-const verifier = new TokenVerifier(cfg.auth.token.secret, "account")
-app.use(verifier.verify)
+const verifier = new TokenVerifier(cfg.auth.token.secret, "account", "token")
+app.use(cookieParser(), verifier.verify)
 
 const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
 // app.use(allow(conf.allow), json(), middleware.log)

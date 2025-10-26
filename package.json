@@ -17,6 +17,7 @@
     "bcrypt-plus": "^0.0.1",
     "config-plus": "^0.0.4",
     "content-menu": "^0.0.3",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-ext": "^0.4.14",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.6",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/multer": "^2.0.0",

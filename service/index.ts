@@ -1,4 +1,4 @@
-import { Application, json } from "express"
+import { Application, json, urlencoded } from "express"
 import multer from "multer"
 import { ApplicationContext } from "./context"
 
@@ -13,7 +13,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/login", ctx.signin.render)
   // app.post("/login", json(), parser.none(), ctx.login.submit)
-  app.post("/login", parser.none(), ctx.signin.submit)
+  app.post("/login", urlencoded(), ctx.signin.submit)
 
   app.get("/signup", ctx.signup.render)
   app.post("/signup", json(), ctx.signup.submit)
