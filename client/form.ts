@@ -464,6 +464,14 @@ function isHidden(ele: HTMLElement | null | undefined): boolean {
   }
   return true
 }
+
+function clearMessage(e: Event) {
+  const ele = e.target as HTMLInputElement
+  if (ele && ele.parentElement) {
+    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
+    ele.parentElement.innerText = ""
+  }
+}
 function showErrorMessage(ele: Element | null, msg: string): boolean {
   if (ele) {
     removeClasses(ele, ["alert-warning", "alert-info"])
@@ -506,6 +514,7 @@ function showInfoMessageOfForm(form: HTMLFormElement, msg: string): boolean {
   const ele = form.querySelector(".message")
   return showInfoMessage(ele, msg)
 }
+
 function setInputValue(form: HTMLFormElement | null | undefined, name: string, value: string): boolean {
   if (form) {
     for (let i = 0; i < form.length; i++) {
@@ -517,30 +526,6 @@ function setInputValue(form: HTMLFormElement | null | undefined, name: string, v
     }
   }
   return false
-}
-
-function checkAll(target: HTMLInputElement, name: string) {
-  const form = target.form
-  if (form) {
-    for (let i = 0; i < form.length; i++) {
-      const ele = form[i] as HTMLInputElement
-      if (ele.name === name) {
-        ele.checked = target.checked
-      }
-    }
-  }
-}
-function getCheckboxValues(form: HTMLFormElement | null | undefined, name: string): string[] {
-  const v: string[] = []
-  if (form) {
-    for (let i = 0; i < form.length; i++) {
-      const ele = form[i] as HTMLInputElement
-      if (ele.name === name && ele.checked) {
-        v.push(ele.value)
-      }
-    }
-  }
-  return v
 }
 
 function getHttpHeaders(): any {

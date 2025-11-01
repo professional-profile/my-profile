@@ -452,6 +452,13 @@ function isHidden(ele) {
   }
   return true
 }
+function clearMessage(e) {
+  var ele = e.target
+  if (ele && ele.parentElement) {
+    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
+    ele.parentElement.innerText = ""
+  }
+}
 function showErrorMessage(ele, msg) {
   if (ele) {
     removeClasses(ele, ["alert-warning", "alert-info"])
@@ -505,29 +512,6 @@ function setInputValue(form, name, value) {
     }
   }
   return false
-}
-function checkAll(target, name) {
-  var form = target.form
-  if (form) {
-    for (var i = 0; i < form.length; i++) {
-      var ele = form[i]
-      if (ele.name === name) {
-        ele.checked = target.checked
-      }
-    }
-  }
-}
-function getCheckboxValues(form, name) {
-  var v = []
-  if (form) {
-    for (var i = 0; i < form.length; i++) {
-      var ele = form[i]
-      if (ele.name === name && ele.checked) {
-        v.push(ele.value)
-      }
-    }
-  }
-  return v
 }
 function getHttpHeaders() {
   var token = getToken()

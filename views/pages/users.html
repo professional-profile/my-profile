@@ -9,21 +9,6 @@
           {{resource.username}}
           <input type="text" id="username" name="username" value="{{filter.username}}" />
         </label>
-        <label class="col s12 m4">
-          {{resource.display_name}}
-          <input type="text" id="displayName" name="displayName" value="{{filter.displayName}}" />
-        </label>
-        <label class="col s12 m4 checkbox-section">
-          {{resource.status}}
-          <section class="checkbox-group">
-            <label>
-              <input type="checkbox" id="active" name="status" value="A" {% if checked(filter.status, 'A') %} checked {% endif %} />{{resource.active}}
-            </label>
-            <label>
-              <input type="checkbox" id="inactive" name="status" value="I" {% if checked(filter.status, 'I') %} checked {% endif %}/>{{resource.inactive}}
-            </label>
-          </section>
-        </label>
       </section>
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />
     </form>
