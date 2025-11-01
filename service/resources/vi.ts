@@ -9,6 +9,8 @@ export const vi = {
   companies: "Công ty thành viên",
   leadership: "Khả năng lãnh đạo",
 
+  my_articles: "Bài viết của tôi",
+
   menu: "Menu",
   sidebar: "Sidebar",
   dark_mode: "Dark mode",

@@ -7,6 +7,11 @@ export function buildQuery(filter: ArticleFilter): Statement {
   const params = []
   let i = 1
 
+  if (filter.authorId && filter.authorId.length > 0) {
+    params.push(filter.authorId)
+    where.push(`author_id = $${i++}`)
+  }
+
   if (filter.tags && filter.tags.length > 0) {
     params.push(filter.tags)
     where.push(`tags && $${i++}`)

@@ -16,6 +16,8 @@ import { ArticleController, useArticleController } from "./article"
 import { SigninController } from "./authentication"
 import { ContentController, useContentController } from "./content"
 import { JobController, useJobController } from "./job"
+import { MyArticlesController, useMyArticlesController } from "./my-articles"
+import { MyProfileController, useMyProfileController } from "./my-profile"
 import { PasswordController } from "./password"
 import { getResourceByLang } from "./resources"
 import { SignUpController } from "./signup"
@@ -40,6 +42,8 @@ export interface ApplicationContext {
   signin: SigninController
   signup: SignUpController
   password: PasswordController
+  myProfile: MyProfileController
+  myArticles: MyArticlesController
   user: UserController
   content: ContentController
   article: ArticleController
@@ -120,12 +124,15 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   )
   const password = new PasswordController(passwordService, logger.error)
 
+  const myProfile = useMyProfileController(db, logger.error)
+  const myArticles = useMyArticlesController(db, logger.error)
+
   const user = useUserController(db, logger.error)
   const content = useContentController(db, ["vi"], menuItemsLoader)
   const article = useArticleController(db)
   const job = useJobController(db)
 
-  return { health, log, middleware, menu, signin, signup, password, user, content, article, job }
+  return { health, log, middleware, menu, signin, signup, password, myProfile, myArticles, user, content, article, job }
 }
 
 function generate(): string {

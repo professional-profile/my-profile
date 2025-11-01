@@ -9,6 +9,8 @@ export const en = {
   companies: "Companies",
   leadership: "Leadership",
 
+  my_articles: "My articles",
+
   menu: "Menu",
   sidebar: "Sidebar",
   dark_mode: "Dark mode",
