@@ -56,13 +56,7 @@
               class="btn-edit"
             ></button>
           </header>
-          <section>
-            {{generateTags(user.lookingFor, true)}}
-            <p>friends</p>
-            <p>football team</p>
-            <p>room mate</p>
-            <p>basketball team</p>
-          </section>
+          <section>{{generateTags(user.lookingFor, true)}}</section>
         </div>
         <div class="card">
           <header>
@@ -87,10 +81,7 @@
             <i class="material-icons highlight">flash_on</i>Interests
             <button type="button" id="btnInterest" name="btnInterest" class="btn-edit"></button>
           </header>
-          <section class="row">
-            {{generateTags(user.interests, true)}}
-            <span class="col s4">money</span><span class="col s4">basketball</span><span class="col s4">football</span>
-          </section>
+          <section class="row">{{generateTags(user.interests, true)}}</section>
         </div>
         <div class="card border-bottom-highlight">
           <header>
