@@ -41,12 +41,6 @@ export class ArticleController {
     this.view = this.view.bind(this)
   }
   search(req: Request, res: Response) {
-    const account = res.locals.account
-    if (account) {
-      console.log("log in with user id " + account.id)
-    } else {
-      console.log("not log in")
-    }
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)

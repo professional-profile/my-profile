@@ -42,9 +42,12 @@ export const config = {
       id: "id",
       username: "username",
       email: "email",
+      language: "language",
+      date_format: "dateFormat",
     },
     account: {
       displayName: "display_name",
+      dateFormat: "date_format",
     },
     userStatus: {
       activated: "A",
@@ -64,7 +67,7 @@ export const config = {
       lockedUntilTime: "locked_until_time",
     },
     query: `
-      select u.id, u.username, u.display_name, email, u.status, u.max_password_age, 
+      select u.id, u.username, u.display_name, email, u.status, language, dateformat as date_format, u.max_password_age, 
         p.password, p.success_time, p.fail_time, p.fail_count, p.locked_until_time, p.changed_time
       from users u
       inner join passwords p

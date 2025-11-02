@@ -57,9 +57,11 @@ export class SigninController {
         .authenticate(user)
         .then((result) => {
           if (result.status == 1 && result.user) {
+            console.log("user " + JSON.stringify(result.user))
             const account = result.user
             const token = account.token
             account.token = undefined
+            // const token = jsonwebtoken.sign({id: account.id, user: user.username, language: account.language, dateFormat: account.dateFormat}, this.secret)
 
             console.log("Login successfully with token " + token)
             res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: 15 * 60 * 1000 })

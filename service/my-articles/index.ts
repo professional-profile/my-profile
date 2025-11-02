@@ -60,6 +60,7 @@ export class MyArticlesController {
       format(filter, ["publishedAt"])
     }
     filter.authorId = res.locals.userId as string
+    console.log("author id " + filter.authorId)
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     this.service

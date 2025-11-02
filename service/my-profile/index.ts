@@ -37,6 +37,7 @@ export class MyProfileController {
   }
   view(req: Request, res: Response) {
     const userId: string = res.locals.userId
+    console.log("user id " + userId)
     const lang = getLang(req)
     const resource = getResource(lang)
     this.service
