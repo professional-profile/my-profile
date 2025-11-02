@@ -3,7 +3,6 @@ import { compare } from "bcrypt"
 import { Comparator } from "bcrypt-plus"
 import { MenuBuilder, MenuItemLoader } from "content-menu"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-ext"
-import { generateToken } from "jsonwebtoken-plus"
 import { nanoid } from "nanoid"
 import { MailConfig, MailData, StringMap } from "onecore"
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from "password-service"
@@ -65,19 +64,8 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const auth = cfg.auth
   const status = initializeStatus(cfg.auth.status)
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, cfg.auth, cfg.map)
-  const authenticator = new Authenticator(
-    status,
-    compare,
-    generateToken,
-    auth.token,
-    auth.payload,
-    auth.account,
-    userRepository,
-    undefined,
-    auth.lockedMinutes,
-    auth.maxPasswordFailed,
-  )
-  const signin = new SigninController(authenticator, logger.error)
+  const authenticator = new Authenticator(status, compare, auth.account, userRepository, undefined, auth.lockedMinutes, auth.maxPasswordFailed)
+  const signin = new SigninController(authenticator, cfg.auth.token.secret, cfg.auth.token.expires, logger.error)
 
   const comparator = new Comparator()
   const signupMailSender = new SignupSender(cfg.signup.url, sendMail, cfg.mail.from, cfg.signup.template.body, cfg.signup.template.subject)

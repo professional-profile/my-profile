@@ -38,13 +38,6 @@ export const config = {
     },
     lockedMinutes: 2,
     maxPasswordFailed: 5,
-    payload: {
-      id: "id",
-      username: "username",
-      email: "email",
-      language: "language",
-      date_format: "dateFormat",
-    },
     account: {
       displayName: "display_name",
       dateFormat: "date_format",

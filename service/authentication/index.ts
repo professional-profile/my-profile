@@ -1,6 +1,7 @@
 import { Authenticator } from "authen-service"
 import { Request, Response } from "express"
 import { handleError, query } from "express-ext"
+import * as jsonwebtoken from "jsonwebtoken"
 import { Attributes, Log, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource } from "../resources"
@@ -29,7 +30,7 @@ export const map: StringMap = {
   "9": "fail_disabled_account",
 }
 export class SigninController {
-  constructor(private authenticator: Authenticator<User, string>, private log: Log) {
+  constructor(private authenticator: Authenticator<User, string>, private secret: string, private expiresIn: number, private log: Log) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
   }
@@ -59,12 +60,11 @@ export class SigninController {
           if (result.status == 1 && result.user) {
             console.log("user " + JSON.stringify(result.user))
             const account = result.user
-            const token = account.token
-            account.token = undefined
-            // const token = jsonwebtoken.sign({id: account.id, user: user.username, language: account.language, dateFormat: account.dateFormat}, this.secret)
-
+            const token = jsonwebtoken.sign({ id: account.id, user: user.username, language: account.language, dateFormat: account.dateFormat }, this.secret, {
+              expiresIn: this.expiresIn,
+            })
             console.log("Login successfully with token " + token)
-            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: 15 * 60 * 1000 })
+            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
             let redirectUrl = query(req, "redirectUrl")
             if (!redirectUrl || redirectUrl == "") {
               redirectUrl = "news"
