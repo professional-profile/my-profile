@@ -36,16 +36,11 @@ export class MyProfileController {
     this.submit = this.submit.bind(this)
   }
   view(req: Request, res: Response) {
-    const account = res.locals.account
-    console.log(req.originalUrl)
-    if (!account) {
-      return res.redirect(`login?redirectUrl=${req.url}`)
-    }
-    const id = account.id
+    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
     this.service
-      .getMyProfile(id)
+      .getMyProfile(userId)
       .then((user) => {
         if (!user) {
           renderError404(req, res, resource)
@@ -56,21 +51,14 @@ export class MyProfileController {
       .catch((err) => renderError500(req, res, resource, err))
   }
   submit(req: Request, res: Response) {
-    const account = res.locals.account
-    console.log(req.originalUrl)
-    if (!account) {
-      console.log("not log in")
-      return res.redirect(`login?redirectUrl=${req.url}`)
-    }
-    const userId: string = account.id
     const lang = getLang(req)
     const resource = getResource(lang)
     const user = req.body as User
+    user.id = res.locals.userId as string
     const errors = validate<User>(user, userModel, resource)
     if (errors.length > 0) {
       return respondError(res, errors)
     }
-    user.id = userId
     this.service
       .saveMyProfile(user)
       .then((result) => {

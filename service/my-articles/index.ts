@@ -59,15 +59,7 @@ export class MyArticlesController {
       filter = fromRequest<ArticleFilter>(req)
       format(filter, ["publishedAt"])
     }
-    const account = res.locals.account
-    console.log(req.originalUrl)
-    if (account) {
-      console.log("log in with user id " + account.id)
-      filter.authorId = account.id
-    } else {
-      console.log("not log in")
-      return res.redirect(`login?redirectUrl=${req.url}`)
-    }
+    filter.authorId = res.locals.userId as string
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     this.service
@@ -92,12 +84,7 @@ export class MyArticlesController {
       .catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
-    const account = res.locals.account
-    console.log(req.originalUrl)
-    if (!account) {
-      console.log("not log in")
-      return res.redirect(`login?redirectUrl=${req.url}`)
-    }
+    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
@@ -105,7 +92,7 @@ export class MyArticlesController {
     this.service
       .load(id)
       .then((article) => {
-        if (!article || article.authorId !== account.id) {
+        if (!article || article.authorId !== userId) {
           renderError404(req, res, resource)
         } else {
           article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
@@ -115,13 +102,7 @@ export class MyArticlesController {
       .catch((err) => renderError500(req, res, resource, err))
   }
   submit(req: Request, res: Response) {
-    const account = res.locals.account
-    console.log(req.originalUrl)
-    if (!account) {
-      console.log("not log in")
-      return res.redirect(`login?redirectUrl=${req.url}`)
-    }
-    const userId: string = account.id
+    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
     const article = req.body as Article
