@@ -1,7 +1,7 @@
 import { Authenticator } from "authen-service"
 import { Request, Response } from "express"
 import { handleError, query } from "express-ext"
-import * as jsonwebtoken from "jsonwebtoken"
+import { sign } from "jsonwebtoken"
 import { Attributes, Log, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource } from "../resources"
@@ -60,7 +60,7 @@ export class SigninController {
           if (result.status == 1 && result.user) {
             console.log("user " + JSON.stringify(result.user))
             const account = result.user
-            const token = jsonwebtoken.sign({ id: account.id, user: user.username, language: account.language, dateFormat: account.dateFormat }, this.secret, {
+            const token = sign({ id: account.id, username: user.username, language: account.language, dateFormat: account.dateFormat }, this.secret, {
               expiresIn: this.expiresIn,
             })
             console.log("Login successfully with token " + token)

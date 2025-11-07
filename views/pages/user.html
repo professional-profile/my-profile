@@ -10,12 +10,12 @@
       </div>
       <button id="btnCamera" name="btnCamera" class="btn-camera"></button>
       <div class="avatar-wrapper">
-        <img class="avatar" src="https://avatars.githubusercontent.com/u/37324393?v=4" alt="avatar" />
-        <img class="profile-status" src="/static/online.svg" alt="status" />
+        <img class="avatar" src="https://avatars.githubusercontent.com/u/37324393?v=4" alt="user avatar" />
+        <img class="profile-status" src="/images/online.svg" alt="status" />
       </div>
       <div class="profile-title">
         <h4>{{user.displayName}}</h4>
-        <p>https://github.com/minhduc140583</p>
+        <p>{{user.website}}</p>
       </div>
       <div class="profile-followers">
         <p><i class="material-icons highlight">group</i> 7 followers</p>
@@ -29,22 +29,32 @@
             <i class="material-icons highlight">account_box</i>Basic Info
             <button type="button" id="btnBasicInfo" name="btnBasicInfo" class="btn-edit"></button>
           </header>
-          <p>Developer Programmer</p>
-          <p>TMA</p>
+          <p class="icon-text">
+            <i class="material-icons">local_mall</i>
+            {{user.occupation}}
+          </p>
+          <p class="icon-text">
+            <i class="material-icons">location_city</i>
+            {{user.company}}
+          </p>
+          <p class="icon-text">
+            <i class="material-icons">location_on</i>
+            {{user.location}}
+          </p>
+          <p class="icon-text">
+            <i class="material-icons">bookmark</i>
+            {{user.website}}
+          </p>
         </div>
         <div class="card">
           <header>
             <i class="material-icons highlight">local_mall</i>Skills
             <button type="button" id="btnSkill" name="btnSkill" class="btn-edit"></button>
           </header>
-          <section>
-            <p>javascripts<i hidden="" class="star highlight"></i></p>
-            <p>reactjs<i hidden="" class="star highlight"></i></p>
-            <p>ruby<i hidden="" class="star highlight"></i></p>
-            <p>Scala<i class="star highlight"></i></p>
-            <p>git<i class="star highlight"></i></p>
+          <section class="chip-list">
+            {{generateStarChips(user.skills, 'skill', 'skill', 'hirable', true)}}
             <hr />
-            <p class="description"><i class="star highlight"></i></p>
+            <p class="description"><i class="star highlight"></i>Hirable Skill</p>
           </section>
         </div>
         <div class="card">
@@ -56,7 +66,7 @@
               class="btn-edit"
             ></button>
           </header>
-          <section>{{generateTags(user.lookingFor, true)}}</section>
+          <section class="chip-list">{{generateTags(user.lookingFor, true)}}</section>
         </div>
         <div class="card">
           <header>
@@ -74,14 +84,14 @@
       <div class="col m12 l8">
         <div class="card border-bottom-highlight">
           <header><i class="material-icons highlight">person</i>About<button type="button" id="btnBio" name="btnBio" class="btn-edit"></button></header>
-          <p>i'm programer ac</p>
+          <p>{{user.bio}}</p>
         </div>
         <div class="card border-bottom-highlight">
           <header>
             <i class="material-icons highlight">flash_on</i>Interests
             <button type="button" id="btnInterest" name="btnInterest" class="btn-edit"></button>
           </header>
-          <section>{{generateTags(user.interests, true)}}</section>
+          <section class="chip-list">{{generateTags(user.interests, true)}}</section>
         </div>
         <div class="card border-bottom-highlight">
           <header>

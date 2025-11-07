@@ -238,7 +238,9 @@ ul.list > li > section:first-child > div > p {
 }
 
 .card > header {
+  position: relative;
   margin-top: -16px;
+  margin-bottom: 16px;
   margin-left: -16px;
   margin-right: -16px;
   width: calc(100% + 32px);
@@ -252,6 +254,12 @@ ul.list > li > section:first-child > div > p {
 
 .card > header * {
   padding-right: 6px;
+}
+
+.card > header > .btn-edit {
+  position: absolute;
+  right: 16px;
+  padding-right: 0;
 }
 
 .card > section,
@@ -328,6 +336,16 @@ ul.list > li > section:first-child > div > p {
 .video p,
 .card p {
   font-size: 14px;
+}
+.card > p.icon-text {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.icon-text .material-icons {
+  font-size: 20px;
 }
 .card > section > h3,
 .card > section > a,

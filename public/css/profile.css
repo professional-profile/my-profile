@@ -1,10 +1,10 @@
 .profile.view-container {
-  max-height: calc(100vh - 44px);
+  max-height: calc(100vh - 52px);
   overflow-x: auto;
 }
 @media screen and (min-width: 769px) {
   .top-menu .profile.view-container {
-    max-height: calc(100vh - 44px - 46px);
+    max-height: calc(100vh - 52px - 46px);
   }
   .classic.top-menu .profile.view-container {
     max-height: auto;
@@ -282,23 +282,7 @@ header.nav > .profile-followers {
 .profile.view-container > form > .row > .col > div.card:last-child {
   margin-bottom: 0;
 }
-.card > header {
-  position: relative;
-  margin-bottom: 16px;
-}
-.card > header > .btn-edit {
-  position: absolute;
-  right: 16px;
-  padding-right: 0;
-}
-.card > section > p,
-.card > p {
-  width: 100%;
-  font-size: 14px;
-  word-wrap: break-word;
-  -moz-word-wrap: break-word;
-  -webkit-word-wrap: break-word;
-}
+
 .profile.view-container > form > .row > .col > div.card p.description {
   color: #aeb4b2;
   line-height: 20px;

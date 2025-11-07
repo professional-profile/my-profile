@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { buildError404, buildError500, checked, generateChips, generateTags, getView, toString } from "express-ext"
+import { buildError404, buildError500, checked, generateChips, generateStarChips, generateTags, getView, toString } from "express-ext"
 import fs from "fs"
 import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"
@@ -34,6 +34,9 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   if (obj) {
     obj.menu = res.locals.menu
     obj.account = res.locals.account
+    if (obj.account && !obj.account.displayName) {
+      obj.account.displayName = obj.account.username
+    }
     obj.checked = checked
     obj.datetimeToString = datetimeToString
     obj.formatLongDateTime = formatLongDateTime
@@ -43,6 +46,7 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
     obj.formatNumber = formatNumber
     obj.generateTags = generateTags
     obj.generateChips = generateChips
+    obj.generateStarChips = generateStarChips
   }
   const html = compiledTemplate.render(obj)
   res.send(html)
