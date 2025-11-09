@@ -14,8 +14,8 @@ import {
   queryPage,
   resources,
 } from "express-ext"
-import { Search, UseCase } from "onecore"
-import { DB, Repository, SearchBuilder } from "query-core"
+import { SearchResult } from "onecore"
+import { DB, SearchBuilder } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -23,20 +23,23 @@ import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService
 import { buildQuery } from "./query"
 export * from "./article"
 
-export class SqlArticleRepository extends Repository<Article, string> implements ArticleRepository {
+export class SqlArticleRepository extends SearchBuilder<Article, ArticleFilter> implements ArticleRepository {
   constructor(db: DB) {
-    super(db, "articles", articleModel)
-    this.load = this.load.bind(this)
+    super(db.query, "articles", articleModel, db.driver, buildQuery)
   }
-  override load(id: string): Promise<Article | null> {
+  load(id: string): Promise<Article | null> {
     const query = `select * from articles where slug = ${this.param(1)}`
     return this.query<Article>(query, [id], this.map).then((articles) => (articles && articles.length > 0 ? articles[0] : null))
   }
 }
 
-export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
-  constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
-    super(search, repository)
+export class ArticleUseCase implements ArticleService {
+  constructor(private repository: ArticleRepository) {}
+  search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
+    return this.repository.search(filter, limit, page, fields)
+  }
+  load(id: string): Promise<Article | null> {
+    return this.repository.load(id)
   }
 }
 
@@ -103,8 +106,7 @@ export class ArticleController {
 }
 
 export function useArticleController(db: DB): ArticleController {
-  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "articles", articleModel, db.driver, buildQuery)
   const repository = new SqlArticleRepository(db)
-  const service = new ArticleUseCase(builder.search, repository)
+  const service = new ArticleUseCase(repository)
   return new ArticleController(service)
 }

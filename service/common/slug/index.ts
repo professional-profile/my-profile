@@ -1,6 +1,4 @@
-import { nanoid } from "nanoid"
-
-export function slugify(title: string, wordLimit: number = 10, maxLength: number = 60): string {
+export function slugify(title: string, uuid: string, wordLimit: number = 10, maxLength: number = 60): string {
   const words = title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
@@ -12,9 +10,5 @@ export function slugify(title: string, wordLimit: number = 10, maxLength: number
   if (slug.length > maxLength) {
     slug = slug.substring(0, maxLength).replace(/-+$/, "") // remove trailing dash
   }
-  return slug + "-" + generate()
-}
-
-function generate(): string {
-  return nanoid(10)
+  return slug.length === 0 ? uuid : slug + "-" + uuid
 }

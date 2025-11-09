@@ -17,6 +17,7 @@ import {
   resources,
   respondError,
 } from "express-ext"
+import { nanoid } from "nanoid"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { formatDateTime } from "ui-formatter"
@@ -38,16 +39,17 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
     super(search, repository)
   }
   create(article: Article, ctx?: any): Promise<number> {
-    article.slug = slugify(article.title)
+    article.id = nanoid(10)
+    article.slug = slugify(article.title, article.id)
     return this.repository.create(article, ctx)
   }
   update(article: Article, ctx?: any): Promise<number> {
-    article.slug = slugify(article.title)
+    article.slug = slugify(article.title, article.id)
     return this.repository.update(article, ctx)
   }
   patch(article: Partial<Article>, ctx?: any): Promise<number> {
     if (article.title && article.title.length > 0) {
-      article.slug = slugify(article.title)
+      article.slug = slugify(article.title, article.id as any)
     } else {
       delete article.slug
     }
