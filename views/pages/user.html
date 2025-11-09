@@ -102,16 +102,13 @@
               class="btn-edit"
             ></button>
           </header>
+          {% for achievement in user.achievements %}
           <section>
-            <h3>Star Performer 2023<i class="star highlight float-right"></i></h3>
-            <p class="description">I got Star Performer 2023</p>
+            <h3>{{achievement.subject}}<i class="star highlight float-right"></i></h3>
+            <p class="description">{{achievement.description}}</p>
             <hr />
           </section>
-          <section>
-            <h3>Star Performer 2024</h3>
-            <p class="description">I got Star Performer 2024</p>
-            <hr />
-          </section>
+          {% endfor %}
         </div>
       </div>
     </div>

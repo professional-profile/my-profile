@@ -33,7 +33,23 @@ export interface UserSettings {
   dateTimeFormat: string
   timeFormat: string
   notification: boolean
+
+  searchEnginesLinksToMyProfile: boolean
+  emailFeedUpdates: boolean
+  notifyFeedUpdates: boolean
+  emailPostMentions: boolean
+  notifyPostMentions: boolean
+  emailCommentsOfYourPosts: boolean
+  notifyCommentsOfYourPosts: boolean
+  emailEventInvitations: boolean
+  notifyEventInvitations: boolean
+  emailWhenNewEventsAround: boolean
+  notifyWhenNewEventsAround: boolean
+  followingListPublicOnMyProfile: boolean
+  showMyProfileInSpacesAroundMe: boolean
+  showAroundMeResultsInMemberFeed: boolean
 }
+
 export interface Skill {
   skill: string
   hirable: boolean
@@ -79,6 +95,8 @@ export interface UserRepository {
 export interface MyProfileService {
   getMyProfile(id: string): Promise<User | null>
   saveMyProfile(user: User): Promise<number>
+  getMySettings(id: string): Promise<UserSettings | null>
+  saveMySettings(id: string, settings: UserSettings): Promise<number>
 }
 
 export const skillsModel: Attributes = {
@@ -117,7 +135,6 @@ export const educationsModel: Attributes = {
   },
 }
 export const userSettingsModel: Attributes = {
-  userId: {},
   language: {},
   dateFormat: {},
   dateTimeFormat: {},

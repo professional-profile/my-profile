@@ -16,7 +16,7 @@ import {
   resources,
 } from "express-ext"
 import { SearchResult } from "onecore"
-import { DB, SearchBuilder } from "query-core"
+import { DB, SearchRepository } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -24,7 +24,7 @@ import { Job, JobFilter, jobModel, JobRepository, JobService } from "./job"
 import { buildQuery } from "./query"
 export * from "./job"
 
-export class SqlJobRepository extends SearchBuilder<Job, JobFilter> implements JobRepository {
+export class SqlJobRepository extends SearchRepository<Job, JobFilter> implements JobRepository {
   constructor(db: DB) {
     super(db.query, "jobs", jobModel, db.driver, buildQuery)
   }

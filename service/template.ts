@@ -38,6 +38,7 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
       obj.account.displayName = obj.account.username
     }
     obj.checked = checked
+    obj.isChecked = isChecked
     obj.datetimeToString = datetimeToString
     obj.formatLongDateTime = formatLongDateTime
     obj.formatDateTime = formatDateTime
@@ -51,7 +52,9 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   const html = compiledTemplate.render(obj)
   res.send(html)
 }
-
+function isChecked(v?: boolean): string {
+  return v ? "checked" : ""
+}
 export function renderError(req: Request, res: Response, obj?: any): void {
   res.render(getView(req, "error"), obj)
 }

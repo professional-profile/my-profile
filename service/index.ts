@@ -36,6 +36,9 @@ export class TokenVerifier {
           console.log("Decoded token: " + JSON.stringify(decoded))
           res.locals[this.account] = decoded
           res.locals.userId = (decoded as any).id
+          if ((decoded as any).username) {
+            res.locals.username = (decoded as any).username
+          }
           next()
         }
       })
@@ -93,6 +96,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/my-profile", checkAuthen, ctx.menu.build, ctx.myProfile.view)
   app.post("/my-profile", authorized, ctx.menu.build, ctx.myProfile.submit)
+
+  app.get("/settings", checkAuthen, ctx.menu.build, ctx.myProfile.viewSettings)
+  app.post("/settings", authorized, ctx.menu.build, ctx.myProfile.saveSettings)
 
   app.get("/my-articles", checkAuthen, ctx.menu.build, ctx.myArticles.search)
   app.get("/my-articles/:id", checkAuthen, ctx.menu.build, ctx.myArticles.view)

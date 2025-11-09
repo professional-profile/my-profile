@@ -15,7 +15,7 @@ import {
   resources,
 } from "express-ext"
 import { SearchResult } from "onecore"
-import { DB, SearchBuilder } from "query-core"
+import { DB, SearchRepository } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -24,7 +24,7 @@ import { buildQuery } from "./query"
 export * from "./article"
 
 const Published = "P"
-export class SqlArticleRepository extends SearchBuilder<Article, ArticleFilter> implements ArticleRepository {
+export class SqlArticleRepository extends SearchRepository<Article, ArticleFilter> implements ArticleRepository {
   constructor(db: DB) {
     super(db.query, "articles", articleModel, db.driver, buildQuery)
   }

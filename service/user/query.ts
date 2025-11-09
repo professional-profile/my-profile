@@ -1,6 +1,6 @@
 import { param } from "pg-extension"
-import { Statement } from "query-core"
-import { UserFilter } from "./user"
+import { buildSort, Statement } from "query-core"
+import { UserFilter, userModel } from "./user"
 
 export function buildQuery(filter: UserFilter): Statement {
   let query = `select * from users`
@@ -62,12 +62,15 @@ export function buildQuery(filter: UserFilter): Statement {
   if (where.length > 0) {
     query = query + ` where ` + where.join(" and ")
   }
+  const orderBy = buildSort(filter.sort, userModel)
+  if (orderBy.length > 0) {
+    query = query + ` order by ${orderBy}`
+  }
   /*
   if (filter.limit && filter.limit > 0) {
     query = query + ` limit ${filter.limit}`
   }
   */
-  console.log(query)
   return { query, params }
 }
 // CREATE INDEX interests_index ON users (interests);

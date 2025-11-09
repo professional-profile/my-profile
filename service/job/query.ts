@@ -1,8 +1,8 @@
 import { param } from "pg-extension"
-import { buildSort, LikeType, Statement } from "query-core"
+import { buildSort, Statement } from "query-core"
 import { JobFilter, jobModel } from "./job"
 
-export function buildQuery(filter: JobFilter, param2: LikeType | ((i: number) => string), sort?: string): Statement {
+export function buildQuery(filter: JobFilter): Statement {
   let query = `select * from jobs`
   const where = []
   const params = []
@@ -38,7 +38,7 @@ export function buildQuery(filter: JobFilter, param2: LikeType | ((i: number) =>
   if (where.length > 0) {
     query = query + ` where ` + where.join(` and `)
   }
-  const orderBy = buildSort(sort, jobModel)
+  const orderBy = buildSort(filter.sort, jobModel)
   if (orderBy.length > 0) {
     query = query + ` order by ${orderBy}`
   }

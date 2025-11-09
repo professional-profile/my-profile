@@ -1,5 +1,5 @@
 import { Log, SearchResult } from "onecore"
-import { DB, SearchBuilder } from "query-core"
+import { DB, SearchRepository } from "query-core"
 import { UserController } from "./controller"
 import { buildQuery } from "./query"
 import { User, UserFilter, userModel, UserRepository, UserService } from "./user"
@@ -7,7 +7,7 @@ import { User, UserFilter, userModel, UserRepository, UserService } from "./user
 export * from "./controller"
 export * from "./user"
 
-export class SqlUserRepository extends SearchBuilder<User, UserFilter> implements UserRepository {
+export class SqlUserRepository extends SearchRepository<User, UserFilter> implements UserRepository {
   constructor(db: DB) {
     super(db.query, "users", userModel, db.driver, buildQuery)
   }

@@ -1,8 +1,8 @@
 import { param } from "pg-extension"
-import { buildSort, LikeType, Statement } from "query-core"
+import { buildSort, Statement } from "query-core"
 import { ArticleFilter, articleModel } from "./article"
 
-export function buildQuery(filter: ArticleFilter, param2: LikeType | ((i: number) => string), sort?: string): Statement {
+export function buildQuery(filter: ArticleFilter): Statement {
   let query = `select * from articles `
   const where = []
   const params = []
@@ -52,7 +52,7 @@ export function buildQuery(filter: ArticleFilter, param2: LikeType | ((i: number
   if (where.length > 0) {
     query = query + ` where ` + where.join(` and `)
   }
-  const orderBy = buildSort(sort, articleModel)
+  const orderBy = buildSort(filter.sort, articleModel)
   if (orderBy.length > 0) {
     query = query + ` order by ${orderBy}`
   }
