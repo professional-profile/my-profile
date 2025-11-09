@@ -34,6 +34,7 @@ export class SqlArticleRepository extends Repository<Article, string> implements
     super(db, "articles", articleModel)
   }
 }
+const draft = "D"
 export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
   constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
     super(search, repository)
@@ -43,17 +44,31 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
     article.slug = slugify(article.title, article.id)
     return this.repository.create(article, ctx)
   }
-  update(article: Article, ctx?: any): Promise<number> {
-    article.slug = slugify(article.title, article.id)
+  async update(article: Article, ctx?: any): Promise<number> {
+    const existingArticle = await this.repository.load(article.id)
+    if (!existingArticle) {
+      return 0
+    }
+    if (existingArticle.status === draft) {
+      article.slug = slugify(article.title, article.id)
+    }
     return this.repository.update(article, ctx)
   }
-  patch(article: Partial<Article>, ctx?: any): Promise<number> {
+  async patch(article: Partial<Article>, ctx?: any): Promise<number> {
     if (article.title && article.title.length > 0) {
-      article.slug = slugify(article.title, article.id as any)
+      const id = article.id as string
+      const existingArticle = await this.repository.load(id)
+      if (!existingArticle) {
+        return 0
+      }
+      if (existingArticle.status === draft) {
+        article.slug = slugify(article.title, id)
+      }
+      return this.repository.patch(article, ctx)
     } else {
       delete article.slug
+      return this.repository.patch(article, ctx)
     }
-    return this.repository.patch ? this.repository.patch(article, ctx) : Promise.resolve(-1)
   }
 }
 
@@ -79,7 +94,10 @@ export class MyArticlesController {
       format(filter, ["publishedAt"])
     }
     filter.authorId = res.locals.userId as string
-    console.log("author id " + filter.authorId)
+    if (!filter.sort) {
+      console.log("sort " + filter.sort)
+      filter.sort = "-publishedAt"
+    }
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     this.service

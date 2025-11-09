@@ -63,6 +63,9 @@ export class ArticleController {
       filter = fromRequest<ArticleFilter>(req)
       format(filter, ["publishedAt"])
     }
+    if (!filter.sort) {
+      filter.sort = "-publishedAt"
+    }
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     this.service

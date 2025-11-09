@@ -1,25 +1,41 @@
-import { GenericUseCase, Log, SearchResult } from "onecore"
+import { Log, SearchResult } from "onecore"
 import { DB, SearchBuilder } from "query-core"
 import { UserController } from "./controller"
 import { buildQuery } from "./query"
-import { SqlUserRepository } from "./repository"
 import { User, UserFilter, userModel, UserRepository, UserService } from "./user"
 
 export * from "./controller"
 export * from "./user"
 
-export class UserUseCase extends GenericUseCase<User, string> implements UserService {
-  constructor(private repo: UserRepository) {
-    super(repo)
+export class SqlUserRepository extends SearchBuilder<User, UserFilter> implements UserRepository {
+  constructor(db: DB) {
+    super(db.query, "users", userModel, db.driver, buildQuery)
   }
-  search(filter: UserFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<User>> {
-    return this.repo.search(filter, limit, page, fields)
+  load(id: string): Promise<User | null> {
+    let query = `select * from users where username = ${this.param(1)}`
+    return this.query<User>(query, [id], this.map).then((users) => {
+      if (users && users.length > 0) {
+        return users[0]
+      } else {
+        query = `select * from users where id = ${this.param(1)}`
+        return this.query<User>(query, [id], this.map).then((users) => (users && users.length > 0 ? users[0] : null))
+      }
+    })
+  }
+}
+
+export class UserUseCase implements UserService {
+  constructor(private repository: UserRepository) {}
+  search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
+    return this.repository.search(filter, limit, page, fields)
+  }
+  load(id: string): Promise<User | null> {
+    return this.repository.load(id)
   }
 }
 
 export function useUserController(db: DB, log: Log): UserController {
-  const builder = new SearchBuilder<User, UserFilter>(db.query, "users", userModel, db.driver, buildQuery)
-  const repo = new SqlUserRepository(builder.search, db)
+  const repo = new SqlUserRepository(db)
   const service = new UserUseCase(repo)
   return new UserController(service, log)
 }

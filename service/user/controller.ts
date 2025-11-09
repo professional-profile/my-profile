@@ -20,7 +20,7 @@ import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { UserFilter, UserService } from "./user"
 
-const fields = ["userId", "username", "email", "displayName", "status"]
+const fields = ["id", "username", "email", "displayName", "status"]
 
 export class UserController {
   constructor(private service: UserService, private log: Log) {
@@ -44,6 +44,13 @@ export class UserController {
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
         const list = escapeArray(result.list, offset, "sequence")
+        if (list && list.length > 0) {
+          list.forEach((user) => {
+            if (!user.username) {
+              user.username = user.id
+            }
+          })
+        }
         const search = getSearch(req.url)
         render(req, res, "users", {
           resource,

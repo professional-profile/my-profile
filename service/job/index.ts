@@ -15,8 +15,8 @@ import {
   queryPage,
   resources,
 } from "express-ext"
-import { Search, UseCase } from "onecore"
-import { DB, Repository, SearchBuilder } from "query-core"
+import { SearchResult } from "onecore"
+import { DB, SearchBuilder } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -24,18 +24,27 @@ import { Job, JobFilter, jobModel, JobRepository, JobService } from "./job"
 import { buildQuery } from "./query"
 export * from "./job"
 
-export class SqlJobRepository extends Repository<Job, string> implements JobRepository {
+export class SqlJobRepository extends SearchBuilder<Job, JobFilter> implements JobRepository {
   constructor(db: DB) {
-    super(db, "jobs", jobModel)
+    super(db.query, "jobs", jobModel, db.driver, buildQuery)
   }
-}
-export class JobUseCase extends UseCase<Job, string, JobFilter> implements JobService {
-  constructor(search: Search<Job, JobFilter>, repository: JobRepository) {
-    super(search, repository)
+  load(id: string): Promise<Job | null> {
+    const query = `select * from jobs where id = ${this.param(1)}`
+    return this.query<Job>(query, [id], this.map).then((jobs) => (jobs && jobs.length > 0 ? jobs[0] : null))
   }
 }
 
-const fields = ["title", "publishedAt", "description"]
+export class JobUseCase implements JobService {
+  constructor(private repository: JobRepository) {}
+  search(filter: JobFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Job>> {
+    return this.repository.search(filter, limit, page, fields)
+  }
+  load(id: string): Promise<Job | null> {
+    return this.repository.load(id)
+  }
+}
+
+const fields = ["id", "title", "publishedAt", "description"]
 export class JobController {
   constructor(private jobService: JobService) {
     this.search = this.search.bind(this)
@@ -52,6 +61,11 @@ export class JobController {
     if (hasSearch(req)) {
       filter = fromRequest<JobFilter>(req)
       format(filter, ["publishedAt"])
+    }
+    if (!filter.sort) {
+      console.log("sort " + filter.sort)
+      filter.sort = "-publishedAt"
+      console.log("sort " + filter.sort)
     }
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
@@ -97,8 +111,7 @@ export class JobController {
 }
 
 export function useJobController(db: DB): JobController {
-  const builder = new SearchBuilder<Job, JobFilter>(db.query, "jobs", jobModel, db.driver, buildQuery)
   const repository = new SqlJobRepository(db)
-  const service = new JobUseCase(builder.search, repository)
+  const service = new JobUseCase(repository)
   return new JobController(service)
 }
