@@ -1,53 +1,51 @@
-import { Statement } from "query-core"
-import { ArticleFilter } from "./article"
+import { param } from "pg-extension"
+import { buildSort, LikeType, Statement } from "query-core"
+import { ArticleFilter, articleModel } from "./article"
 
-export function buildQuery(filter: ArticleFilter): Statement {
+export function buildQuery(filter: ArticleFilter, param2: LikeType | ((i: number) => string), sort?: string): Statement {
   let query = `select * from articles `
   const where = []
   const params = []
   let i = 1
 
+  if (filter.id && filter.id.length > 0) {
+    where.push(`id = ${param(i++)}`)
+    params.push(filter.id)
+  }
+
   if (filter.authorId && filter.authorId.length > 0) {
     params.push(filter.authorId)
-    where.push(`author_id = $${i++}`)
+    where.push(`author_id = ${param(i++)}`)
   }
 
   if (filter.tags && filter.tags.length > 0) {
     params.push(filter.tags)
-    where.push(`tags && $${i++}`)
-  }
-
-  if (filter.slug && filter.slug.length > 0) {
-    params.push(filter.slug + "%")
-    where.push(`slug ilike $${i++}`)
+    where.push(`tags && ${param(i++)}`)
   }
 
   if (filter.publishedAt) {
     if (filter.publishedAt.min) {
-      where.push(`published_at >= $${i++}`)
+      where.push(`published_at >= ${param(i++)}`)
       params.push(filter.publishedAt.min)
     }
-
     if (filter.publishedAt.max) {
-      where.push(`published_at <= $${i++}`)
+      where.push(`published_at <= ${param(i++)}`)
       params.push(filter.publishedAt.max)
     }
   }
 
-  if (filter.id && filter.id.length > 0) {
-    where.push(`id = $${i++}`)
-    params.push(filter.id)
-  }
-
   if (filter.q && filter.q.length > 0) {
     const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
-    where.push(`(title ilike $${i++} or description ilike $${i++})`)
+    where.push(`(title ilike ${param(i++)} or description ilike ${param(i++)})`)
     params.push(q)
   }
 
   if (where.length > 0) {
     query = query + ` where ` + where.join(` and `)
   }
+
+  const orderBy = buildSort(sort, articleModel)
+  query = query + (orderBy.length > 0 ? ` order by ${orderBy}` : "")
 
   return { query, params }
 }

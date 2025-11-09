@@ -23,6 +23,7 @@ import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService
 import { buildQuery } from "./query"
 export * from "./article"
 
+const Published = "P"
 export class SqlArticleRepository extends SearchBuilder<Article, ArticleFilter> implements ArticleRepository {
   constructor(db: DB) {
     super(db.query, "articles", articleModel, db.driver, buildQuery)
@@ -56,7 +57,6 @@ export class ArticleController {
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
       q: "",
-      status: [],
       publishedAt: {},
     }
     if (hasSearch(req)) {
@@ -66,6 +66,7 @@ export class ArticleController {
     if (!filter.sort) {
       filter.sort = "-publishedAt"
     }
+    filter.status = Published
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     this.service

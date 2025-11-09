@@ -19,7 +19,7 @@ export interface ArticleFilter extends Filter {
   slug?: string
   title?: string
   description?: string
-  status: string[]
+  status?: string
   publishedAt: TimeRange
   tags?: string[]
   authorId?: string

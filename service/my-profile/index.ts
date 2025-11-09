@@ -7,7 +7,7 @@ import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { MyProfileService, User, userModel, UserRepository } from "./user"
 
-export class SqlUserRepositoy extends Repository<User, string> implements UserRepository {
+export class SqlUserRepository extends Repository<User, string> implements UserRepository {
   constructor(db: DB) {
     super(db, "users", userModel)
   }
@@ -37,7 +37,6 @@ export class MyProfileController {
   }
   view(req: Request, res: Response) {
     const userId: string = res.locals.userId
-    console.log("user id " + userId)
     const lang = getLang(req)
     const resource = getResource(lang)
     this.service
@@ -74,7 +73,7 @@ export class MyProfileController {
 }
 
 export function useMyProfileController(db: DB, log: Log): MyProfileController {
-  const repository = new SqlUserRepositoy(db)
+  const repository = new SqlUserRepository(db)
   const service = new MyProfileUseCase(repository)
   return new MyProfileController(service, log)
 }

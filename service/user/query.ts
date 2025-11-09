@@ -1,3 +1,4 @@
+import { param } from "pg-extension"
 import { Statement } from "query-core"
 import { UserFilter } from "./user"
 
@@ -8,51 +9,51 @@ export function buildQuery(filter: UserFilter): Statement {
   let i = 1
   if (filter.interests && filter.interests.length > 0) {
     params.push(filter.interests)
-    where.push(`interests && $${i++}`)
+    where.push(`interests && ${param(i++)}`)
   }
   if (filter.skills && filter.skills.length > 0) {
     const skills = []
     for (const skill of filter.skills) {
-      skills.push(`$${i++} <@ ANY(skills)`)
+      skills.push(`${param(i++)} <@ ANY(skills)`)
       params.push(skill)
     }
     where.push(`(${skills.join(" or ")})`)
   }
   if (filter.dateOfBirth) {
     if (filter.dateOfBirth.min) {
-      where.push(`date_of_birth >= $${i++}`)
+      where.push(`date_of_birth >= ${param(i++)}`)
       params.push(filter.dateOfBirth.min)
     }
     if (filter.dateOfBirth.max) {
-      where.push(`date_of_birth <= $${i++}`)
+      where.push(`date_of_birth <= ${param(i++)}`)
       params.push(filter.dateOfBirth.max)
     }
   }
   if (filter.id && filter.id.length > 0) {
-    where.push(`id = $${i++}`)
+    where.push(`id = ${param(i++)}`)
     params.push(filter.id)
   }
   if (filter.username && filter.username.length > 0) {
-    where.push(`username ilike $${i++}`)
+    where.push(`username ilike ${param(i++)}`)
     params.push("%" + filter.username + "%")
   }
   if (filter.email && filter.email.length > 0) {
-    where.push(`email ilike $${i++}`)
+    where.push(`email ilike ${param(i++)}`)
     params.push(filter.email + "%")
   }
   if (filter.phone && filter.phone.length > 0) {
-    where.push(`username ilike $${i++}`)
+    where.push(`username ilike ${param(i++)}`)
     params.push("%" + filter.phone + "%")
   }
   /*
   if (s.settings) {
     params.push(s.settings);
-    where.push(`settings @> $${i++}`);
+    where.push(`settings @> ${param(i++)}`);
   }
   if (s.achievements && s.achievements.length > 0) {
     const achievements = [];
     for (const achievement of s.achievements) {
-      achievements.push(`$${i++} <@ ANY(achievements)`);
+      achievements.push(`${param(i++)} <@ ANY(achievements)`);
       params.push(achievement);
     }
     where.push(`(${achievements.join(' or ')})`);
