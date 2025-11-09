@@ -95,7 +95,6 @@ export class MyArticlesController {
     }
     filter.authorId = res.locals.userId as string
     if (!filter.sort) {
-      console.log("sort " + filter.sort)
       filter.sort = "-publishedAt"
     }
     const page = queryPage(req, filter)

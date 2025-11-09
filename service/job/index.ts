@@ -63,9 +63,7 @@ export class JobController {
       format(filter, ["publishedAt"])
     }
     if (!filter.sort) {
-      console.log("sort " + filter.sort)
       filter.sort = "-publishedAt"
-      console.log("sort " + filter.sort)
     }
     const page = queryPage(req, filter)
     const limit = queryLimit(req)

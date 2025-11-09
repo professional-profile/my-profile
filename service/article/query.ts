@@ -48,9 +48,9 @@ export function buildQuery(filter: ArticleFilter, param2: LikeType | ((i: number
   if (where.length > 0) {
     query = query + ` where ` + where.join(` and `)
   }
-
   const orderBy = buildSort(sort, articleModel)
-  query = query + (orderBy.length > 0 ? ` order by ${orderBy}` : "")
-
+  if (orderBy.length > 0) {
+    query = query + ` order by ${orderBy}`
+  }
   return { query, params }
 }
