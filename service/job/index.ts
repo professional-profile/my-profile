@@ -15,7 +15,7 @@ import {
   queryPage,
   resources,
 } from "express-ext"
-import { Manager, Search } from "onecore"
+import { Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
@@ -29,7 +29,7 @@ export class SqlJobRepository extends Repository<Job, string> implements JobRepo
     super(db, "jobs", jobModel)
   }
 }
-export class JobUseCase extends Manager<Job, string, JobFilter> implements JobService {
+export class JobUseCase extends UseCase<Job, string, JobFilter> implements JobService {
   constructor(search: Search<Job, JobFilter>, repository: JobRepository) {
     super(search, repository)
   }

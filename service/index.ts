@@ -96,7 +96,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/my-articles", checkAuthen, ctx.menu.build, ctx.myArticles.search)
   app.get("/my-articles/:id", checkAuthen, ctx.menu.build, ctx.myArticles.view)
-  app.post("/my-articles/:id", authorized, ctx.menu.build, json(), ctx.myArticles.view)
+  app.post("/my-articles/:id", authorized, ctx.menu.build, json(), ctx.myArticles.submit)
 
   app.get("/profiles", ctx.menu.build, ctx.user.search)
   app.get("/profiles/:id", ctx.menu.build, ctx.user.view)

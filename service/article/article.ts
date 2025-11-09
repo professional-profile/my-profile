@@ -2,6 +2,7 @@ import { Attributes, Filter, Result, SearchResult, TimeRange } from "onecore"
 
 export interface Article {
   id: string
+  slug: string
   title: string
   description?: string
   content: string
@@ -15,6 +16,7 @@ export interface Article {
 }
 export interface ArticleFilter extends Filter {
   id?: string
+  slug?: string
   title?: string
   description?: string
   status: string[]
@@ -69,8 +71,8 @@ export const articleModel: Attributes = {
   thumbnail: {
     length: 400,
   },
-  high_thumbnail: {
-    column: "published_at",
+  highThumbnail: {
+    column: "high_thumbnail",
     length: 400,
   },
   authorId: {

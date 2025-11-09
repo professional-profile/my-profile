@@ -14,7 +14,7 @@ import {
   queryPage,
   resources,
 } from "express-ext"
-import { Manager, Search } from "onecore"
+import { Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
@@ -26,9 +26,15 @@ export * from "./article"
 export class SqlArticleRepository extends Repository<Article, string> implements ArticleRepository {
   constructor(db: DB) {
     super(db, "articles", articleModel)
+    this.load = this.load.bind(this)
+  }
+  override load(id: string): Promise<Article | null> {
+    const query = `select * from articles where slug = ${this.param(1)}`
+    return this.query<Article>(query, [id], this.map).then((articles) => (articles && articles.length > 0 ? articles[0] : null))
   }
 }
-export class ArticleUseCase extends Manager<Article, string, ArticleFilter> implements ArticleService {
+
+export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
   constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
     super(search, repository)
   }

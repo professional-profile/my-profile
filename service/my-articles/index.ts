@@ -17,10 +17,11 @@ import {
   resources,
   respondError,
 } from "express-ext"
-import { Log, Manager, Search } from "onecore"
+import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "xvalidators"
+import { slugify } from "../common/slug"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
@@ -32,9 +33,25 @@ export class SqlArticleRepository extends Repository<Article, string> implements
     super(db, "articles", articleModel)
   }
 }
-export class ArticleUseCase extends Manager<Article, string, ArticleFilter> implements ArticleService {
+export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
   constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
     super(search, repository)
+  }
+  create(article: Article, ctx?: any): Promise<number> {
+    article.slug = slugify(article.title)
+    return this.repository.create(article, ctx)
+  }
+  update(article: Article, ctx?: any): Promise<number> {
+    article.slug = slugify(article.title)
+    return this.repository.update(article, ctx)
+  }
+  patch(article: Partial<Article>, ctx?: any): Promise<number> {
+    if (article.title && article.title.length > 0) {
+      article.slug = slugify(article.title)
+    } else {
+      delete article.slug
+    }
+    return this.repository.patch ? this.repository.patch(article, ctx) : Promise.resolve(-1)
   }
 }
 
@@ -121,7 +138,7 @@ export class MyArticlesController {
             if (result === 0) {
               res.status(410).end()
             } else {
-              res.status(201).json(article).end()
+              res.status(201).json(result).end()
             }
           })
           .catch((err) => handleError(err, res, this.log))
@@ -139,7 +156,7 @@ export class MyArticlesController {
               if (result === 0) {
                 res.status(410).end()
               } else {
-                res.status(200).json(article).end()
+                res.status(200).json(result).end()
               }
             })
             .catch((err) => handleError(err, res, this.log))

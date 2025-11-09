@@ -17,6 +17,11 @@ export function buildQuery(filter: ArticleFilter): Statement {
     where.push(`tags && $${i++}`)
   }
 
+  if (filter.slug && filter.slug.length > 0) {
+    params.push(filter.slug + "%")
+    where.push(`slug ilike $${i++}`)
+  }
+
   if (filter.publishedAt) {
     if (filter.publishedAt.min) {
       where.push(`published_at >= $${i++}`)

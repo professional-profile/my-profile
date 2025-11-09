@@ -207,7 +207,7 @@ export const userModel: Attributes = {
     typeof: achievementsModel,
   },
   educations: {
-    type: "primitives",
+    type: "array",
     typeof: educationsModel,
   },
   settings: {

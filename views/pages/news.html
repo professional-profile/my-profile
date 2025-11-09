@@ -36,7 +36,7 @@
         <li class="col s12 m6 l4 xl3 card">
           <section>
             <div class="cover" style="background-image: url('{{ item.thumbnail }}')"></div>
-            <a href="/news/{{ item.id }}" onclick="navigate(event)">{{ item.title }}</a>
+            <a href="/news/{{ item.slug }}" onclick="navigate(event)">{{ item.title }}</a>
             <p>{{ item.publishedAt }}</p>
             <p>{{ item.description }}</p>
           </section>

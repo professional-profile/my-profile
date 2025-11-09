@@ -1,5 +1,6 @@
 create table articles (
   id varchar(80) primary key,
+  slug varchar(120),
   title varchar(255) not null,
   description varchar(1200) not null,
   content varchar(9500),
