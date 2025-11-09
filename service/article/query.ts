@@ -34,15 +34,15 @@ export function buildQuery(filter: ArticleFilter, param2: LikeType | ((i: number
     }
   }
 
+  if (filter.status && filter.status.length > 0) {
+    params.push(filter.status)
+    where.push(`status = ${param(i++)}`)
+  }
+
   if (filter.q && filter.q.length > 0) {
     const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
     where.push(`(title ilike ${param(i++)} or description ilike ${param(i++)})`)
     params.push(q)
-  }
-
-  if (filter.status && filter.status.length > 0) {
-    params.push(filter.status)
-    where.push(`status = ${param(i++)}`)
   }
 
   if (where.length > 0) {

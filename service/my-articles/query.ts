@@ -34,6 +34,15 @@ export function buildQuery(filter: ArticleFilter, param2: LikeType | ((i: number
     }
   }
 
+  if (filter.status && filter.status.length > 0) {
+    const arr: string[] = []
+    for (const status of filter.status) {
+      params.push(status)
+      arr.push(`${param(i++)}`)
+    }
+    where.push(`status in (${arr.join(",")})`)
+  }
+
   if (filter.q && filter.q.length > 0) {
     const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
     where.push(`(title ilike ${param(i++)} or description ilike ${param(i++)})`)

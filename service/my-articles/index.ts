@@ -90,7 +90,7 @@ export class MyArticlesController {
       publishedAt: {},
     }
     if (hasSearch(req)) {
-      filter = fromRequest<ArticleFilter>(req)
+      filter = fromRequest<ArticleFilter>(req, ["status"])
       format(filter, ["publishedAt"])
     }
     filter.authorId = res.locals.userId as string
