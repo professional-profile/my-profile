@@ -337,6 +337,9 @@ ul.list > li > section:first-child > div > p {
 .card p {
   font-size: 14px;
 }
+.card p.article-meta {
+  font-size: 16px;
+}
 .card > p.icon-text {
   display: flex;
   justify-content: left;

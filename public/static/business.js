@@ -1,9 +1,7 @@
 "use strict"
-function saveItem(id) {
+function saveItem(target, id, remove) {
   var url = getCurrentURL()
-  if (id && id.length > 0) {
-    url = removeLast(url) + "/" + id
-  }
+  url = (remove ? removeLast(url) : url) + "/" + id
   showLoading()
   fetch(url, {
     method: "PATCH",
@@ -12,11 +10,12 @@ function saveItem(id) {
     .then(function (response) {
       hideLoading()
       if (response.ok) {
-        alertSuccess("Save item successfully")
+        toast("Save item successfully")
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
         } else if (response.status === 409) {
+          toast("No change. You already saved this item before.")
         } else if (response.status === 422) {
           alertWarning("You reach the maximum of saved articles: 200. Remove some articles to have more slots to save.")
         }
@@ -26,11 +25,9 @@ function saveItem(id) {
       return handleError(err, resource.error_network)
     })
 }
-function removeItem(id) {
+function removeItem(target, id, remove) {
   var url = getCurrentURL()
-  if (id && id.length > 0) {
-    url = removeLast(url) + "/" + id
-  }
+  url = (remove ? removeLast(url) : url) + "/" + id
   showLoading()
   fetch(url, {
     method: "PATCH",
@@ -44,6 +41,7 @@ function removeItem(id) {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
         } else if (response.status === 410) {
+          toast("No change. You already removed this item before.")
         }
       }
     })

@@ -124,7 +124,7 @@ export class ArticleController {
       filter.sort = "-publishedAt"
     }
     filter.status = Published
-    filter.currentUserId = res.locals.userId
+    filter.userId = res.locals.userId
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     this.service
@@ -135,7 +135,7 @@ export class ArticleController {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
         const search = getSearch(req.url)
-        render(req, res, "news", {
+        render(req, res, "articles", {
           resource,
           limits: resources.limits,
           filter,
@@ -165,7 +165,7 @@ export class ArticleController {
       filter.sort = "-savedAt"
     }
     filter.status = Published
-    filter.currentUserId = res.locals.userId
+    filter.userId = res.locals.userId
     filter.isSaved = true
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
@@ -177,7 +177,7 @@ export class ArticleController {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
         const search = getSearch(req.url)
-        render(req, res, "news", {
+        render(req, res, "articles", {
           resource,
           limits: resources.limits,
           filter,

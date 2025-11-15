@@ -75,7 +75,7 @@ export class JobController {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
         const search = getSearch(req.url)
-        render(req, res, "careers", {
+        render(req, res, "jobs", {
           resource,
           limits: resources.limits,
           filter,

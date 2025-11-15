@@ -24,7 +24,7 @@ export interface ArticleFilter extends Filter {
   publishedAt: TimeRange
   tags?: string[]
   authorId?: string
-  currentUserId?: string
+  userId?: string
   isSaved?: boolean
 }
 
@@ -89,6 +89,5 @@ export const articleModel: Attributes = {
     type: "datetime",
     noupdate: true,
     noinsert: true,
-    ignored: true,
   },
 }

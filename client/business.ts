@@ -1,8 +1,6 @@
-function saveItem(id?: string) {
+function saveItem(target: HTMLElement, id: string, remove?: boolean) {
   let url = getCurrentURL()
-  if (id && id.length > 0) {
-    url = removeLast(url) + "/" + id
-  }
+  url = (remove ? removeLast(url) : url) + "/" + id
   showLoading()
   fetch(url, {
     method: "PATCH",
@@ -11,11 +9,12 @@ function saveItem(id?: string) {
     .then((response) => {
       hideLoading()
       if (response.ok) {
-        alertSuccess("Save item successfully")
+        toast("Save item successfully")
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
         } else if (response.status === 409) {
+          toast("No change. You already saved this item before.")
         } else if (response.status === 422) {
           alertWarning("You reach the maximum of saved articles: 200. Remove some articles to have more slots to save.")
         }
@@ -23,11 +22,9 @@ function saveItem(id?: string) {
     })
     .catch((err) => handleError(err, resource.error_network))
 }
-function removeItem(id: string) {
+function removeItem(target: HTMLElement, id: string, remove?: boolean) {
   let url = getCurrentURL()
-  if (id && id.length > 0) {
-    url = removeLast(url) + "/" + id
-  }
+  url = (remove ? removeLast(url) : url) + "/" + id
   showLoading()
   fetch(url, {
     method: "PATCH",
@@ -41,6 +38,7 @@ function removeItem(id: string) {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
         } else if (response.status === 410) {
+          toast("No change. You already removed this item before.")
         }
       }
     })
