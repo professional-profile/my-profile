@@ -5,7 +5,6 @@ import { buildQuery } from "./query"
 import { User, UserFilter, userModel, UserRepository, UserService } from "./user"
 
 export * from "./controller"
-export * from "./user"
 
 export class SqlUserRepository extends SearchRepository<User, UserFilter> implements UserRepository {
   constructor(db: DB) {
