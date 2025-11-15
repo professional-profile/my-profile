@@ -40,6 +40,8 @@ export interface ArticleService {
   remove(userId: string, id: string): Promise<number>
 }
 
+export const Published = "P"
+
 export const articleModel: Attributes = {
   id: {
     key: true,

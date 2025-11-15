@@ -15,53 +15,15 @@ import {
   queryPage,
   resources,
 } from "express-ext"
-import { Log, SearchResult } from "onecore"
+import { Log, SavedRepository, SavedService, SearchResult } from "onecore"
+import { SqlSavedRepository } from "pg-extension"
 import { DB, SearchRepository } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
-import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
+import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Published } from "./article"
 import { buildQuery } from "./query"
 export * from "./article"
-
-const Published = "P"
-
-export interface SavedRepository {
-  isSaved(userId: string, id: string): Promise<boolean>
-  save(userId: string, id: string): Promise<number>
-  remove(userId: string, id: string): Promise<number>
-  count(userId: string): Promise<number>
-}
-export class SqlSavedRepository {
-  constructor(protected db: DB, protected table: string, protected userId: string, protected id: string, protected saveAt: string) {
-    this.isSaved = this.isSaved.bind(this)
-    this.save = this.save.bind(this)
-    this.remove = this.remove.bind(this)
-    this.count = this.count.bind(this)
-  }
-  isSaved(userId: string, id: string): Promise<boolean> {
-    const sql = `select ${this.userId} from ${this.table} where ${this.userId} = ${this.db.param(1)} and ${this.id} = ${this.db.param(2)}`
-    return this.db.query<any>(sql, [userId, id]).then((rows) => {
-      return rows.length > 0 ? true : false
-    })
-  }
-  save(userId: string, id: string): Promise<number> {
-    const sql = `insert into ${this.table} (${this.userId}, ${this.id}, ${this.saveAt})
-    values (${this.db.param(1)}, ${this.db.param(2)}, ${this.db.param(3)})
-    on conflict (${this.userId}, ${this.id}) do nothing`
-    return this.db.exec(sql, [userId, id, new Date()])
-  }
-  remove(userId: string, id: string): Promise<number> {
-    const sql = `delete from ${this.table} where ${this.userId} = ${this.db.param(1)} and ${this.id} = ${this.db.param(2)}`
-    return this.db.exec(sql, [userId, id])
-  }
-  count(userId: string): Promise<number> {
-    const sql = `select count(*) as total from ${this.table} where ${this.userId} = ${this.db.param(1)}`
-    return this.db.query<any>(sql, [userId]).then((rows) => {
-      return rows[0]["total"] as number
-    })
-  }
-}
 
 export class SqlArticleRepository extends SearchRepository<Article, ArticleFilter> implements ArticleRepository {
   constructor(db: DB) {
@@ -73,32 +35,19 @@ export class SqlArticleRepository extends SearchRepository<Article, ArticleFilte
   }
 }
 
-export class ArticleUseCase implements ArticleService {
-  constructor(private repository: ArticleRepository, private savedRepository: SavedRepository, private max: number) {}
+export class ArticleUseCase extends SavedService<string, string> implements ArticleService {
+  constructor(private repository: ArticleRepository, savedRepository: SavedRepository<string, string>, max: number) {
+    super(savedRepository, max)
+  }
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)
   }
   load(id: string): Promise<Article | null> {
     return this.repository.load(id)
   }
-  isSaved(userId: string, id: string): Promise<boolean> {
-    return this.savedRepository.isSaved(userId, id)
-  }
-  save(userId: string, id: string): Promise<number> {
-    return this.savedRepository.count(userId).then((count) => {
-      if (count >= this.max) {
-        return -1
-      } else {
-        return this.savedRepository.save(userId, id)
-      }
-    })
-  }
-  remove(userId: string, id: string): Promise<number> {
-    return this.savedRepository.remove(userId, id)
-  }
 }
 
-const fields = ["title", "publishedAt", "description"]
+const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController {
   constructor(private service: ArticleService, private log: Log) {
     this.search = this.search.bind(this)
