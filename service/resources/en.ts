@@ -10,6 +10,7 @@ export const en = {
   leadership: "Leadership",
 
   my_articles: "My articles",
+  saved_articles: "My saved articles",
 
   menu: "Menu",
   sidebar: "Sidebar",

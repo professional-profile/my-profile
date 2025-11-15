@@ -12,6 +12,7 @@ interface ErrorMessage {
 // tslint:disable-next-line:class-name
 class resources {
   static autoCollapse = false
+  static refreshLoad = true
   static login = "/login"
   static redirect = "redirectUrl"
   static defaultLimit = 12
@@ -19,7 +20,7 @@ class resources {
   static hiddenMessage = "hidden-message"
   static token = "token"
 
-  static load(pageBody: HTMLElement): void {}
+  static load?: (pageBody: HTMLElement) => void
 
   static num1 = / |,|\$|€|£|¥|'|٬|،| /g
   static num2 = / |\.|\$|€|£|¥|'|٬|،| /g
@@ -45,6 +46,13 @@ class resources {
 
 function getCurrentURL() {
   return window.location.origin + window.location.pathname
+}
+function removeLast(url: string): string {
+  const i = url.lastIndexOf("/")
+  if (i > 0) {
+    return url.substring(0, i)
+  }
+  return url
 }
 function getRedirect(): string {
   const loc = window.location.href

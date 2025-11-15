@@ -37,7 +37,13 @@
           <section>
             <div class="cover" style="background-image: url('{{ item.thumbnail }}')"></div>
             <a href="/news/{{ item.slug }}" onclick="navigate(event)">{{ item.title }}</a>
-            <p>{{ item.publishedAt }}</p>
+            <p>{{ item.publishedAt }}
+            {% if account %} {% if article.savedAt %}
+            <i class="material-icons" onclick="removeItem('{{article.id}}')">bookmark</i>
+            {% else %}
+            <i class="material-icons" onclick="saveItem('{{article.id}}')">bookmark_border</i>
+            {% endif %} {% endif %}
+            </p>
             <p>{{ item.description }}</p>
           </section>
         </li>

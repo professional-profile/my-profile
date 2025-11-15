@@ -117,7 +117,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
 
   const user = useUserController(db, logger.error)
   const content = useContentController(db, ["vi"], menuItemsLoader)
-  const article = useArticleController(db)
+  const article = useArticleController(db, logger.error)
   const job = useJobController(db)
 
   return { health, log, middleware, menu, signin, signup, password, myProfile, myArticles, user, content, article, job }

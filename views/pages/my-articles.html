@@ -48,7 +48,7 @@
           <section>
             <div class="cover" style="background-image: url('{{ item.thumbnail }}')"></div>
             <a href="/my-articles/{{ item.id }}" onclick="navigate(event)">{{ item.title }}</a>
-            <p>{{ item.publishedAt }}</p>
+            <p>{{ item.publishedAt }} <i class="material-icons">bookmark</i> <i class="material-icons">bookmark_border</i></p>
             <p>{{ item.description }}</p>
           </section>
         </li>

@@ -10,6 +10,7 @@ export const vi = {
   leadership: "Khả năng lãnh đạo",
 
   my_articles: "Bài viết của tôi",
+  saved_articles: "Bài viết đã lưu",
 
   menu: "Menu",
   sidebar: "Sidebar",

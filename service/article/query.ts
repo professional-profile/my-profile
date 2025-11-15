@@ -3,10 +3,26 @@ import { buildSort, Statement } from "query-core"
 import { ArticleFilter, articleModel } from "./article"
 
 export function buildQuery(filter: ArticleFilter): Statement {
-  let query = `select * from articles `
   const where = []
   const params = []
   let i = 1
+  let query: string
+  if (filter.currentUserId) {
+    if (filter.isSaved) {
+      query = `select a.*, sa.saved_at 
+        from saved_articles sa 
+        inner join articles a
+        on sa.user_id  = ${param(i++)} and sa.id = a.id`
+    } else {
+      query = `select a.*, sa.saved_at 
+        from articles a 
+        left join saved_articles sa 
+        on sa.id = a.id and sa.user_id = ${param(i++)}`
+    }
+    params.push(filter.currentUserId)
+  } else {
+    query = `select a.* from articles a`
+  }
 
   if (filter.id && filter.id.length > 0) {
     where.push(`id = ${param(i++)}`)
@@ -52,5 +68,6 @@ export function buildQuery(filter: ArticleFilter): Statement {
   if (orderBy.length > 0) {
     query = query + ` order by ${orderBy}`
   }
+  console.log("Query " + query)
   return { query, params }
 }

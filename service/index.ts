@@ -109,6 +109,9 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/news", ctx.menu.build, ctx.article.search)
   app.get("/news/:id", ctx.menu.build, ctx.article.view)
+  app.get("/saved-news", checkAuthen, ctx.menu.build, ctx.article.getSavedArticles)
+  app.patch("/news/:id", checkAuthen, ctx.article.save)
+  app.delete("/news/:id", checkAuthen, ctx.article.remove)
 
   app.get("/careers", ctx.menu.build, ctx.job.search)
   app.get("/careers/:id", ctx.menu.build, ctx.job.view)

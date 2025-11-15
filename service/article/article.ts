@@ -13,6 +13,7 @@ export interface Article {
   status?: string
   createdAt?: Date
   authorId?: string
+  isSaved?: boolean
 }
 export interface ArticleFilter extends Filter {
   id?: string
@@ -23,6 +24,8 @@ export interface ArticleFilter extends Filter {
   publishedAt: TimeRange
   tags?: string[]
   authorId?: string
+  currentUserId?: string
+  isSaved?: boolean
 }
 
 export interface ArticleRepository {
@@ -32,6 +35,9 @@ export interface ArticleRepository {
 export interface ArticleService {
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
   load(id: string): Promise<Article | null>
+  isSaved(userId: string, id: string): Promise<boolean>
+  save(userId: string, id: string): Promise<number>
+  remove(userId: string, id: string): Promise<number>
 }
 
 export const articleModel: Attributes = {
@@ -77,5 +83,12 @@ export const articleModel: Attributes = {
     column: "created_at",
     type: "datetime",
     noupdate: true,
+  },
+  savedAt: {
+    column: "saved_at",
+    type: "datetime",
+    noupdate: true,
+    noinsert: true,
+    ignored: true,
   },
 }

@@ -1,8 +1,8 @@
 "use strict"
 var resources = (function () {
   function resources() {}
-  resources.load = function (pageBody) {}
   resources.autoCollapse = false
+  resources.refreshLoad = true
   resources.login = "/login"
   resources.redirect = "redirectUrl"
   resources.defaultLimit = 12
@@ -31,6 +31,13 @@ var resources = (function () {
 })()
 function getCurrentURL() {
   return window.location.origin + window.location.pathname
+}
+function removeLast(url) {
+  var i = url.lastIndexOf("/")
+  if (i > 0) {
+    return url.substring(0, i)
+  }
+  return url
 }
 function getRedirect() {
   var loc = window.location.href

@@ -5,7 +5,16 @@
   </header>
   <div class="article-body">
     <h4 class="article-description">{{article.description}}</h4>
-    <h4 class="article-meta">{{article.publishedAt}}</h4>
+    <h4 class="article-meta">
+      {{article.publishedAt}}
+      {% if account %}
+      {% if article.isSaved %}
+      <i class="material-icons" onclick="removeItem('{{article.id}}')">bookmark</i>
+      {% else %}
+      <i class="material-icons" onclick="saveItem('{{article.id}}')">bookmark_border</i>
+      {% endif %}
+      {% endif %}
+    </h4>
     <div class="article-content">{{article.content}}</div>
     <h4 class="article-meta">{{generateTags(article.tags, true)}}</h4>
   </div>
