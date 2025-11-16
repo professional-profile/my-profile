@@ -13,7 +13,7 @@ export interface Article {
   status?: string
   createdAt?: Date
   authorId?: string
-  isSaved?: boolean
+  savedAt?: Date
 }
 export interface ArticleFilter extends Filter {
   id?: string
@@ -30,11 +30,11 @@ export interface ArticleFilter extends Filter {
 
 export interface ArticleRepository {
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
-  load(id: string): Promise<Article | null>
+  load(id: string, userId?: string): Promise<Article | null>
 }
 export interface ArticleService {
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
-  load(id: string): Promise<Article | null>
+  load(id: string, userId?: string): Promise<Article | null>
   isSaved(userId: string, id: string): Promise<boolean>
   save(userId: string, id: string): Promise<number>
   remove(userId: string, id: string): Promise<number>

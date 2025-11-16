@@ -117,22 +117,15 @@ export class ArticleController extends SavedController {
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const id = req.params.id
+    const userId: string = res.locals.userId
     this.service
-      .load(id)
+      .load(id, userId)
       .then((article) => {
         if (!article) {
           renderError404(req, res, resource)
         } else {
-          const userId: string = res.locals.userId
           article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-          if (userId) {
-            this.service.isSaved(userId, article.id).then((isSaved) => {
-              article.isSaved = isSaved
-              render(req, res, "article", { resource, article })
-            })
-          } else {
-            render(req, res, "article", { resource, article })
-          }
+          render(req, res, "article", { resource, article })
         }
       })
       .catch((err) => renderError500(req, res, resource, err))

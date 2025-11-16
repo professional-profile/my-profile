@@ -2,7 +2,7 @@
   <form id="userForm" name="userForm">
     <header class="border-bottom-highlight">
       <div class="cover-image">
-        <img src="https://pre00.deviantart.net/6ecb/th/pre/f/2013/086/3/d/facebook_cover_1_by_alphacid-d5zfrww.jpg" alt="cover" />
+        <img src="{{user.coverURL}}" alt="cover" />
         <div class="contact-group">
           <button id="btnPhone" name="btnPhone" class="btn-phone"></button><button id="btnEmail" name="btnEmail" class="btn-email"></button>
         </div>
@@ -10,12 +10,12 @@
       </div>
       <button id="btnCamera" name="btnCamera" class="btn-camera"></button>
       <div class="avatar-wrapper">
-        <img class="avatar" src="https://avatars.githubusercontent.com/u/37324393?v=4" alt="user avatar" />
+        <img class="avatar" src="{{user.imageURL}}" alt="user avatar" />
         <img class="profile-status" src="/images/online.svg" alt="status" />
       </div>
       <div class="profile-title">
         <h4>{{user.displayName}}</h4>
-        <p>{{user.website}}</p>
+        <p>{{user.headline}}</p>
       </div>
       <div class="profile-followers">
         <p><i class="material-icons highlight">group</i> 7 followers</p>
@@ -29,22 +29,42 @@
             <i class="material-icons highlight">account_box</i>Basic Info
             <button type="button" id="btnBasicInfo" name="btnBasicInfo" class="btn-edit"></button>
           </header>
+          {% if user.occupation %}
           <p class="icon-text">
             <i class="material-icons">local_mall</i>
             {{user.occupation}}
           </p>
+          {% endif %}
+          {% if user.company %}
           <p class="icon-text">
             <i class="material-icons">location_city</i>
             {{user.company}}
           </p>
+          {% endif %}
+          {% if user.location %}
           <p class="icon-text">
             <i class="material-icons">location_on</i>
             {{user.location}}
           </p>
+          {% endif %}
+          {% if user.website %}
           <p class="icon-text">
             <i class="material-icons">bookmark</i>
             {{user.website}}
           </p>
+          {% endif %}
+          {% if user.email %}
+          <p class="icon-text">
+            <i class="material-icons">email</i>
+            {{user.email}}
+          </p>
+          {% endif %}
+          {% if user.phone %}
+          <p class="icon-text">
+            <i class="material-icons">phone</i>
+            {{user.phone}}
+          </p>
+          {% endif %}
         </div>
         <div class="card">
           <header>

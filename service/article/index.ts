@@ -11,9 +11,20 @@ export class SqlArticleRepository extends SearchRepository<Article, ArticleFilte
   constructor(db: DB) {
     super(db.query, "articles", articleModel, db.driver, buildQuery)
   }
-  load(id: string): Promise<Article | null> {
-    const query = `select * from articles where slug = ${this.param(1)}`
-    return this.query<Article>(query, [id], this.map).then((articles) => (articles && articles.length > 0 ? articles[0] : null))
+  load(id: string, userId?: string): Promise<Article | null> {
+    const params = []
+    let query: string
+    if (userId && userId.length > 0) {
+      query = `select a.*, sa.saved_at 
+        from articles a 
+        left join saved_articles sa 
+          on sa.id = a.id and sa.user_id = ${this.param(1)} where a.slug = ${this.param(2)}`
+      params.push(userId)
+    } else {
+      query = `select a.* from articles a where a.slug = ${this.param(1)}`
+    }
+    params.push(id)
+    return this.query<Article>(query, params, this.map).then((articles) => (articles && articles.length > 0 ? articles[0] : null))
   }
 }
 
@@ -24,8 +35,8 @@ export class ArticleUseCase extends SavedService<string, string> implements Arti
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)
   }
-  load(id: string): Promise<Article | null> {
-    return this.repository.load(id)
+  load(id: string, userId?: string): Promise<Article | null> {
+    return this.repository.load(id, userId)
   }
 }
 
