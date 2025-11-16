@@ -2,7 +2,7 @@ import { nanoid } from "nanoid"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { slugify } from "../common/slug"
-import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
+import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
 import { MyArticlesController } from "./controller"
 import { buildQuery } from "./query"
 
@@ -13,7 +13,7 @@ export class SqlArticleRepository extends Repository<Article, string> implements
     super(db, "articles", articleModel)
   }
 }
-const draft = "D"
+
 export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
   constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
     super(search, repository)
@@ -28,7 +28,7 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
     if (!existingArticle) {
       return 0
     }
-    if (existingArticle.status === draft) {
+    if (existingArticle.status === Draft) {
       article.slug = slugify(article.title, article.id)
     }
     return this.repository.update(article, ctx)
@@ -40,7 +40,7 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
       if (!existingArticle) {
         return 0
       }
-      if (existingArticle.status === draft) {
+      if (existingArticle.status === Draft) {
         article.slug = slugify(article.title, id)
       }
       return this.repository.patch(article, ctx)

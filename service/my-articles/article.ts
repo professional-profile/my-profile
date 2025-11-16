@@ -41,6 +41,8 @@ export interface ArticleService {
   delete(id: string): Promise<number>
 }
 
+export const Draft = "D"
+
 export const articleModel: Attributes = {
   id: {
     key: true,
