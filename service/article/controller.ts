@@ -9,11 +9,11 @@ import {
   format,
   fromRequest,
   getSearch,
-  handleError,
   hasSearch,
   queryLimit,
   queryPage,
   resources,
+  SavedController
 } from "express-ext"
 import { Log } from "onecore"
 import { formatDateTime } from "ui-formatter"
@@ -22,13 +22,12 @@ import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
 
 const fields = ["id", "title", "publishedAt", "description"]
-export class ArticleController {
-  constructor(private service: ArticleService, private log: Log) {
+export class ArticleController extends SavedController {
+  constructor(protected service: ArticleService, protected log: Log) {
+    super(service, log, "id", "userId")
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.getSavedArticles = this.getSavedArticles.bind(this)
-    this.save = this.save.bind(this)
-    this.remove = this.remove.bind(this)
   }
   search(req: Request, res: Response) {
     const lang = getLang(req)
@@ -137,33 +136,5 @@ export class ArticleController {
         }
       })
       .catch((err) => renderError500(req, res, resource, err))
-  }
-  save(req: Request, res: Response) {
-    const userId: string = res.locals.userId
-    const id = req.params.id
-    if (!id || id.length === 0) {
-      return res.status(400).end(`'id' cannot be empty`)
-    }
-    this.service
-      .save(userId, id)
-      .then((result) => {
-        const status = result > 0 ? 200 : result === 0 ? 409 : 422
-        res.status(status).json(result).end()
-      })
-      .catch((err) => handleError(err, res, this.log))
-  }
-  remove(req: Request, res: Response) {
-    const userId: string = res.locals.userId
-    const id = req.params.id
-    if (!id || id.length === 0) {
-      return res.status(400).end(`id' cannot be empty`)
-    }
-    this.service
-      .remove(userId, id)
-      .then((result) => {
-        const status = result > 0 ? 200 : 410
-        res.status(status).json(result).end()
-      })
-      .catch((err) => handleError(err, res, this.log))
   }
 }

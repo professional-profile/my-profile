@@ -30,7 +30,7 @@ function removeItem(target, id, remove) {
   url = (remove ? removeLast(url) : url) + "/" + id
   showLoading()
   fetch(url, {
-    method: "PATCH",
+    method: "DELETE",
     headers: getHttpHeaders(),
   })
     .then(function (response) {

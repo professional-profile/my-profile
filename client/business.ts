@@ -27,7 +27,7 @@ function removeItem(target: HTMLElement, id: string, remove?: boolean) {
   url = (remove ? removeLast(url) : url) + "/" + id
   showLoading()
   fetch(url, {
-    method: "PATCH",
+    method: "DELETE",
     headers: getHttpHeaders(),
   })
     .then((response) => {
