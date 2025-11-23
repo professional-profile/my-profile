@@ -9,19 +9,19 @@ export function buildQuery(filter: ArticleFilter): Statement {
   let query: string
   if (filter.userId) {
     if (filter.isSaved) {
-      query = `select a.*, sa.saved_at 
+      query = `select a.id, a.thumbnail, a.slug, a.title, a.description, a.published_at, sa.saved_at 
         from saved_articles sa 
         inner join articles a
         on sa.user_id = ${param(i++)} and sa.id = a.id`
     } else {
-      query = `select a.*, sa.saved_at 
+      query = `select a.id, a.thumbnail, a.slug, a.title, a.description, a.published_at, sa.saved_at 
         from articles a 
         left join saved_articles sa 
         on sa.id = a.id and sa.user_id = ${param(i++)}`
     }
     params.push(filter.userId)
   } else {
-    query = `select a.* from articles a`
+    query = `select a.id, a.thumbnail, a.slug, a.title, a.description, a.published_at from articles a`
   }
 
   if (filter.id && filter.id.length > 0) {

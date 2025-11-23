@@ -26,6 +26,10 @@ export interface User {
   works: Work[]
   educations: Education[]
   settings?: UserSettings
+  followerCount?: number
+  followingCount?: number
+  followingAt?: Date
+  followedAt?: Date
 }
 export interface UserSettings {
   language: string
@@ -70,11 +74,14 @@ export interface UserFilter extends Filter {
 
 export interface UserRepository {
   search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
-  load(id: string): Promise<User | null>
+  load(id: string, userId?: string): Promise<User | null>
 }
 export interface UserService {
   search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
-  load(id: string): Promise<User | null>
+  load(id: string, userId?: string): Promise<User | null>
+  follow(id: string, target: string): Promise<number>
+  unfollow(id: string, target: string): Promise<number>
+  checkFollow(id: string, target: string): Promise<number>
 }
 
 export const skillsModel: Attributes = {
@@ -205,5 +212,29 @@ export const userModel: Attributes = {
   settings: {
     type: "object",
     typeof: userSettingsModel,
+  },
+  followerCount: {
+    column: "follower_count",
+    type: "integer",
+    noinsert: true,
+    noupdate: true
+  },
+  followingCount: {
+    column: "following_count",
+    type: "integer",
+    noinsert: true,
+    noupdate: true
+  },
+  followingAt: {
+    column: "following_at",
+    type: "datetime",
+    noinsert: true,
+    noupdate: true
+  },
+  followedAt: {
+    column: "followed_at",
+    type: "datetime",
+    noinsert: true,
+    noupdate: true
   },
 }

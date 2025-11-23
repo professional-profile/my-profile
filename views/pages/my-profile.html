@@ -6,7 +6,13 @@
         <div class="contact-group">
           <button id="btnPhone" name="btnPhone" class="btn-phone"></button><button id="btnEmail" name="btnEmail" class="btn-email"></button>
         </div>
-        <button id="btnFollow" name="btnFollow" class="btn-follow">Follow</button>
+        {% if account.id != user.id %}
+        {% if user.followingAt %}
+        <button type="button" id="btnFollow" name="btnFollow" class="btn-follow" onclick="unfollow(this, '{{user.id}}', true)">Unfollow</button>
+        {% else %}
+        <button type="button" id="btnFollow" name="btnFollow" class="btn-follow" onclick="follow(this, '{{user.id}}', true)">Follow</button>
+        {% endif %}
+        {% endif %}
       </div>
       <button id="btnCamera" name="btnCamera" class="btn-camera"></button>
       <div class="avatar-wrapper">
@@ -18,8 +24,8 @@
         <p>{{user.headline}}</p>
       </div>
       <div class="profile-followers">
-        <p><i class="material-icons highlight">group</i> 7 followers</p>
-        <p><i class="material-icons highlight">group_add</i> 10 following</p>
+        {% if user.followerCount %}<p><i class="material-icons highlight">group</i>{{user.followerCount}} followers</p>{% endif %}
+        {% if user.followingCount %}<p><i class="material-icons highlight">group_add</i>{{user.followingCount}} followings</p>{% endif %}
       </div>
     </header>
     <div class="row list card-grid">

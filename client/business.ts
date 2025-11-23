@@ -33,7 +33,7 @@ function removeItem(target: HTMLElement, id: string, remove?: boolean) {
     .then((response) => {
       hideLoading()
       if (response.ok) {
-        alertSuccess("Remove item successfully")
+        toast("Remove item successfully")
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
@@ -77,7 +77,7 @@ function unfollow(target: HTMLElement, id: string, remove?: boolean) {
     .then((response) => {
       hideLoading()
       if (response.ok) {
-        alertSuccess("Remove item successfully")
+        toast("Unfollow successfully")
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()

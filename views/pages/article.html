@@ -10,7 +10,7 @@
       {% if account %} {% if article.savedAt %}
       <i class="material-icons" onclick="removeItem(this, '{{article.id}}', true)">bookmark</i>
       {% else %}
-      <i class="material-icons" onclick="saveItem(this, '{{article.id}}'), true">bookmark_border</i>
+      <i class="material-icons" onclick="saveItem(this, '{{article.id}}', true)">bookmark_border</i>
       {% endif %} {% endif %}
     </h4>
     <div class="article-content">{{article.content}}</div>

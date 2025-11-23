@@ -3,7 +3,7 @@ import { buildSort, Statement } from "query-core"
 import { UserFilter, userModel } from "./user"
 
 export function buildQuery(filter: UserFilter): Statement {
-  let query = `select * from users`
+  let query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline from users u`
   const where = []
   const params = []
   let i = 1

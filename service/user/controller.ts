@@ -7,6 +7,7 @@ import {
   cloneFilter,
   escape,
   escapeArray,
+  FollowController,
   fromRequest,
   getOffset,
   getSearch,
@@ -22,8 +23,9 @@ import { UserFilter, UserService } from "./user"
 
 const fields = ["id", "username", "email", "displayName", "status"]
 
-export class UserController {
-  constructor(private service: UserService, private log: Log) {
+export class UserController extends FollowController {
+  constructor(protected service: UserService, protected log: Log) {
+    super(service, log, "id", "userId")
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
   }
@@ -69,12 +71,14 @@ export class UserController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const id = req.params.id
+    const userId: string = res.locals.userId
     this.service
-      .load(id)
+      .load(id, userId)
       .then((user) => {
         if (!user) {
           renderError404(req, res, resource)
         } else {
+          console.log("user " + JSON.stringify(user))
           render(req, res, "user", {
             resource,
             user: escape(user),
