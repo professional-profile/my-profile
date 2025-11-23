@@ -1,4 +1,3 @@
-"use strict"
 function saveItem(target, id, remove) {
   var url = getCurrentURL()
   url = (remove ? removeLast(url) : url) + "/" + id
@@ -42,6 +41,54 @@ function removeItem(target, id, remove) {
           window.location.href = buildLoginUrl()
         } else if (response.status === 410) {
           toast("No change. You already removed this item before.")
+        }
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
+}
+function follow(target, id, remove) {
+  var url = getCurrentURL()
+  url = (remove ? removeLast(url) : url) + "/" + id
+  showLoading()
+  fetch(url, {
+    method: "PATCH",
+    headers: getHttpHeaders(),
+  })
+    .then(function (response) {
+      hideLoading()
+      if (response.ok) {
+        toast("Follow successfully")
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
+        } else if (response.status === 409) {
+          toast("No change. You already follow this user before.")
+        }
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
+}
+function unfollow(target, id, remove) {
+  var url = getCurrentURL()
+  url = (remove ? removeLast(url) : url) + "/" + id
+  showLoading()
+  fetch(url, {
+    method: "DELETE",
+    headers: getHttpHeaders(),
+  })
+    .then(function (response) {
+      hideLoading()
+      if (response.ok) {
+        alertSuccess("Remove item successfully")
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
+        } else if (response.status === 410) {
+          toast("No change. You already unfollowed this user before.")
         }
       }
     })

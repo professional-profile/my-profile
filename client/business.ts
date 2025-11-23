@@ -44,6 +44,51 @@ function removeItem(target: HTMLElement, id: string, remove?: boolean) {
     })
     .catch((err) => handleError(err, resource.error_network))
 }
+function follow(target: HTMLElement, id: string, remove?: boolean) {
+  let url = getCurrentURL()
+  url = (remove ? removeLast(url) : url) + "/" + id
+  showLoading()
+  fetch(url, {
+    method: "PATCH",
+    headers: getHttpHeaders(),
+  })
+    .then((response) => {
+      hideLoading()
+      if (response.ok) {
+        toast("Follow successfully")
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
+        } else if (response.status === 409) {
+          toast("No change. You already follow this user before.")
+        }
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
+}
+function unfollow(target: HTMLElement, id: string, remove?: boolean) {
+  let url = getCurrentURL()
+  url = (remove ? removeLast(url) : url) + "/" + id
+  showLoading()
+  fetch(url, {
+    method: "DELETE",
+    headers: getHttpHeaders(),
+  })
+    .then((response) => {
+      hideLoading()
+      if (response.ok) {
+        alertSuccess("Remove item successfully")
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
+        } else if (response.status === 410) {
+          toast("No change. You already unfollowed this user before.")
+        }
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
+}
+
 function toggleView(target: HTMLButtonElement, viewId: string, editorId: string, toolbarId: string) {
   const form = target.form
   if (form) {
