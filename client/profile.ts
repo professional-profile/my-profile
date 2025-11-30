@@ -1,50 +1,34 @@
 function editUserInterests(target: HTMLButtonElement) {
-  hideOtherElements(target, "btn-edit")
-  let url = getCurrentURL()
-  console.log("url " + url)
-  url = url + "/interests_update"
-  console.log("url " + url)
+  const url = getCurrentURL() + "/interests_update"
   const container = document.getElementById("userInterests")
+  const form = target.form as HTMLFormElement
   if (container) {
     showLoading()
-    fetch(url, {
-      method: "GET",
-      headers: getHttpHeaders(),
-    })
-      .then((response) => {
-        if (response.ok) {
-          response
-            .text()
-            .then((data) => {
-              container.innerHTML = data
-              hideLoading()
-            })
-            .catch((err) => handleError(err, resource.error_response_body))
-        } else {
-          hideLoading()
-          if (response.status === 401) {
-            window.location.href = buildLoginUrl()
-          } else if (response.status === 403) {
-            alertError(resource.error_403)
-          } else if (response.status === 404) {
-            alertError(resource.error_404)
-          } else {
-            console.error("Error: ", response.statusText)
-            alertError(resource.error_submit_failed, response.statusText)
-          }
-        }
-      })
-      .catch((err) => handleError(err, resource.error_network))
+    loadAjax(
+      url,
+      container,
+      function () {
+        hideLoading()
+        hideOtherElements(form, target, "btn-edit")
+      },
+      hideLoading,
+    )
   }
 }
-function hideOtherElements(target: HTMLButtonElement, className: string) {
-  const form = target.form
-  if (form) {
-    for (let i = 0; i < form.length; i++) {
-      const ele = form[i] as HTMLInputElement
-      if (ele !== target && ele.classList.contains(className)) {
-        ele.hidden = true
-      }
-    }
+function closeUserInterests(target: HTMLButtonElement) {
+  const url = getCurrentURL() + "/interests"
+  const container = document.getElementById("userInterests")
+  const form = target.form as HTMLFormElement
+  if (container) {
+    showLoading()
+    loadAjax(
+      url,
+      container,
+      function () {
+        hideLoading()
+        showOtherElements(form, target, "btn-edit")
+      },
+      hideLoading,
+    )
   }
 }

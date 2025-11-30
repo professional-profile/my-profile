@@ -105,6 +105,7 @@ export const vi = {
   error_network: "The network is down. Cannot connect to server.",
   error_response_body: "Error while processing the response body.",
   error_submit_failed: "Failed to submit data.",
+  error_ajax: "Không thể lấy trang với ajax",
 
   error_500: "Internal Server error",
   error_502: "Bad Gateway",
