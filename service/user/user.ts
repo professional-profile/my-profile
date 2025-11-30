@@ -137,8 +137,9 @@ export const userModel: Attributes = {
   },
   username: {},
   email: {
-    format: "email",
     required: true,
+    format: "email",
+    length: 255,
     match: "prefix",
   },
   phone: {
@@ -188,7 +189,9 @@ export const userModel: Attributes = {
   bio: {
     length: 3000,
   },
-  website: {},
+  website: {
+    length: 255,
+  },
   occupation: {
     length: 100,
   },
@@ -221,24 +224,24 @@ export const userModel: Attributes = {
     column: "follower_count",
     type: "integer",
     noinsert: true,
-    noupdate: true
+    noupdate: true,
   },
   followingCount: {
     column: "following_count",
     type: "integer",
     noinsert: true,
-    noupdate: true
+    noupdate: true,
   },
   followingAt: {
     column: "following_at",
     type: "datetime",
     noinsert: true,
-    noupdate: true
+    noupdate: true,
   },
   followedAt: {
     column: "followed_at",
     type: "datetime",
     noinsert: true,
-    noupdate: true
+    noupdate: true,
   },
 }

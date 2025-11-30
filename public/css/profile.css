@@ -16,12 +16,13 @@
     padding: 10px 5%;
   }
 
+  .page-body > div > header.profile-header,
   .profile-header {
     width: calc(100% - 30px);
     margin-left: 15px;
   }
 }
-
+.page-body > div > header.profile-header,
 .profile-header {
   position: relative;
   height: 314px; /* 394px */
@@ -278,6 +279,15 @@ header.nav > .profile-followers {
   max-height: none;
 }
 
+.profile .list.row.card-grid {
+  margin-top: 0;
+}
+@media screen and (max-width: 600px) {
+  .profile > form > div > *:last-child {
+    margin-bottom: 16px; /* 44px + 20px - 20px */
+  }
+}
+
 .profile .card:last-child {
   margin-bottom: 0;
 }
@@ -378,12 +388,6 @@ header.nav > .profile-followers {
   display: none;
   margin-left: 7px;
   margin-right: 9px;
-}
-
-@media screen and (max-width: 600px) {
-  .profile > form > div > *:last-child {
-    margin-bottom: 64px; /* 44px + 20px - 20px */
-  }
 }
 
 .dropdown-upload-cover {

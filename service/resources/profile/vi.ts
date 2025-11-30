@@ -46,6 +46,13 @@ export const vi = {
   user_profile_educations: "Educations",
   user_profile_works: "Works",
 
+  placeholder_occupation: "Occupation",
+  placeholder_company: "Company",
+  placeholder_location: "Location",
+  placeholder_website: "Website",
+  placeholder_email: "Email",
+  placeholder_phone: "Phone",
+
   placeholder_user_profile_looking_for: "Enter a skill you are looking for",
   placeholder_user_profile_skill: "Enter a new skill",
   placeholder_user_profile_interest: "Enter a new interest",

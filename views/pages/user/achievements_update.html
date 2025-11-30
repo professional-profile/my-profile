@@ -1,0 +1,15 @@
+<header>
+  <i class="material-icons highlight">beenhere</i>{{resource.achievements}}
+  <button type="button" id="btnAchievement" name="btnAchievement" class="btn-close"></button>
+</header>
+{% for achievement in user.achievements %}
+<section>
+  <h3>{{achievement.subject}}<i class="star highlight float-right"></i></h3>
+  <p class="description">{{achievement.description}}</p>
+  <hr />
+</section>
+{% endfor %}
+<footer>
+  <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button>
+  <button type="button" id="btnCancel" name="btnCancel" onclick="cancel(event)">{{resource.cancel}}</button>
+</footer>

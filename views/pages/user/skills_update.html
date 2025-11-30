@@ -1,0 +1,12 @@
+<header>
+  <i class="material-icons highlight">local_mall</i>{{resource.skills}}
+  <button type="button" id="btnSkill" name="btnSkill" class="btn-close"></button>
+</header>
+<section class="chip-list" data-name="skills">
+  {{generateStarChips(user.skills, 'skill', 'skill', 'hirable', true)}}
+  <hr />
+  <p class="description"><i class="star highlight"></i>Hirable Skill</p>
+</section>
+<footer>
+  <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button>
+</footer>
