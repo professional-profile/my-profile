@@ -70,6 +70,7 @@ export interface UserFilter extends Filter {
   dateOfBirth?: DateRange
   interests?: string[]
   skills?: Skill[]
+  userId?: string
 }
 
 export interface UserRepository {

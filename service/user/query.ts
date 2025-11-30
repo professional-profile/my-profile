@@ -3,10 +3,22 @@ import { buildSort, Statement } from "query-core"
 import { UserFilter, userModel } from "./user"
 
 export function buildQuery(filter: UserFilter): Statement {
-  let query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline from users u`
   const where = []
   const params = []
   let i = 1
+  let query: string
+  if (filter.userId) {
+    query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline,
+        ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
+      from users u
+      left join user_info ui on u.id = ui.id
+      left join user_followings uf on uf.id = ${param(i++)} and uf.following = u.id
+      left join user_followers ur on ur.id = ${param(i++)} and ur.follower = u.id`
+    params.push(filter.userId, filter.userId)
+  } else {
+    query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline from users u`
+  }
+
   if (filter.interests && filter.interests.length > 0) {
     params.push(filter.interests)
     where.push(`interests && ${param(i++)}`)

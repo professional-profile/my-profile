@@ -42,6 +42,7 @@ export class UserController extends FollowController {
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     const offset = getOffset(limit, page)
+    filter.userId = res.locals.userId
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {

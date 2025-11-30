@@ -5,7 +5,7 @@
   </header>
   <div class="article-body">
     <h4 class="article-description">{{article.description}}</h4>
-    <h4 class="article-meta">
+    <h4 class="article-meta center-align-items">
       {{article.publishedAt}}
       {% if account %} {% if article.savedAt %}
       <i class="material-icons" onclick="removeItem(this, '{{article.id}}', true)">bookmark</i>
