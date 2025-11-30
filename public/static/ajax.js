@@ -107,3 +107,50 @@ function closePart(target, containerId, partialName, toggleClassName) {
     }
   }
 }
+function submitPartialForm(e, containerId, successPartialName, toggleClassName, confirm) {
+  e.preventDefault()
+  var target = e.target
+  var form = target.form
+  var valid = validateForm(form)
+  if (!valid) {
+    return
+  }
+  var data = decodeFromForm(form)
+  var url = getCurrentURL()
+  if (confirm) {
+    var confirmMsg = getConfirmMessage(target, resource)
+    showConfirm(confirmMsg, function () {
+      callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName)
+    })
+  } else {
+    callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName)
+  }
+}
+function callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName) {
+  var resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "POST",
+    headers: getHttpHeaders(),
+    body: JSON.stringify(data),
+  })
+    .then(function (response) {
+      hideLoading()
+      if (response.ok) {
+        if (containerId) {
+          var container = document.getElementById(containerId)
+          if (container) {
+            loadAjax(url + "/" + successPartialName, container)
+            if (toggleClassName) {
+              showOtherElements(form, undefined, toggleClassName)
+            }
+          }
+        }
+      } else {
+        handleJsonError(response, resource, form)
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
+}

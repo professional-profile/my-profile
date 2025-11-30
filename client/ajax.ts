@@ -52,7 +52,7 @@ function hideOtherElements(form: HTMLFormElement, target: HTMLButtonElement, cla
     }
   }
 }
-function showOtherElements(form: HTMLFormElement, target: HTMLButtonElement, className: string) {
+function showOtherElements(form: HTMLFormElement, target: HTMLButtonElement | undefined, className: string) {
   if (form) {
     for (let i = 0; i < form.length; i++) {
       const ele = form[i] as HTMLInputElement
@@ -83,7 +83,6 @@ function editPart(target: HTMLButtonElement, containerId: string, partialName: s
     }
   }
 }
-
 function closePart(target: HTMLButtonElement, containerId: string, partialName: string, toggleClassName?: string) {
   const container = document.getElementById(containerId)
   if (container) {
@@ -104,4 +103,49 @@ function closePart(target: HTMLButtonElement, containerId: string, partialName: 
       )
     }
   }
+}
+function submitPartialForm(e: Event, containerId?: string, successPartialName?: string, toggleClassName?: string, confirm?: boolean) {
+  e.preventDefault()
+  const target = e.target as HTMLButtonElement
+  const form = target.form as HTMLFormElement
+  const valid = validateForm(form)
+  if (!valid) {
+    return
+  }
+  const data = decodeFromForm(form)
+  const url = getCurrentURL()
+  if (confirm) {
+    const confirmMsg = getConfirmMessage(target, resource)
+    showConfirm(confirmMsg, () => {
+      callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName)
+    })
+  } else {
+    callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName)
+  }
+}
+function callSubmitPartialForm(url: string, form: HTMLFormElement, data: any, containerId?: string, successPartialName?: string, toggleClassName?: string) {
+  const resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "POST",
+    headers: getHttpHeaders(),
+    body: JSON.stringify(data), // Convert the form data to JSON format
+  })
+    .then((response) => {
+      hideLoading()
+      if (response.ok) {
+        if (containerId) {
+          const container = document.getElementById(containerId)
+          if (container) {
+            loadAjax(url + "/" + successPartialName, container)
+            if (toggleClassName) {
+              showOtherElements(form, undefined, toggleClassName)
+            }
+          }
+        }
+      } else {
+        handleJsonError(response, resource, form)
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
 }

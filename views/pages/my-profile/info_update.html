@@ -1,6 +1,6 @@
 <header>
   <i class="material-icons highlight">account_box</i>{{resource.user_profile_basic_info}}
-  <button type="button" id="btnBasicInfo" name="btnBasicInfo" class="btn-edit" onclick="closePart(this, 'userInfo', 'info', 'btn-edit')"></button>
+  <button type="button" id="btnBasicInfo" name="btnBasicInfo" class="btn-close" onclick="closePart(this, 'userInfo', 'info', 'btn-edit')"></button>
 </header>
 <p class="icon-text">
   <i class="material-icons">local_mall</i>
@@ -27,5 +27,5 @@
   <input type="text" id="phone" name="phone" value="{{user.phone}}" maxlength="255" required placeholder="{{resource.placeholder_phone}}" />
 </p>
 <footer>
-  <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button>
+  <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userInfo', 'info', 'btn-edit')">{{resource.save}}</button>
 </footer>
