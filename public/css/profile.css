@@ -251,8 +251,8 @@ header.nav > .profile-followers {
   }
 }
 
-.profile-header > div.card,
-.profile.view-container > form > .row > .col > div.card {
+.profile-header > .card,
+.profile .card {
   margin: 20px 0;
   padding: 16px;
   border-radius: 4px;
@@ -273,16 +273,16 @@ header.nav > .profile-followers {
   background-color: #fff;
 }
 
-.page-body > .profile.view-container > form > div {
+.profile > form > div {
   padding-top: 0;
   max-height: none;
 }
 
-.profile.view-container > form > .row > .col > div.card:last-child {
+.profile .card:last-child {
   margin-bottom: 0;
 }
 
-.profile.view-container > form > .row > .col > div.card p.description {
+.profile .card p.description {
   color: #aeb4b2;
   line-height: 20px;
 }
@@ -293,59 +293,52 @@ header.nav > .profile-followers {
   padding-left: 0;
 }
 
-.profile.view-container > form > .row > .col > div.card > section:first-of-type {
+.profile .card > section:first-of-type {
   margin-top: 0;
 }
-.profile.view-container > form > .row > .col > div.card > section {
+.profile .card > section {
   position: relative;
   margin-top: 16px;
   border: none;
   margin-bottom: unset;
   flex-direction: unset;
 }
-.profile.view-container > form > .row > .col > div.card > section > h3 {
+.profile .card > section > h3 {
   font-size: 15px;
   padding-top: unset;
   margin-bottom: 0.5rem;
   line-height: 1.2;
   color: inherit;
 }
-.profile.view-container > form > .row > .col > div.card > section > .btn-remove {
+.profile .card > section > .btn-remove {
   position: absolute;
   top: 7px;
   right: 2px;
 }
 /*
-.profile.view-container > form > .row > .col > div.card > section > .btn-remove::before {
+.profile .card > section > .btn-remove::before {
   font-size: 25px;
   font-family: Material Icons;
   font-style: normal;
   content: "\e92b";
 }
 */
-.profile.view-container > form > .row > .col > div.card > section > label.checkbox-container {
+.profile .card > section > label.checkbox-container {
   width: 100%;
   height: 40px;
   padding-left: 22px;
 }
 
-.profile.view-container
-  > form
-  > .row
-  > .col
-  > div.card
-  > section
-  > label.checkbox-container
-  > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
+.profile .card > section > label.checkbox-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
   left: 0;
 }
-.profile.view-container .btn-group {
+.profile .btn-group {
   display: inline-flex;
   align-items: center;
   font-size: 15px;
   min-height: 40px;
 }
-.profile.view-container .btn-group > .btn-add {
+.profile .btn-group > .btn-add {
   width: 22px;
   height: 22px;
   margin-top: -4px;
@@ -353,7 +346,7 @@ header.nav > .profile-followers {
   border: 1px solid;
   border-radius: 21px;
 }
-.profile.view-container .btn-group > .btn-add::before {
+.profile .btn-group > .btn-add::before {
   font-size: 23px;
   font-weight: 100;
   content: "\2B";
@@ -361,17 +354,17 @@ header.nav > .profile-followers {
   left: 3px;
 }
 
-.profile.view-container > form > .row > .col > div.card > div {
+.profile .card > div {
   width: 100%;
   margin-top: -3px;
   margin-bottom: -3px;
 }
-.profile.view-container > form > .row > .col > div.card > div > a {
+.profile .card > div > a {
   display: inline-block;
   margin: 3px 10px 3px 0;
   color: #999999;
 }
-.profile.view-container > form > .row > .col > div.card > div > a > i {
+.profile .card > div > a > i {
   padding-top: 5px;
   width: 28px;
   height: 28px;
@@ -381,14 +374,14 @@ header.nav > .profile-followers {
   border-radius: 50%;
   color: #0dcfb0;
 }
-.profile.view-container > form > .row > .col > div.card > div > a > span {
+.profile .card > div > a > span {
   display: none;
   margin-left: 7px;
   margin-right: 9px;
 }
 
 @media screen and (max-width: 600px) {
-  .profile.view-container > form > div > *:last-child {
+  .profile > form > div > *:last-child {
     margin-bottom: 64px; /* 44px + 20px - 20px */
   }
 }

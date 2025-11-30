@@ -54,43 +54,7 @@
     </header>
     <div class="row list card-grid">
       <div class="col m12 l4">
-        <div class="card">
-          <header>
-            <i class="material-icons highlight">account_box</i>{{resource.user_profile_basic_info}}
-            <button type="button" id="btnBasicInfo" name="btnBasicInfo" class="btn-edit"></button>
-          </header>
-          {% if user.occupation %}
-          <p class="icon-text">
-            <i class="material-icons">local_mall</i>
-            {{user.occupation}}
-          </p>
-          {% endif %} {% if user.company %}
-          <p class="icon-text">
-            <i class="material-icons">location_city</i>
-            {{user.company}}
-          </p>
-          {% endif %} {% if user.location %}
-          <p class="icon-text">
-            <i class="material-icons">location_on</i>
-            {{user.location}}
-          </p>
-          {% endif %} {% if user.website %}
-          <p class="icon-text">
-            <i class="material-icons">bookmark</i>
-            {{user.website}}
-          </p>
-          {% endif %} {% if user.email %}
-          <p class="icon-text">
-            <i class="material-icons">email</i>
-            {{user.email}}
-          </p>
-          {% endif %} {% if user.phone %}
-          <p class="icon-text">
-            <i class="material-icons">phone</i>
-            {{user.phone}}
-          </p>
-          {% endif %}
-        </div>
+        <div class="card" id="userInfo">{% include "pages/user/info.html" %}</div>
         <div class="card">
           <header>
             <i class="material-icons highlight">local_mall</i>{{resource.skills}}
@@ -138,7 +102,7 @@
             <i class="material-icons highlight">flash_on</i>{{resource.interests}}
             <button type="button" id="btnInterest" name="btnInterest" class="btn-edit"></button>
           </header>
-          <section class="chip-list">{{generateTags(user.interests, true)}}</section>
+          <section id="userInterests" class="chip-list">{{generateTags(user.interests, true)}}</section>
         </div>
         <div class="card border-bottom-highlight">
           <header>
