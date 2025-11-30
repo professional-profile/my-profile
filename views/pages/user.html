@@ -54,18 +54,8 @@
     </header>
     <div class="row list card-grid">
       <div class="col m12 l4">
-        <div class="card" id="userInfo">{% include "pages/user/info.html" %}</div>
-        <div class="card">
-          <header>
-            <i class="material-icons highlight">local_mall</i>{{resource.skills}}
-            <button type="button" id="btnSkill" name="btnSkill" class="btn-edit"></button>
-          </header>
-          <section class="chip-list">
-            {{generateStarChips(user.skills, 'skill', 'skill', 'hirable', true)}}
-            <hr />
-            <p class="description"><i class="star highlight"></i>Hirable Skill</p>
-          </section>
-        </div>
+        <div id="userInfo" class="card">{% include "pages/user/info.html" %}</div>
+        <div id="userSkills" class="card">{% include "pages/user/skills.html" %}</div>
         <div class="card">
           <header>
             <i class="material-icons highlight">find_in_page</i>Looking for<button
@@ -97,30 +87,8 @@
           </header>
           <p>{{user.bio}}</p>
         </div>
-        <div class="card border-bottom-highlight">
-          <header>
-            <i class="material-icons highlight">flash_on</i>{{resource.interests}}
-            <button type="button" id="btnInterest" name="btnInterest" class="btn-edit"></button>
-          </header>
-          <section id="userInterests" class="chip-list">{{generateTags(user.interests, true)}}</section>
-        </div>
-        <div class="card border-bottom-highlight">
-          <header>
-            <i class="material-icons highlight">beenhere</i>{{resource.achievements}}<button
-              type="button"
-              id="btnAchievement"
-              name="btnAchievement"
-              class="btn-edit"
-            ></button>
-          </header>
-          {% for achievement in user.achievements %}
-          <section>
-            <h3>{{achievement.subject}}<i class="star highlight float-right"></i></h3>
-            <p class="description">{{achievement.description}}</p>
-            <hr />
-          </section>
-          {% endfor %}
-        </div>
+        <div id="userInterests" class="card border-bottom-highlight">{% include "pages/user/interests.html" %}</div>
+        <div id="userAchievements" class="card border-bottom-highlight">{% include "pages/user/achievements.html" %}</div>
       </div>
     </div>
   </form>
