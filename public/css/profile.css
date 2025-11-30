@@ -16,13 +16,13 @@
     padding: 10px 5%;
   }
 
-  .profile.view-container > form > header {
+  .profile-header {
     width: calc(100% - 30px);
     margin-left: 15px;
   }
 }
 
-.profile.view-container > form > header {
+.profile-header {
   position: relative;
   height: 314px; /* 394px */
   display: flex;
@@ -34,18 +34,18 @@
 }
 
 @media screen and (max-width: 600px) {
-  .dark .page-body > .profile.view-container > form > header,
-  .page-body > .profile.view-container > form > header {
+  .dark .page-body > .profile-header,
+  .page-body > .profile-header {
     background-image: none;
   }
 }
 
-.profile.view-container > form > header > .btn-camera {
+.profile-header > .btn-camera {
   position: absolute;
   top: 9px;
   right: 12px;
 }
-.profile.view-container > form > header .btn-follow {
+.profile-header .btn-follow {
   position: absolute;
   bottom: 20px;
   right: 18px;
@@ -58,13 +58,13 @@
   color: #c9b500;
 }
 
-.profile.view-container > form > header .contact-group {
+.profile-header .contact-group {
   display: flex;
   position: absolute;
   bottom: 20px;
   left: 20px;
 }
-.profile.view-container > form > header .contact-group > button {
+.profile-header .contact-group > button {
   width: 35px;
   height: 35px;
   border: 1px solid;
@@ -74,21 +74,21 @@
   font-style: normal;
   color: #fff;
 }
-.profile.view-container > form > header .contact-group > button:not(:first-child) {
+.profile-header .contact-group > button:not(:first-child) {
   margin-left: 20px;
 }
 
-.profile.view-container > form > header > nav {
+.profile-header > nav {
   width: 100%;
 }
-.profile.view-container > form > header > nav > ul {
+.profile-header > nav > ul {
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding-inline-start: 0;
   margin-block-end: 0;
 }
-.profile.view-container > form > header > nav > ul > li {
+.profile-header > nav > ul > li {
   display: inline-flex;
   height: 38px;
   align-items: center;
@@ -96,21 +96,21 @@
   margin-left: 11px;
   margin-right: 11px;
 }
-.profile.view-container > form > header > nav > ul > li:first-child {
+.profile-header > nav > ul > li:first-child {
   margin-left: 0;
 }
-.profile.view-container > form > header > nav > ul > li:last-child {
+.profile-header > nav > ul > li:last-child {
   margin-right: 0;
 }
 
-.profile.view-container > form > header > .cover-image {
+.profile-header > .cover-image {
   position: relative;
   overflow: hidden;
   width: 100%;
   height: 100%;
   padding: 0px;
 }
-.profile.view-container > form > header > .cover-image > img {
+.profile-header > .cover-image > img {
   width: 100%;
 }
 
@@ -186,20 +186,20 @@ header.nav > .profile-followers {
 }
 
 @media (min-width: 993px) {
-  .profile.view-container > form > header {
+  .profile-header {
     height: 394px;
   }
-  .profile.view-container > form > header .contact-group {
+  .profile-header .contact-group {
     left: unset;
     right: 148px;
   }
-  .profile.view-container > form > header > nav {
+  .profile-header > nav {
     padding-left: 152px;
   }
-  .profile.view-container > form > header > nav > ul {
+  .profile-header > nav > ul {
     justify-content: unset;
   }
-  .profile.view-container > form > header > nav > ul > li {
+  .profile-header > nav > ul > li {
     height: 50px;
   }
   .avatar-wrapper {
@@ -251,7 +251,7 @@ header.nav > .profile-followers {
   }
 }
 
-.profile.view-container > form > header > div.card,
+.profile-header > div.card,
 .profile.view-container > form > .row > .col > div.card {
   margin: 20px 0;
   padding: 16px;
@@ -265,7 +265,7 @@ header.nav > .profile-followers {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
 }
 
-.profile.view-container > form > header > div.card {
+.profile-header > div.card {
   position: relative;
   width: calc(100% - 32px);
   margin: -32px 16px 7px 16px;

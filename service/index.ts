@@ -6,7 +6,7 @@ export * from "./context"
 
 const prefix = "Bearer "
 export class TokenVerifier {
-  constructor(private secret: string, private account: string, private token: string) {
+  constructor(private account: string, private token: string, private secret: string) {
     this.verify = this.verify.bind(this)
   }
 
@@ -14,26 +14,20 @@ export class TokenVerifier {
     let token: string | undefined
     if (req.cookies) {
       token = req.cookies[this.token]
-      if (token) {
-        console.log("Token from cookie: " + token)
-      }
     }
 
     if (!token || token.length === 0) {
       let data = req.headers["authorization"]
       if (data && data.startsWith(prefix)) {
         token = data.substring(prefix.length)
-        console.log("Token from bearer token: " + token)
       }
     }
 
     if (token && token.length > 0) {
       verify(token, this.secret, (err, decoded) => {
         if (err) {
-          console.log("Token verification error: " + err.message)
           next()
         } else {
-          console.log("Decoded token: " + JSON.stringify(decoded))
           res.locals[this.account] = decoded
           res.locals.userId = (decoded as any).id
           if ((decoded as any).username) {
@@ -50,10 +44,8 @@ export class TokenVerifier {
 
 function checkAuthen(req: Request, res: Response, next: NextFunction) {
   const account = res.locals.account
-  console.log(req.originalUrl)
   if (!account) {
     let url = req.url
-    console.log("not log in " + url)
     if (url.startsWith("/")) {
       url = url.substring(1)
     }
@@ -68,7 +60,6 @@ function checkAuthen(req: Request, res: Response, next: NextFunction) {
 }
 function authorized(req: Request, res: Response, next: NextFunction) {
   const account = res.locals.account
-  console.log(req.originalUrl)
   if (!account) {
     res.status(401).end("Require Authentication")
   } else {

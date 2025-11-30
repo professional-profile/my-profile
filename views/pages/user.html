@@ -1,12 +1,12 @@
 <div class="profile view-container">
   <form id="userForm" name="userForm">
-    <header class="border-bottom-highlight">
+    <header class="profile-header border-bottom-highlight">
       <div class="cover-image">
         <img src="{{user.coverURL}}" alt="cover" />
         <div class="contact-group">
           <button id="btnPhone" name="btnPhone" class="btn-phone"></button><button id="btnEmail" name="btnEmail" class="btn-email"></button>
         </div>
-        {% if account.id != user.id %}
+        {% if account and account.id != user.id %}
         {% if user.followingAt %}
         <button type="button" id="btnFollow" name="btnFollow" class="btn-follow" onclick="unfollow(this, '{{user.id}}', true)">Unfollow</button>
         {% else %}

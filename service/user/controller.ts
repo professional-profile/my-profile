@@ -78,7 +78,7 @@ export class UserController extends FollowController {
         if (!user) {
           renderError404(req, res, resource)
         } else {
-          console.log("user " + JSON.stringify(user))
+          console.log("followingAt at " + user.followingAt)
           render(req, res, "user", {
             resource,
             user: escape(user),

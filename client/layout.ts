@@ -174,7 +174,9 @@ function navigate(e: Event, ignoreLang?: boolean) {
                 })
                 afterLoaded(pageBody)
                 setTimeout(function () {
-                  resources.load(pageBody)
+                  if (resources.load) {
+                    resources.load(pageBody)
+                  }
                 }, 0)
                 setTimeout(function () {
                   const parent = findParentNode(target, "LI")

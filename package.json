@@ -30,7 +30,7 @@
     "onecore": "^0.2.0",
     "password-service": "^0.0.4",
     "pg": "^8.14.1",
-    "pg-extension": "^0.2.5",
+    "pg-extension": "^0.2.6",
     "query-core": "^0.2.7",
     "signup-service": "^0.0.8",
     "types-validation": "^0.0.2",

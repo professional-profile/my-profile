@@ -49,7 +49,6 @@ export class SignUpController {
   submit(req: Request, res: Response) {
     const resource = getResource(req)
     const info: UserSignUp = req.body
-    console.log("user " + JSON.stringify(info))
     const errors = validate<UserSignUp>(info, userModel, resource, true)
     if (errors.length > 0) {
       console.log("Sign up error: " + JSON.stringify(errors))

@@ -175,14 +175,17 @@ export const userModel: Attributes = {
   },
   imageURL: {
     column: "image_url",
-    length: 255,
+    length: 500,
   },
   coverURL: {
     column: "cover_url",
-    length: 255,
+    length: 500,
+  },
+  headline: {
+    length: 500,
   },
   bio: {
-    length: 255,
+    length: 3000,
   },
   website: {},
   occupation: {

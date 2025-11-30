@@ -16,7 +16,7 @@
       {% for user in list %}
       <li class="col s12 m6 l4 xl3 img-item">
         <img src="{{user.imageURL}}" alt="user avatar" class="round-border" />
-        <a href="/profiles/{{user.username}}">{{user.displayName}}</a>
+        <a href="/profiles/{{user.username}}">{{user.username}}</a>
         <button class="btn-detail"></button>
         <p>{{user.occupation}}</p>
       </li>

@@ -27,22 +27,22 @@ export class FollowRepository<ID> {
     this.checkFollow = this.checkFollow.bind(this)
   }
   follow(id: ID, target: ID): Promise<number> {
-    const now = new Date()
-    const double = `select * from ${this.followingTable} where ${this.id} = $1 and ${this.following}=$2 `
-    const query1 = `insert into ${this.followingTable}(${this.id}, ${this.following}, ${this.following_at}) values ($1, $2, $3) on conflict (${this.id}, ${this.following}) do nothing`
-    const query2 = `insert into ${this.followerTable}(${this.followerId}, ${this.follower}, ${this.followed_at}) values ($1, $2, $3) on conflict (${this.followerId}, ${this.follower}) do nothing`
-    const query3 = `
-            insert into ${this.infoTable}(${this.infoId},${this.followingCount}, ${this.followerCount})
-            values ($1, 1, 0)
-            on conflict (${this.infoId}) do update set ${this.followingCount} =   ${this.infoTable}.${this.followingCount} + 1`
-    const query4 = `
-            insert into ${this.infoTable}(${this.infoId},${this.followingCount}, ${this.followerCount})
-            values ($1, 0, 1)
-            on conflict (${this.infoId}) do update set ${this.followerCount} = ${this.infoTable}.${this.followerCount} + 1`
+    const double = `select * from ${this.followingTable} where ${this.id} = $1 and ${this.following} = $2`
     return this.execute([{ query: double, params: [id, target] }], true).then((data) => {
       if (data > 0) {
         return 0
       } else {
+        const now = new Date()
+        const query1 = `insert into ${this.followingTable}(${this.id}, ${this.following}, ${this.following_at}) values ($1, $2, $3) on conflict (${this.id}, ${this.following}) do nothing`
+        const query2 = `insert into ${this.followerTable}(${this.followerId}, ${this.follower}, ${this.followed_at}) values ($1, $2, $3) on conflict (${this.followerId}, ${this.follower}) do nothing`
+        const query3 = `
+                insert into ${this.infoTable}(${this.infoId},${this.followingCount}, ${this.followerCount})
+                values ($1, 1, 0)
+                on conflict (${this.infoId}) do update set ${this.followingCount} =   ${this.infoTable}.${this.followingCount} + 1`
+        const query4 = `
+                insert into ${this.infoTable}(${this.infoId},${this.followingCount}, ${this.followerCount})
+                values ($1, 0, 1)
+                on conflict (${this.infoId}) do update set ${this.followerCount} = ${this.infoTable}.${this.followerCount} + 1`
         return this.execute(
           [
             { query: query1, params: [id, target, now] },
@@ -89,7 +89,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
     super(db.query, "users", userModel, db.driver, buildQuery)
   }
   load(id: string, userId?: string): Promise<User | null> {
-    const params = []
+    let params = []
     let query: string
 
     if (userId && userId.length > 0) {
@@ -112,6 +112,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
       if (users && users.length > 0) {
         return users[0]
       } else {
+        params = []
         query = `select * from users where id = ${this.param(1)}`
         if (userId && userId.length > 0) {
           query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
@@ -127,6 +128,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
             left join user_info ui on u.id = ui.id
             where u.id = ${this.param(1)}`
         }
+        params.push(id)
         return this.query<User>(query, [id], this.map).then((users) => (users && users.length > 0 ? users[0] : null))
       }
     })

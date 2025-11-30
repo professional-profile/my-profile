@@ -43,6 +43,6 @@ export class ArticleUseCase extends SavedService<string, string> implements Arti
 export function useArticleController(db: DB, log: Log): ArticleController {
   const repository = new SqlArticleRepository(db)
   const savedRepository = new SqlSavedRepository(db, "saved_articles", "user_id", "id", "saved_at")
-  const service = new ArticleUseCase(repository, savedRepository, 3)
+  const service = new ArticleUseCase(repository, savedRepository, 200)
   return new ArticleController(service, log)
 }

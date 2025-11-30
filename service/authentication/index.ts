@@ -48,7 +48,6 @@ export class SigninController {
   submit(req: Request, res: Response) {
     const resource = getResource(req)
     const user: User = req.body
-    console.log("User = " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true)
     if (errors.length > 0) {
       console.log("Login error: " + JSON.stringify(errors))
@@ -58,12 +57,10 @@ export class SigninController {
         .authenticate(user)
         .then((result) => {
           if (result.status == 1 && result.user) {
-            console.log("user " + JSON.stringify(result.user))
             const account = result.user
             const token = sign({ id: account.id, username: user.username, language: account.language, dateFormat: account.dateFormat }, this.secret, {
               expiresIn: this.expiresIn,
             })
-            console.log("Login successfully with token " + token)
             res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
             let redirectUrl = query(req, "redirectUrl")
             if (!redirectUrl || redirectUrl == "") {
