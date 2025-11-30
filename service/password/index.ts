@@ -4,6 +4,7 @@ import { Log } from "onecore"
 import { PasswordChange, PasswordReset, PasswordService } from "password-service"
 import { isEmpty } from "xvalidators"
 import { getResource } from "../resources"
+import { render } from "../template"
 
 export class PasswordController {
   constructor(private service: PasswordService<string>, private log: Log) {
@@ -51,18 +52,18 @@ export class PasswordController {
   }
   resetPassword(req: Request, res: Response) {
     const resource = getResource(req)
-    const pass: PasswordReset = req.body
-    if (isEmpty(pass.username)) {
+    const user: PasswordReset = req.body
+    if (isEmpty(user.username)) {
       return res.status(401).end(formatText(resource.required, resource.username))
     }
-    if (isEmpty(pass.passcode)) {
+    if (isEmpty(user.passcode)) {
       return res.status(401).end(formatText(resource.required, resource.passcode))
     }
-    if (isEmpty(pass.password)) {
+    if (isEmpty(user.password)) {
       return res.status(401).end(formatText(resource.required, resource.new_password))
     }
     this.service
-      .reset(pass)
+      .reset(user)
       .then((result) => {
         const status = result > 0 ? 200 : result < 0 ? 409 : 403
         res.status(status).json(result).end()
@@ -71,6 +72,15 @@ export class PasswordController {
   }
   renderChangePassword(req: Request, res: Response) {
     const resource = getResource(req)
+    render(req, res, "change-password", {
+      resource,
+      user: {
+        username: "kaka",
+        password: "Password1!",
+      },
+      message: "Enter login",
+    })
+    /*
     res.render("change-password", {
       resource,
       user: {
@@ -79,21 +89,20 @@ export class PasswordController {
       },
       message: "Enter login",
     })
+      */
   }
   changePassword(req: Request, res: Response) {
     const resource = getResource(req)
-    const pass: PasswordChange = req.body
-    if (isEmpty(pass.username)) {
-      return res.status(401).end(formatText(resource.required, resource.username))
-    }
-    if (isEmpty(pass.currentPassword)) {
+    const user: PasswordChange = req.body
+    user.username = res.locals.username
+    if (isEmpty(user.currentPassword)) {
       return res.status(401).end(formatText(resource.required, resource.current_password))
     }
-    if (isEmpty(pass.password)) {
+    if (isEmpty(user.password)) {
       return res.status(401).end(formatText(resource.required, resource.new_password))
     }
     this.service
-      .change(pass)
+      .change(user)
       .then((result) => {
         if (result < 0) {
           res.status(409).json(result).end()

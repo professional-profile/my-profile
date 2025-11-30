@@ -188,7 +188,7 @@
 .grey footer > .btn-accept::after,
 .grey footer > .btn-next::after,
 .grey .section.search > .btn-search,
-.grey .central-full > form > div > button,
+.grey .central-full button,
 .grey .view-footer > button,
 .grey footer > button {
   color: #fff;

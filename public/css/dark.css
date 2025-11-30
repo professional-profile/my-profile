@@ -191,7 +191,7 @@
 .dark footer > .btn-accept::after,
 .dark footer > .btn-next::after,
 .dark .section.search > .btn-search,
-.dark .central-full > form > div > button,
+.dark .central-full button,
 .dark .view-footer > button,
 .dark footer > button {
   color: #000;

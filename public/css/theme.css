@@ -171,7 +171,7 @@ footer > .btn-cancel::before {
 footer > .btn-accept::after,
 footer > .btn-next::after,
 .section.search > .btn-search,
-.central-full > form > div > button,
+.central-full button,
 .view-footer > button,
 footer > button {
   color: #fff;

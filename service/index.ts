@@ -132,8 +132,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post("/forgot-password", json(), ctx.password.forgotPassword)
   app.get("/reset-password", ctx.password.renderResetPassword)
   app.post("/reset-password", json(), ctx.password.resetPassword)
-  app.get("/change-password", ctx.password.renderChangePassword)
-  app.post("/change-password", json(), ctx.password.changePassword)
+  app.get("/change-password", checkAuthen, ctx.menu.build, ctx.password.renderChangePassword)
+  app.post("/change-password", authorized, ctx.menu.build, json(), ctx.password.changePassword)
 
   app.get("/my-profile", checkAuthen, ctx.menu.build, ctx.myProfile.view)
   app.post("/my-profile", authorized, ctx.menu.build, ctx.myProfile.submit)
