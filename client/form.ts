@@ -359,7 +359,7 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
                 val = val.filter((item: string) => item != ele.value)
               }
             } else {
-              val = ele.value.length > 0 ? ele.value : ele.checked
+              val = ele.value !== "on" ? ele.value : ele.checked
             }
             setValue(obj, name, val)
             continue

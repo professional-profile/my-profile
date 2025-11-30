@@ -61,6 +61,10 @@ function removeItem(target: HTMLElement, id: string, remove?: boolean) {
 function follow(target: HTMLElement, id: string, remove?: boolean) {
   let url = getCurrentURL()
   url = (remove ? removeLast(url) : url) + "/" + id
+  if (target.nodeName !== "I" && target.nodeName !== "BUTTON") {
+    target = target.parentElement as HTMLElement
+  }
+  const strue = remove ? ", true" : ""
   showLoading()
   fetch(url, {
     method: "PATCH",
@@ -70,6 +74,14 @@ function follow(target: HTMLElement, id: string, remove?: boolean) {
       hideLoading()
       if (response.ok) {
         toast("Follow successfully")
+        if (target.nodeName === "I") {
+          target.onclick = null
+          target.innerText = "bookmark"
+        } else if (target.nodeName === "BUTTON") {
+          target.onclick = null
+          target.innerText = target.getAttribute("data-unfollow-text") || ""
+        }
+        target.setAttribute("onclick", `unfollow(this, '${escapeHTML(id)}'${strue})`)
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
@@ -83,6 +95,7 @@ function follow(target: HTMLElement, id: string, remove?: boolean) {
 function unfollow(target: HTMLElement, id: string, remove?: boolean) {
   let url = getCurrentURL()
   url = (remove ? removeLast(url) : url) + "/" + id
+  const strue = remove ? ", true" : ""
   showLoading()
   fetch(url, {
     method: "DELETE",
@@ -92,6 +105,14 @@ function unfollow(target: HTMLElement, id: string, remove?: boolean) {
       hideLoading()
       if (response.ok) {
         toast("Unfollow successfully")
+        if (target.nodeName === "I") {
+          target.onclick = null
+          target.innerText = "bookmark_border"
+        } else if (target.nodeName === "BUTTON") {
+          target.onclick = null
+          target.innerText = target.getAttribute("data-follow-text") || ""
+        }
+        target.setAttribute("onclick", `follow(this, '${escapeHTML(id)}'${strue})`)
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()

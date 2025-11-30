@@ -346,7 +346,7 @@ function decodeFromForm(form, currencySymbol) {
                 })
               }
             } else {
-              val = ele.value.length > 0 ? ele.value : ele.checked
+              val = ele.value !== "on" ? ele.value : ele.checked
             }
             setValue(obj, name_1, val)
             return "continue"

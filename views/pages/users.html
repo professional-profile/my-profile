@@ -16,16 +16,15 @@
       {% for user in list %}
       <li class="col s12 m6 l4 xl3 img-item">
         <img src="{{user.imageURL}}" alt="user avatar" class="round-border" />
-        <a href="/profiles/{{user.username}}">{{user.username}}</a>
-        <button class="btn-detail"></button>
-        <p class="center-align-items">
-          {{user.occupation}}
-          {% if account %} {% if user.followingAt %}
-            <i class="material-icons" onclick="unfollow(this, '{{user.id}}')">bookmark</i>
+        <a href="/profiles/{{user.username}}" class="center-align-items">
+          {{user.displayName}} {% if account %} {% if user.followingAt %}
+          <i class="material-icons" onclick="unfollow(this, '{{user.id}}')">bookmark</i>
           {% else %}
-            <i class="material-icons" onclick="saveItem(this, '{{item.id}}')">bookmark_border</i>
+          <i class="material-icons" onclick="follow(this, '{{user.id}}')">bookmark_border</i>
           {% endif %} {% endif %}
-        </p>
+        </a>
+        <button class="btn-detail"></button>
+        <p>{{user.occupation}}</p>
       </li>
       {% endfor %}
     </ul>
