@@ -1,5 +1,5 @@
 export const en = {
-  my_settings: "My settings",
+  settings: "Settings",
   my_profile: "My profile",
   my_password: "My password",
   skills: "Skills",
@@ -15,8 +15,13 @@ export const en = {
   success_save_my_settings: "You have updated your settings successfully.",
   fail_save_my_settings: "Cannot update your settings.",
 
-  user_profile_followers: "Followers {0}",
-  user_profile_following: "Following {0}",
+  user_profile_followers: "{0} followers",
+  user_profile_following: "{0} followings",
+
+  user_profile_follow_success: "Follow successfully",
+  user_profile_follow_conflict: "No change. You already follow this user before.",
+  user_profile_unfollow_success: "Unfollow successfully.",
+  user_profile_unfollow_conflict: "No change. You already unfollowed this user before.",
 
   user_profile_basic_info: "Basic Info",
   user_profile_website: "Website",

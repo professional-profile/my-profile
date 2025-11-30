@@ -37,12 +37,12 @@
           <section>
             <div class="cover" style="background-image: url('{{ item.thumbnail }}')"></div>
             <a href="/news/{{ item.slug }}" onclick="navigate(event)">{{ item.title }}</a>
-            <p class="article-meta center-align-items">{{ item.publishedAt }}
-            {% if account %} {% if item.savedAt %}
-              <i class="material-icons" onclick="removeItem(this, '{{item.id}}')">bookmark</i>
-            {% else %}
-              <i class="material-icons" onclick="saveItem(this, '{{item.id}}')">bookmark_border</i>
-            {% endif %} {% endif %}
+            <p class="article-meta center-align-items">
+              {{ item.publishedAt }} {% if account %} {% if item.savedAt %}
+              <i class="material-icons" onclick="unsaveArticle(this, '{{item.id}}')">bookmark</i>
+              {% else %}
+              <i class="material-icons" onclick="saveArticle(this, '{{item.id}}')">bookmark_border</i>
+              {% endif %} {% endif %}
             </p>
             <p>{{ item.description }}</p>
           </section>

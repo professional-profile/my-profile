@@ -15,6 +15,7 @@
           class="btn-follow"
           data-follow-text="{{resource.button_follow}}"
           data-unfollow-text="{{resource.button_unfollow}}"
+          data-followers="{{user.followerCount}}"
           onclick="unfollow(this, '{{user.id}}', true)"
         >
           {{resource.button_unfollow}}
@@ -27,6 +28,7 @@
           class="btn-follow"
           data-follow-text="{{resource.button_follow}}"
           data-unfollow-text="{{resource.button_unfollow}}"
+          data-followers="{{user.followerCount}}"
           onclick="follow(this, '{{user.id}}', true)"
         >
           {{resource.button_follow}}
@@ -44,7 +46,7 @@
       </div>
       <div class="profile-followers">
         {% if user.followerCount %}
-        <p><i class="material-icons highlight">group</i>{{user.followerCount}} followers</p>
+        <p id="followerCount"><i class="material-icons highlight">group</i>{{user.followerCount}} followers</p>
         {% endif %} {% if user.followingCount %}
         <p><i class="material-icons highlight">group_add</i>{{user.followingCount}} followings</p>
         {% endif %}

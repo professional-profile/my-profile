@@ -6,11 +6,10 @@
   <div class="article-body">
     <h4 class="article-description">{{article.description}}</h4>
     <h4 class="article-meta center-align-items">
-      {{article.publishedAt}}
-      {% if account %} {% if article.savedAt %}
-      <i class="material-icons" onclick="removeItem(this, '{{article.id}}', true)">bookmark</i>
+      {{article.publishedAt}} {% if account %} {% if article.savedAt %}
+      <i class="material-icons" onclick="unsaveArticle(this, '{{article.id}}', true)">bookmark</i>
       {% else %}
-      <i class="material-icons" onclick="saveItem(this, '{{article.id}}', true)">bookmark_border</i>
+      <i class="material-icons" onclick="saveArticle(this, '{{article.id}}', true)">bookmark_border</i>
       {% endif %} {% endif %}
     </h4>
     <div class="article-content">{{article.content}}</div>
