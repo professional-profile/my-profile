@@ -1,6 +1,10 @@
 function saveItem(target: HTMLElement, id: string, remove?: boolean) {
   let url = getCurrentURL()
   url = (remove ? removeLast(url) : url) + "/" + id
+  const strue = remove ? ", true" : ""
+  if (target.nodeName !== "I") {
+    target = target.parentElement as HTMLElement
+  }
   showLoading()
   fetch(url, {
     method: "PATCH",
@@ -10,6 +14,9 @@ function saveItem(target: HTMLElement, id: string, remove?: boolean) {
       hideLoading()
       if (response.ok) {
         toast("Save item successfully")
+        target.onclick = null
+        target.innerText = "bookmark"
+        target.setAttribute("onclick", `removeItem(this, '${escapeHTML(id)}'${strue})`)
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
@@ -25,6 +32,10 @@ function saveItem(target: HTMLElement, id: string, remove?: boolean) {
 function removeItem(target: HTMLElement, id: string, remove?: boolean) {
   let url = getCurrentURL()
   url = (remove ? removeLast(url) : url) + "/" + id
+  const strue = remove ? ", true" : ""
+  if (target.nodeName !== "I") {
+    target = target.parentElement as HTMLElement
+  }
   showLoading()
   fetch(url, {
     method: "DELETE",
@@ -34,6 +45,9 @@ function removeItem(target: HTMLElement, id: string, remove?: boolean) {
       hideLoading()
       if (response.ok) {
         toast("Remove item successfully")
+        target.onclick = null
+        target.innerText = "bookmark_border"
+        target.setAttribute("onclick", `saveItem(this, '${escapeHTML(id)}'${strue})`)
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
