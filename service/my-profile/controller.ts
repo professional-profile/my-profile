@@ -10,9 +10,15 @@ export class MyProfileController {
   constructor(private service: MyProfileService, private log: Log) {
     this.getPartial = this.getPartial.bind(this)
     this.getInfo = this.getInfo.bind(this)
+    this.getBio = this.getBio.bind(this)
+    this.getBioUpdate = this.getBioUpdate.bind(this)
     this.getInfoUpdate = this.getInfoUpdate.bind(this)
+    this.getSkills = this.getSkills.bind(this)
+    this.getSkillsUpdate = this.getSkillsUpdate.bind(this)
     this.getInterests = this.getInterests.bind(this)
     this.getInterestsUpdate = this.getInterestsUpdate.bind(this)
+    this.getAchievements = this.getAchievements.bind(this)
+    this.getAchievementsUpdate = this.getAchievementsUpdate.bind(this)
 
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -40,11 +46,29 @@ export class MyProfileController {
   getInfoUpdate(req: Request, res: Response) {
     this.getPartial(req, res, "info_update")
   }
+  getBio(req: Request, res: Response) {
+    this.getPartial(req, res, "bio")
+  }
+  getBioUpdate(req: Request, res: Response) {
+    this.getPartial(req, res, "bio_update")
+  }
+  getSkills(req: Request, res: Response) {
+    this.getPartial(req, res, "skills")
+  }
+  getSkillsUpdate(req: Request, res: Response) {
+    this.getPartial(req, res, "skills_update")
+  }
   getInterests(req: Request, res: Response) {
     this.getPartial(req, res, "interests")
   }
   getInterestsUpdate(req: Request, res: Response) {
     this.getPartial(req, res, "interests_update")
+  }
+  getAchievements(req: Request, res: Response) {
+    this.getPartial(req, res, "achievements")
+  }
+  getAchievementsUpdate(req: Request, res: Response) {
+    this.getPartial(req, res, "achievements_update")
   }
   view(req: Request, res: Response) {
     const userId: string = res.locals.userId

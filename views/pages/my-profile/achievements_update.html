@@ -1,6 +1,12 @@
 <header>
   <i class="material-icons highlight">beenhere</i>{{resource.achievements}}
-  <button type="button" id="btnAchievement" name="btnAchievement" class="btn-close"></button>
+  <button
+    type="button"
+    id="btnAchievement"
+    name="btnAchievement"
+    class="btn-close"
+    onclick="closePart(this, 'userAchievements', 'achievements', 'btn-edit')"
+  ></button>
 </header>
 {% for achievement in user.achievements %}
 <section>
@@ -9,7 +15,23 @@
   <hr />
 </section>
 {% endfor %}
+<section>
+  <div class="form-group">
+    <input class="form-control" placeholder="Name of Achievement" maxlength="50" required="" type="text" value="" name="subject" /><input
+      class="form-control"
+      placeholder="Description of Achievement"
+      maxlength="100"
+      required=""
+      type="text"
+      value=""
+      name="description"
+    />
+  </div>
+  <label class="checkbox-container"><input id="highlight" type="checkbox" name="highlight" />Highlight Achievement</label>
+  <div class="btn-group"><button type="button" id="btnAddAchievement" name="btnAddAchievement" class="btn-add"></button>Add Achievement</div>
+</section>
 <footer>
-  <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button>
-  <button type="button" id="btnCancel" name="btnCancel" onclick="cancel(event)">{{resource.cancel}}</button>
+  <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userAchievements', 'achievements', 'btn-edit')">
+    {{resource.save}}
+  </button>
 </footer>

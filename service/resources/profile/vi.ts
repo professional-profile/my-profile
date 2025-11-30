@@ -52,6 +52,7 @@ export const vi = {
   placeholder_website: "Website",
   placeholder_email: "Email",
   placeholder_phone: "Phone",
+  placeholder_bio: "Bio",
 
   placeholder_user_profile_looking_for: "Enter a skill you are looking for",
   placeholder_user_profile_skill: "Enter a new skill",

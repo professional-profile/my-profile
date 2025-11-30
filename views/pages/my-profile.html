@@ -81,12 +81,7 @@
         </div>
       </div>
       <div class="col m12 l8">
-        <div class="card border-bottom-highlight">
-          <header>
-            <i class="material-icons highlight">person</i>{{resource.about}}<button type="button" id="btnBio" name="btnBio" class="btn-edit"></button>
-          </header>
-          <p>{{user.bio}}</p>
-        </div>
+        <div id="userBio" class="card border-bottom-highlight">{% include "pages/my-profile/bio.html" %}</div>
         <div id="userInterests" class="card border-bottom-highlight">{% include "pages/my-profile/interests.html" %}</div>
         <div id="userAchievements" class="card border-bottom-highlight">{% include "pages/my-profile/achievements.html" %}</div>
       </div>

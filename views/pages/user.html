@@ -97,34 +97,22 @@
           </section>
         </div>
         <div class="card">
-          <header>
-            <i class="material-icons highlight">find_in_page</i>Looking for<button
-              type="button"
-              id="btnLookingFor"
-              name="btnLookingFor"
-              class="btn-edit"
-            ></button>
-          </header>
+          <header><i class="material-icons highlight">find_in_page</i>Looking for</header>
           <section class="chip-list">{{generateTags(user.lookingFor, true)}}</section>
         </div>
         <div class="card">
-          <header>
-            <i class="material-icons highlight">chat</i>Social
-            <button type="button" id="btnSocial" name="btnSocial" class="btn-edit"></button>
-          </header>
+          <header><i class="material-icons highlight">chat</i>Social</header>
           <div>
             <a href="https://facebookcom/minhduc" title="facebook" target="_blank" rel="noreferrer"><i class="fa fa-facebook"></i><span>facebook</span></a>
-            <a href="https://linkedin.com/minhduc1405" title="Linked in" target="_blank" rel="noreferrer"
-              ><i class="fa fa-linkedin"></i><span>Linked in</span></a
-            >
+            <a href="https://linkedin.com/minhduc1405" title="Linked in" target="_blank" rel="noreferrer">
+              <i class="fa fa-linkedin"></i><span>Linked in</span>
+            </a>
           </div>
         </div>
       </div>
       <div class="col m12 l8">
         <div class="card border-bottom-highlight">
-          <header>
-            <i class="material-icons highlight">person</i>{{resource.about}}<button type="button" id="btnBio" name="btnBio" class="btn-edit"></button>
-          </header>
+          <header><i class="material-icons highlight">person</i>{{resource.about}}</header>
           <p>{{user.bio}}</p>
         </div>
         <div id="userInterests" class="card border-bottom-highlight">

@@ -2,7 +2,7 @@ import { merge } from "config-plus"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
-import { resources as exResources, generateTags, MiddlewareLogger } from "express-ext"
+import { resources as exResources, generateStarChips, generateTags, MiddlewareLogger } from "express-ext"
 import http from "http"
 import { createLogger } from "logger-core"
 import nunjucks from "nunjucks"
@@ -53,6 +53,7 @@ route(app, ctx)
 
 app.locals.datetimeToString = datetimeToString
 app.locals.generateTags = generateTags
+app.locals.generateStarChips = generateStarChips
 
 http.createServer(app).listen(cfg.port, () => {
   console.log("Start server at port " + cfg.port)
