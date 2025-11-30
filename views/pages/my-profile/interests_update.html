@@ -1,6 +1,6 @@
 <header>
   <i class="material-icons highlight">flash_on</i>{{resource.interests}}
-  <button type="button" id="btnInterest" name="btnInterest" class="btn-close" onclick="closeUserInterests(this)"></button>
+  <button type="button" id="btnInterest" name="btnInterest" class="btn-close" onclick="closePart(this, 'userInterests', 'interests', 'btn-edit')"></button>
 </header>
 <section id="userInterests" class="chip-list" data-name="interests">
   {{generateTags(user.interests)}}

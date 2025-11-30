@@ -65,3 +65,45 @@ function showOtherElements(form, target, className) {
     }
   }
 }
+function editPart(target, containerId, partialName, toggleClassName) {
+  var container = document.getElementById(containerId)
+  if (container) {
+    var url = getCurrentURL() + "/" + partialName
+    var form_1 = target.form
+    if (container) {
+      showLoading()
+      loadAjax(
+        url,
+        container,
+        function () {
+          hideLoading()
+          if (form_1 && toggleClassName) {
+            hideOtherElements(form_1, target, toggleClassName)
+          }
+        },
+        hideLoading,
+      )
+    }
+  }
+}
+function closePart(target, containerId, partialName, toggleClassName) {
+  var container = document.getElementById(containerId)
+  if (container) {
+    var url = getCurrentURL() + "/" + partialName
+    var form_2 = target.form
+    if (container) {
+      showLoading()
+      loadAjax(
+        url,
+        container,
+        function () {
+          hideLoading()
+          if (form_2 && toggleClassName) {
+            showOtherElements(form_2, target, toggleClassName)
+          }
+        },
+        hideLoading,
+      )
+    }
+  }
+}

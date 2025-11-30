@@ -8,6 +8,9 @@ import { MyProfileService, User, userModel, UserSettings } from "./user"
 
 export class MyProfileController {
   constructor(private service: MyProfileService, private log: Log) {
+    this.getPartial = this.getPartial.bind(this)
+    this.getInfo = this.getInfo.bind(this)
+    this.getInfoUpdate = this.getInfoUpdate.bind(this)
     this.getInterests = this.getInterests.bind(this)
     this.getInterestsUpdate = this.getInterestsUpdate.bind(this)
 
@@ -15,6 +18,33 @@ export class MyProfileController {
     this.submit = this.submit.bind(this)
     this.viewSettings = this.viewSettings.bind(this)
     this.saveSettings = this.saveSettings.bind(this)
+  }
+  getPartial(req: Request, res: Response, name: string) {
+    const userId: string = res.locals.userId
+    const lang = getLang(req)
+    const resource = getResource(lang)
+    this.service
+      .getMyProfile(userId)
+      .then((user) => {
+        if (!user) {
+          res.status(404).end("Cannot load user profile")
+        } else {
+          res.render("pages/my-profile/" + name, { resource, user })
+        }
+      })
+      .catch((err) => handleError(err, res, this.log))
+  }
+  getInfo(req: Request, res: Response) {
+    this.getPartial(req, res, "info")
+  }
+  getInfoUpdate(req: Request, res: Response) {
+    this.getPartial(req, res, "info_update")
+  }
+  getInterests(req: Request, res: Response) {
+    this.getPartial(req, res, "interests")
+  }
+  getInterestsUpdate(req: Request, res: Response) {
+    this.getPartial(req, res, "interests_update")
   }
   view(req: Request, res: Response) {
     const userId: string = res.locals.userId
@@ -30,37 +60,6 @@ export class MyProfileController {
         }
       })
       .catch((err) => renderError500(req, res, resource, err))
-  }
-  getInterests(req: Request, res: Response) {
-    const userId: string = res.locals.userId
-    const lang = getLang(req)
-    const resource = getResource(lang)
-    this.service
-      .getMyProfile(userId)
-      .then((user) => {
-        if (!user) {
-          res.status(404).end("Cannot load user profile")
-        } else {
-          res.render("pages/user/interests", { resource, user })
-        }
-      })
-      .catch((err) => handleError(err, res, this.log))
-  }
-  getInterestsUpdate(req: Request, res: Response) {
-    const userId: string = res.locals.userId
-    const lang = getLang(req)
-    const resource = getResource(lang)
-    console.log("user id " + userId)
-    this.service
-      .getMyProfile(userId)
-      .then((user) => {
-        if (!user) {
-          res.status(404).end("Cannot load user profile")
-        } else {
-          res.render("pages/user/interests_update", { resource, user: escape(user) })
-        }
-      })
-      .catch((err) => handleError(err, res, this.log))
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req)

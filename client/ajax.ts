@@ -62,3 +62,46 @@ function showOtherElements(form: HTMLFormElement, target: HTMLButtonElement, cla
     }
   }
 }
+function editPart(target: HTMLButtonElement, containerId: string, partialName: string, toggleClassName?: string) {
+  const container = document.getElementById(containerId)
+  if (container) {
+    const url = getCurrentURL() + "/" + partialName
+    const form = target.form as HTMLFormElement
+    if (container) {
+      showLoading()
+      loadAjax(
+        url,
+        container,
+        function () {
+          hideLoading()
+          if (form && toggleClassName) {
+            hideOtherElements(form, target, toggleClassName)
+          }
+        },
+        hideLoading,
+      )
+    }
+  }
+}
+
+function closePart(target: HTMLButtonElement, containerId: string, partialName: string, toggleClassName?: string) {
+  const container = document.getElementById(containerId)
+  if (container) {
+    const url = getCurrentURL() + "/" + partialName
+    const form = target.form as HTMLFormElement
+    if (container) {
+      showLoading()
+      loadAjax(
+        url,
+        container,
+        function () {
+          hideLoading()
+          if (form && toggleClassName) {
+            showOtherElements(form, target, toggleClassName)
+          }
+        },
+        hideLoading,
+      )
+    }
+  }
+}

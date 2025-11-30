@@ -136,6 +136,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post("/change-password", authorized, ctx.menu.build, json(), ctx.password.changePassword)
 
   app.get("/my-profile", checkAuthen, ctx.menu.build, ctx.myProfile.view)
+  app.get("/my-profile/info", checkAuthen, ctx.myProfile.getInfo)
+  app.get("/my-profile/info_update", checkAuthen, ctx.myProfile.getInfoUpdate)
   app.get("/my-profile/interests", checkAuthen, ctx.myProfile.getInterests)
   app.get("/my-profile/interests_update", checkAuthen, ctx.myProfile.getInterestsUpdate)
   app.post("/my-profile", authorized, ctx.menu.build, json(), ctx.myProfile.submit)
