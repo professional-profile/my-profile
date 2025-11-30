@@ -1,4 +1,4 @@
-import { Authenticator, initializeStatus, SqlAuthTemplateConfig, useUserRepository } from "authen-service"
+import { Authenticator, initializeStatus, SqlAuthTemplateConfig, Token, useUserRepository } from "authen-service"
 import { compare } from "bcrypt"
 import { Comparator } from "bcrypt-plus"
 import { MenuBuilder, MenuItemLoader } from "content-menu"
@@ -27,6 +27,7 @@ resources.check = check
 
 export interface Config {
   cookie?: boolean
+  rememberToken: Token
   auth: SqlAuthTemplateConfig
   map: StringMap
   signup: SignupTemplateConfig
@@ -65,7 +66,16 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const status = initializeStatus(cfg.auth.status)
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, cfg.auth, cfg.map)
   const authenticator = new Authenticator(status, compare, auth.account, userRepository, undefined, auth.lockedMinutes, auth.maxPasswordFailed)
-  const signin = new SigninController(authenticator, cfg.auth.token.secret, cfg.auth.token.expires, logger.error)
+  const signin = new SigninController(
+    authenticator,
+    "token",
+    cfg.auth.token.secret,
+    cfg.auth.token.expires,
+    "remember",
+    cfg.rememberToken.secret,
+    cfg.rememberToken.expires,
+    logger.error,
+  )
 
   const comparator = new Comparator()
   const signupMailSender = new SignupSender(cfg.signup.url, sendMail, cfg.mail.from, cfg.signup.template.body, cfg.signup.template.subject)

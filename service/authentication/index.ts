@@ -30,7 +30,16 @@ export const map: StringMap = {
   "9": "fail_disabled_account",
 }
 export class SigninController {
-  constructor(private authenticator: Authenticator<User, string>, private secret: string, private expiresIn: number, private log: Log) {
+  constructor(
+    private authenticator: Authenticator<User, string>,
+    private token: string,
+    private secret: string,
+    private expiresIn: number,
+    private remember: string,
+    private rememberSecret: string,
+    private rememberExpiresIn: number,
+    private log: Log,
+  ) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
   }
@@ -48,34 +57,38 @@ export class SigninController {
   submit(req: Request, res: Response) {
     const resource = getResource(req)
     const user: User = req.body
+    console.log("User = " + JSON.stringify(user))
+
     const errors = validate<User>(user, userModel, resource, true)
     if (errors.length > 0) {
-      console.log("Login error: " + JSON.stringify(errors))
+      console.log("Login error = " + JSON.stringify(errors))
       res.status(422).json(errors)
     } else {
       this.authenticator
         .authenticate(user)
         .then((result) => {
-          if (result.status == 1 && result.user) {
+          if (result.status === 1 && result.user) {
+            console.log("User = " + JSON.stringify(result.user))
             const account = result.user
             const token = sign({ id: account.id, username: user.username, language: account.language, dateFormat: account.dateFormat }, this.secret, {
               expiresIn: this.expiresIn,
             })
-            res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
+
+            const remember = sign(
+              { id: account.id, username: user.username, language: account.language, dateFormat: account.dateFormat },
+              this.rememberSecret,
+              { expiresIn: this.rememberExpiresIn },
+            )
+            console.log("Login successfully with token = " + token)
+            res.cookie(this.token, token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
+
+            res.cookie(this.remember, remember, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.rememberExpiresIn })
+
             let redirectUrl = query(req, "redirectUrl")
-            if (!redirectUrl || redirectUrl == "") {
+            if (!redirectUrl || redirectUrl === "") {
               redirectUrl = "news"
             }
-            res.send(`
-              <html>
-                <body>
-                  <script>
-                    sessionStorage.setItem('token', ${JSON.stringify(token)});
-                    window.location.href = '/${redirectUrl}';
-                  </script>
-                </body>
-              </html>
-            `)
+            return res.redirect(redirectUrl)
           } else {
             let key: string | undefined = map["" + result.status]
             const message = key ? resource[key] : resource.fail_authentication

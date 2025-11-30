@@ -1,45 +1,95 @@
 import { Application, json, NextFunction, Request, Response, urlencoded } from "express"
-import { verify } from "jsonwebtoken"
+import { sign, verify } from "jsonwebtoken"
 import { ApplicationContext } from "./context"
 
 export * from "./context"
 
 const prefix = "Bearer "
 export class TokenVerifier {
-  constructor(private account: string, private token: string, private secret: string) {
+  constructor(
+    private account: string,
+    private token: string,
+    private secret: string,
+    private expiresIn: number,
+    private remember: string,
+    private rememberSecret: string,
+  ) {
     this.verify = this.verify.bind(this)
   }
 
   verify(req: Request, res: Response, next: NextFunction) {
     let token: string | undefined
+    let remember: string | undefined
     if (req.cookies) {
       token = req.cookies[this.token]
-    }
-
-    if (!token || token.length === 0) {
-      let data = req.headers["authorization"]
-      if (data && data.startsWith(prefix)) {
-        token = data.substring(prefix.length)
+      remember = req.cookies[this.remember]
+      if (token) {
+        console.log("Token from cookie " + token)
+      }
+      if (remember) {
+        console.log("Remember from cookie " + remember)
       }
     }
-
-    if (token && token.length > 0) {
-      verify(token, this.secret, (err, decoded) => {
+    if (!token) {
+      if (!remember) {
+        next()
+      } else {
+        verify(remember, this.rememberSecret, (err2: any, decoded2: any) => {
+          if (err2) {
+            next()
+          } else {
+            console.log("Decoded remember not token " + JSON.stringify(decoded2))
+            removeJWTFields(decoded2)
+            const newToken = sign(decoded2, this.secret, { expiresIn: this.expiresIn })
+            res.cookie(this.token, newToken, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
+            res.locals[this.account] = decoded2
+            res.locals.userId = decoded2.id
+            if (decoded2.username) {
+              res.locals.username = decoded2.username
+            }
+            next()
+          }
+        })
+      }
+    } else {
+      verify(token, this.secret, (err: any, decoded: any) => {
         if (err) {
-          next()
+          if (!remember) {
+            next()
+          } else {
+            verify(remember, this.rememberSecret, (err2: any, decoded2: any) => {
+              if (err2) {
+                next()
+              } else {
+                console.log("Decoded remember token " + JSON.stringify(decoded2))
+                removeJWTFields(decoded2)
+                const newToken = sign(decoded2, this.secret, { expiresIn: this.expiresIn })
+                res.cookie(this.token, newToken, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
+                res.locals[this.account] = decoded2
+                res.locals.userId = decoded2.id
+                if (decoded2.username) {
+                  res.locals.username = decoded2.username
+                }
+                next()
+              }
+            })
+          }
         } else {
           res.locals[this.account] = decoded
-          res.locals.userId = (decoded as any).id
-          if ((decoded as any).username) {
-            res.locals.username = (decoded as any).username
+          res.locals.userId = decoded.id
+          if (decoded.username) {
+            res.locals.username = decoded.username
           }
           next()
         }
       })
-    } else {
-      next()
     }
   }
+}
+
+function removeJWTFields(obj: any) {
+  delete obj.iat
+  delete obj.exp
 }
 
 function checkAuthen(req: Request, res: Response, next: NextFunction) {

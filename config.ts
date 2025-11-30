@@ -24,10 +24,14 @@ export const config = {
   db: {
     connectionString: "postgres://postgres:abcd1234@localhost/my-profile",
   },
+  rememberToken: {
+    secret: "secretremember",
+    expires: 30 * 24 * 60 * 60 * 1000,
+  },
   auth: {
     token: {
       secret: "secretbackoffice",
-      expires: 86400000,
+      expires: 60 * 60 * 1000,
     },
     status: {
       success: 1,

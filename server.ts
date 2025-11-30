@@ -39,7 +39,7 @@ app.set("view engine", "html")
 const logger = createLogger(cfg.log)
 resources.log = logger.error
 
-const verifier = new TokenVerifier("account", "token", cfg.auth.token.secret)
+const verifier = new TokenVerifier("account", "token", cfg.auth.token.secret, cfg.auth.token.expires, "remember", cfg.rememberToken.secret)
 app.use(cookieParser(), verifier.verify)
 
 const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
