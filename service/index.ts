@@ -3,8 +3,6 @@ import { sign, verify } from "jsonwebtoken"
 import { ApplicationContext } from "./context"
 
 export * from "./context"
-
-const prefix = "Bearer "
 export class TokenVerifier {
   constructor(
     private account: string,
@@ -128,17 +126,17 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post("/change-password", authorized, ctx.menu.build, json(), ctx.password.changePassword)
 
   app.get("/my-profile", checkAuthen, ctx.menu.build, ctx.myProfile.view)
-  app.get("/my-profile/info", checkAuthen, ctx.myProfile.getInfo)
-  app.get("/my-profile/info_update", checkAuthen, ctx.myProfile.getInfoUpdate)
-  app.get("/my-profile/bio", checkAuthen, ctx.myProfile.getBio)
-  app.get("/my-profile/bio_update", checkAuthen, ctx.myProfile.getBioUpdate)
-  app.get("/my-profile/skills", checkAuthen, ctx.myProfile.getSkills)
-  app.get("/my-profile/skills_update", checkAuthen, ctx.myProfile.getSkillsUpdate)
-  app.get("/my-profile/interests", checkAuthen, ctx.myProfile.getInterests)
-  app.get("/my-profile/interests_update", checkAuthen, ctx.myProfile.getInterestsUpdate)
-  app.get("/my-profile/achievements", checkAuthen, ctx.myProfile.getAchievements)
-  app.get("/my-profile/achievements_update", checkAuthen, ctx.myProfile.getAchievementsUpdate)
-  app.get("/my-profile/skills_update", checkAuthen, ctx.myProfile.getSkillsUpdate)
+  app.get("/my-profile/info", authorized, ctx.myProfile.getInfo)
+  app.get("/my-profile/info_update", authorized, ctx.myProfile.getInfoUpdate)
+  app.get("/my-profile/bio", authorized, ctx.myProfile.getBio)
+  app.get("/my-profile/bio_update", authorized, ctx.myProfile.getBioUpdate)
+  app.get("/my-profile/skills", authorized, ctx.myProfile.getSkills)
+  app.get("/my-profile/skills_update", authorized, ctx.myProfile.getSkillsUpdate)
+  app.get("/my-profile/interests", authorized, ctx.myProfile.getInterests)
+  app.get("/my-profile/interests_update", authorized, ctx.myProfile.getInterestsUpdate)
+  app.get("/my-profile/achievements", authorized, ctx.myProfile.getAchievements)
+  app.get("/my-profile/achievements_update", authorized, ctx.myProfile.getAchievementsUpdate)
+  app.get("/my-profile/skills_update", authorized, ctx.myProfile.getSkillsUpdate)
   app.post("/my-profile", authorized, ctx.menu.build, json(), ctx.myProfile.submit)
 
   app.get("/settings", checkAuthen, ctx.menu.build, ctx.myProfile.viewSettings)
