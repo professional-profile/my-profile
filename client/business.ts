@@ -146,24 +146,45 @@ function unfollow(target: HTMLElement, id: string, remove?: boolean) {
     .catch((err) => handleError(err, resource.error_network))
 }
 
+function saveAchievements(e: Event) {
+  e.preventDefault()
+  const target = e.target as HTMLButtonElement
+  const parent = target.parentElement?.parentElement
+  if (parent) {
+    const sections = parent.querySelectorAll('section[data-value="true"]')
+    const l = sections.length
+    const achievements = []
+    for (let i = 0; i < l; i++) {
+      const section = sections[i]
+      const achievement = {} as any
+      const hSubject = section.querySelector("h3") as HTMLElement
+      if (hSubject) {
+        achievement.subject = hSubject.firstChild?.textContent
+        const iHighlight = hSubject.querySelector("i.star.highlight")
+        if (iHighlight) {
+          achievement.highlight = true
+        }
+      }
+      const pDescription = section.querySelector("p") as HTMLElement
+      if (pDescription) {
+        achievement.description = pDescription.innerText
+      }
+      achievements.push(achievement)
+    }
+    const url = getCurrentURL()
+    const data = { achievements }
+    callSubmitPartialForm(url, target, data, "userAchievements", "achievements", "btn-edit")
+  }
+}
+interface Achievement {
+  subject: string
+  description: string
+  highlight?: boolean
+}
 function addAchievement(target: HTMLButtonElement) {
   const parent = target.parentElement?.parentElement
   if (parent) {
-    const achievement: any = {}
-
-    const txtSubject = parent.querySelector('input[name="subject"]') as HTMLInputElement
-    if (txtSubject) {
-      achievement.subject = txtSubject.value.trim()
-    }
-    const txtDescription = parent.querySelector('input[name="description"]') as HTMLInputElement
-    if (txtDescription) {
-      achievement.description = txtDescription.value.trim()
-    }
-    const checkHighlight = parent.querySelector('input[name="highlight"]') as HTMLInputElement
-    if (checkHighlight && checkHighlight.checked) {
-      achievement.highlight = true
-    }
-
+    const achievement = decode<Achievement>(parent, ["subject", "description", "highlight"])
     const container = parent.parentElement
     if (container && container.childNodes.length > 2) {
       let beforeElement = container.querySelector('section[data-value="true"]')
@@ -179,7 +200,6 @@ function addAchievement(target: HTMLButtonElement) {
     }
   }
 }
-
 function renderAchievement(subject: string, description: string, highlight?: boolean): string {
   const star = highlight ? '<i class="star highlight"></i>' : ""
   return `<h3>${escapeHTML(subject)}${star}</h3>

@@ -313,6 +313,53 @@ function setKey(_object: any, _isArrayKey: boolean, _key: string, _nextValue: an
   return _object
 }
 
+function decode<T>(parent: HTMLElement | null | undefined, fields: string[], currencySymbol?: string | null): T {
+  const obj = {} as any
+  if (parent) {
+    for (const field of fields) {
+      const ele = parent.querySelector(`input[name="${escapeHTML(field)}"]`) as HTMLInputElement
+      if (ele) {
+        const type = ele.type
+        if (type === "checkbox") {
+          obj[field] = ele.checked
+        } else if (type === "date") {
+          if (ele.value.length === 10) {
+            obj[field] = ele.value
+          }
+        } else if (type === "datetime-local") {
+          if (ele.value.length > 0) {
+            try {
+              const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
+              obj[field] = val
+            } catch (err) {}
+          }
+        } else {
+          const datatype = ele.getAttribute("data-type")
+          let symbol: string | null | undefined
+          let v = ele.value.trim()
+          if (datatype === "currency" || datatype === "string-currency") {
+            symbol = ele.getAttribute("data-currency-symbol")
+            if (!symbol) {
+              symbol = currencySymbol
+            }
+            if (symbol && symbol.length > 0 && v.indexOf(symbol) >= 0) {
+              v = v.replace(symbol, "")
+            }
+          }
+          if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
+            const decimalSeparator = getDecimalSeparator(ele)
+            v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
+            const val = isNaN(v as any) ? null : parseFloat(v)
+            obj[field] = val
+          } else {
+            obj[field] = v
+          }
+        }
+      }
+    }
+  }
+  return obj
+}
 function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
   const dateFormat = form.getAttribute("data-date-format")
   const obj = {} as T

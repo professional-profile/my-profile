@@ -1,7 +1,7 @@
 import { Attributes, DateRange, Filter } from "onecore"
 
 export interface User {
-  id: string
+  id?: string
   username: string
   email?: string
   phone?: string
@@ -57,6 +57,7 @@ export interface Skill {
 export interface Achievement {
   subject: string
   description: string
+  hirable?: boolean
 }
 export interface Work {
   name: string

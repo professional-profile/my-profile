@@ -10,7 +10,7 @@
 </header>
 {% for achievement in user.achievements %}
 <section>
-  <h3>{{achievement.subject}}<i class="star highlight float-right"></i></h3>
+  <h3>{{achievement.subject}}{% if achievement.highlight %}<i class="star highlight float-right"></i>{% endif %}</h3>
   <p class="description">{{achievement.description}}</p>
   <hr />
 </section>

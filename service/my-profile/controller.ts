@@ -113,6 +113,7 @@ export class MyProfileController {
           if (targetTemplate) {
             res.render("pages/my-profile/" + targetTemplate, { resource, user: escape(user) })
           } else {
+            delete user.id
             res.status(200).json(user).end()
           }
         }
