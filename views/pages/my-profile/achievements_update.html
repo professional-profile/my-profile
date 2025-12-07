@@ -9,23 +9,17 @@
   ></button>
 </header>
 {% for achievement in user.achievements %}
-<section>
-  <h3>{{achievement.subject}}<i class="star highlight float-right"></i></h3>
+<section data-value="true">
+  <h3>{{achievement.subject}}<i class="star highlight"></i></h3>
   <p class="description">{{achievement.description}}</p>
+  <button type="button" class="btn-remove"></button>
   <hr />
 </section>
 {% endfor %}
 <section>
   <div class="form-group">
-    <input class="form-control" placeholder="Name of Achievement" maxlength="50" required="" type="text" value="" name="subject" /><input
-      class="form-control"
-      placeholder="Description of Achievement"
-      maxlength="100"
-      required=""
-      type="text"
-      value=""
-      name="description"
-    />
+    <input type="text" name="subject" value="" maxlength="50" required placeholder="Name of Achievement" />
+    <input type="text" value="" name="description" maxlength="100" required="" placeholder="Description of Achievement" />
   </div>
   <label class="checkbox-container"><input id="highlight" type="checkbox" name="highlight" />Highlight Achievement</label>
   <div class="btn-group"><button type="button" id="btnAddAchievement" name="btnAddAchievement" class="btn-add"></button>Add Achievement</div>

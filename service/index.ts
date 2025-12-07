@@ -23,12 +23,6 @@ export class TokenVerifier {
     if (req.cookies) {
       token = req.cookies[this.token]
       remember = req.cookies[this.remember]
-      if (token) {
-        console.log("Token from cookie " + token)
-      }
-      if (remember) {
-        console.log("Remember from cookie " + remember)
-      }
     }
     if (!token) {
       if (!remember) {
@@ -38,7 +32,6 @@ export class TokenVerifier {
           if (err2) {
             next()
           } else {
-            console.log("Decoded remember not token " + JSON.stringify(decoded2))
             removeJWTFields(decoded2)
             const newToken = sign(decoded2, this.secret, { expiresIn: this.expiresIn })
             res.cookie(this.token, newToken, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
@@ -61,7 +54,6 @@ export class TokenVerifier {
               if (err2) {
                 next()
               } else {
-                console.log("Decoded remember token " + JSON.stringify(decoded2))
                 removeJWTFields(decoded2)
                 const newToken = sign(decoded2, this.secret, { expiresIn: this.expiresIn })
                 res.cookie(this.token, newToken, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })

@@ -41,7 +41,7 @@ export const en = {
   user_profile_occupation: "Occupation",
   user_profile_social: "Social",
   user_profile_bio: "About",
-  user_profile_hireable_skill: "Hireable Skill",
+  user_profile_hirable_skill: "Hirable Skill",
   user_profile_companies: "Companies",
   user_profile_educations: "Educations",
   user_profile_works: "Works",

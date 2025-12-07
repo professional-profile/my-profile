@@ -414,8 +414,14 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
   form.querySelectorAll(".chip-list").forEach((divChip) => {
     const name = divChip.getAttribute("data-name")
     if (name && name.length > 0) {
-      const v = getChipsByElement(divChip)
-      setValue(obj, name, v)
+      const dv = divChip.getAttribute("data-value")
+      if (dv) {
+        const v = getChipObjects(divChip, dv, divChip.getAttribute("data-text"), divChip.getAttribute("data-star"))
+        setValue(obj, name, v)
+      } else {
+        const v = getChipsByElement(divChip)
+        setValue(obj, name, v)
+      }
     }
   })
   return obj
@@ -429,6 +435,30 @@ function getChipsByElement(container?: Element | null): string[] {
     return Array.from(container.querySelectorAll<HTMLElement>(".chip")).map((chip) => {
       const v = chip.getAttribute("data-value")
       return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
+}
+function getChipObjects(container: Element | null | undefined, value: string, text?: string | null, star?: string | null): any[] {
+  if (container) {
+    return Array.from(container.querySelectorAll<HTMLElement>(".chip")).map((chip) => {
+      const obj: any = {}
+      const v = chip.getAttribute("data-value")
+      obj[value] = v ? v.trim() : ""
+
+      if (text) {
+        obj[text] = chip.firstChild?.textContent
+      }
+
+      if (star) {
+        const i = chip.querySelector("i.star.highlight")
+        if (i) {
+          obj[star] = true
+        }
+      }
+
+      return obj
     })
   } else {
     return []

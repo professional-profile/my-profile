@@ -404,8 +404,14 @@ function decodeFromForm(form, currencySymbol) {
   form.querySelectorAll(".chip-list").forEach(function (divChip) {
     var name = divChip.getAttribute("data-name")
     if (name && name.length > 0) {
-      var v = getChipsByElement(divChip)
-      setValue(obj, name, v)
+      var dv = divChip.getAttribute("data-value")
+      if (dv) {
+        var v = getChipObjects(divChip, dv, divChip.getAttribute("data-text"), divChip.getAttribute("data-star"))
+        setValue(obj, name, v)
+      } else {
+        var v = getChipsByElement(divChip)
+        setValue(obj, name, v)
+      }
     }
   })
   return obj
@@ -419,6 +425,28 @@ function getChipsByElement(container) {
     return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
       var v = chip.getAttribute("data-value")
       return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
+}
+function getChipObjects(container, value, text, star) {
+  if (container) {
+    return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
+      var _a
+      var obj = {}
+      var v = chip.getAttribute("data-value")
+      obj[value] = v ? v.trim() : ""
+      if (text) {
+        obj[text] = (_a = chip.firstChild) === null || _a === void 0 ? void 0 : _a.textContent
+      }
+      if (star) {
+        var i = chip.querySelector("i.star.highlight")
+        if (i) {
+          obj[star] = true
+        }
+      }
+      return obj
     })
   } else {
     return []

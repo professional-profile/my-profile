@@ -88,6 +88,7 @@ pre[class*="language-"] {
 .article-thumbnail {
   margin-bottom: 14px;
 }
+.article-content > p > img,
 .article-content > figure > img {
   max-width: 100%;
   margin-bottom: 0px;

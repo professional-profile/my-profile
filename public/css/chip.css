@@ -31,6 +31,14 @@
   color: #f44336;
 }
 
+.chip-input-container > span {
+  white-space: nowrap;
+  margin-top: 16px;
+  margin-left: 8px;
+}
+.chip-input-container > input[type="checkbox"] {
+  margin-top: 16px;
+}
 .chip-input-container .btn-add {
   width: 34px;
   height: 34px;
