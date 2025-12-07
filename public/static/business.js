@@ -152,3 +152,29 @@ function unfollow(target, id, remove) {
       return handleError(err, resource.error_network)
     })
 }
+
+function removeParent(target) {
+  var parent = target.parentElement
+  if (parent) {
+    parent.remove()
+  }
+}
+function addAchievement(target) {
+  var _a
+  var parent = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
+  if (parent) {
+    var achievement = {}
+    var txtSubject = parent.querySelector('input[name="subject"]')
+    if (txtSubject) {
+      achievement.subject = txtSubject.value.trim()
+    }
+    var txtDescription = parent.querySelector('input[name="description"]')
+    if (txtDescription) {
+      achievement.description = txtDescription.value.trim()
+    }
+    var checkHighlight = parent.querySelector('input[name="highlight"]')
+    if (checkHighlight && checkHighlight.checked) {
+      achievement.highlight = true
+    }
+  }
+}

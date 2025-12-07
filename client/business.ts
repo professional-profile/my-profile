@@ -146,6 +146,35 @@ function unfollow(target: HTMLElement, id: string, remove?: boolean) {
     .catch((err) => handleError(err, resource.error_network))
 }
 
+function removeParent(target: HTMLElement) {
+  const parent = target.parentElement
+  if (parent) {
+    parent.remove()
+  }
+}
+
+function addAchievement(target: HTMLButtonElement) {
+  const parent = target.parentElement?.parentElement
+  if (parent) {
+    const achievement: any = {}
+
+    const txtSubject = parent.querySelector('input[name="subject"]') as HTMLInputElement
+    if (txtSubject) {
+      achievement.subject = txtSubject.value.trim()
+    }
+
+    const txtDescription = parent.querySelector('input[name="description"]') as HTMLInputElement
+    if (txtDescription) {
+      achievement.description = txtDescription.value.trim()
+    }
+
+    const checkHighlight = parent.querySelector('input[name="highlight"]') as HTMLInputElement
+    if (checkHighlight && checkHighlight.checked) {
+      achievement.highlight = true
+    }
+  }
+}
+
 function toggleView(target: HTMLButtonElement, viewId: string, editorId: string, toolbarId: string) {
   const form = target.form
   if (form) {
