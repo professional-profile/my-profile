@@ -184,7 +184,7 @@ interface Achievement {
 function addAchievement(target: HTMLButtonElement) {
   const parent = target.parentElement?.parentElement
   if (parent) {
-    const achievement = decode<Achievement>(parent, ["subject", "description", "highlight"])
+    const achievement = decodeFromElement<Achievement>(parent, ["subject", "description", "highlight"])
     const container = parent.parentElement
     if (container && container.childNodes.length > 2) {
       let beforeElement = container.querySelector('section[data-value="true"]')

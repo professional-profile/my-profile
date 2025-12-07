@@ -1,6 +1,6 @@
 import { MenuItemLoader } from "content-menu"
 import { Request, Response } from "express"
-import { escape, getView } from "express-ext"
+import { getView } from "express-ext"
 import { getResource } from "../resources"
 import { renderError404, renderError500 } from "../template"
 import { ContentService } from "./content"
@@ -30,7 +30,7 @@ export class ContentController {
         if (!content) {
           renderError404(req, res, resource)
         } else {
-          res.render(getView(req, "content"), { lang, resource, content: escape(content) })
+          res.render(getView(req, "content"), { lang, resource, content })
         }
       })
       .catch((err) => renderError500(req, res, resource, err))

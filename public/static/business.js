@@ -188,7 +188,7 @@ function addAchievement(target) {
   var _a
   var parent = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
   if (parent) {
-    var achievement = decode(parent, ["subject", "description", "highlight"])
+    var achievement = decodeFromElement(parent, ["subject", "description", "highlight"])
     var container = parent.parentElement
     if (container && container.childNodes.length > 2) {
       var beforeElement = container.querySelector('section[data-value="true"]')

@@ -115,7 +115,7 @@ function submitPartialForm(e, containerId, successPartialName, toggleClassName, 
   if (!valid) {
     return
   }
-  var data = decodeFromForm(form)
+  var data = decode(form)
   var url = getCurrentURL()
   if (confirm) {
     var confirmMsg = getConfirmMessage(target, resource)

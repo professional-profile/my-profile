@@ -301,7 +301,7 @@ function setKey(_object, _isArrayKey, _key, _nextValue) {
   }
   return _object
 }
-function decode(parent, fields, currencySymbol) {
+function decodeFromElement(parent, fields, currencySymbol) {
   var obj = {}
   if (parent) {
     for (var _i = 0, fields_1 = fields; _i < fields_1.length; _i++) {
@@ -349,7 +349,7 @@ function decode(parent, fields, currencySymbol) {
   }
   return obj
 }
-function decodeFromForm(form, currencySymbol) {
+function decode(form, currencySymbol) {
   var dateFormat = form.getAttribute("data-date-format")
   var obj = {}
   var len = form.length
@@ -709,7 +709,7 @@ function submitForm(e) {
   var confirmMsg = getConfirmMessage(target, resource)
   showConfirm(confirmMsg, function () {
     showLoading()
-    var data = decodeFromForm(form)
+    var data = decode(form)
     var url = getCurrentURL()
     fetch(url, {
       method: "POST",

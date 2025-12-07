@@ -112,7 +112,7 @@ function submitPartialForm(e: Event, containerId?: string, successPartialName?: 
   if (!valid) {
     return
   }
-  const data = decodeFromForm(form)
+  const data = decode(form)
   const url = getCurrentURL()
   if (confirm) {
     const confirmMsg = getConfirmMessage(target, resource)

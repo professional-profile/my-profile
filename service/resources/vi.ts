@@ -9,8 +9,9 @@ export const vi = {
   companies: "Công ty thành viên",
   leadership: "Khả năng lãnh đạo",
 
-  my_articles: "Bài viết của tôi",
   saved_articles: "Bài viết đã lưu",
+  my_articles: "Bài viết của tôi",
+  my_article: "Bài viết của tôi",
 
   menu: "Menu",
   sidebar: "Sidebar",
@@ -127,7 +128,7 @@ export const vi = {
   job_title: "Chức danh",
   message: "Tin nhắn",
 
-  published_at: "Published At",
+  published_at: "Đăng lúc",
   published_at_from: "Đăng sau khi",
   published_at_to: "Đăng trước khi",
 

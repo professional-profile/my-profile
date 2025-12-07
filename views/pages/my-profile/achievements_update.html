@@ -18,12 +18,29 @@
 {% endfor %}
 <section>
   <div class="form-group">
-    <input type="text" name="subject" value="" class="form-control" maxlength="50" required placeholder="Name of Achievement" />
-    <input type="text" name="description" value="" class="form-control" maxlength="100" required placeholder="Description of Achievement" />
+    <input
+      type="text"
+      name="subject"
+      value=""
+      class="form-control"
+      maxlength="50"
+      required
+      placeholder="{{resource.placeholder_user_profile_achievement_subject}}"
+    />
+    <input
+      type="text"
+      name="description"
+      value=""
+      class="form-control"
+      maxlength="100"
+      required
+      placeholder="{{resource.placeholder_user_profile_achievement_description}}"
+    />
   </div>
-  <label class="checkbox-container"><input id="highlight" type="checkbox" name="highlight" />Highlight Achievement</label>
+  <label class="checkbox-container"><input id="highlight" type="checkbox" name="highlight" />{{resource.user_profile_highlight_achievement}}</label>
   <div class="btn-group">
-    <button type="button" id="btnAddAchievement" name="btnAddAchievement" class="btn-add" onclick="addAchievement(this)"></button>Add Achievement
+    <button type="button" id="btnAddAchievement" name="btnAddAchievement" class="btn-add" onclick="addAchievement(this)"></button>
+    {{resource.button_add_achievement}}
   </div>
 </section>
 <footer>

@@ -5,7 +5,6 @@ import {
   buildPageSearch,
   buildSortSearch,
   cloneFilter,
-  escape,
   escapeArray,
   format,
   fromRequest,
@@ -77,7 +76,7 @@ export class JobController {
           renderError404(req, res, resource)
         } else {
           job.publishedAt = formatDateTime(job.publishedAt, dateFormat)
-          render(req, res, "job", { resource, job: escape(job) })
+          render(req, res, "job", { resource, job })
         }
       })
       .catch((err) => renderError500(req, res, resource, err))

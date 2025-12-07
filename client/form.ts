@@ -313,7 +313,7 @@ function setKey(_object: any, _isArrayKey: boolean, _key: string, _nextValue: an
   return _object
 }
 
-function decode<T>(parent: HTMLElement | null | undefined, fields: string[], currencySymbol?: string | null): T {
+function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: string[], currencySymbol?: string | null): T {
   const obj = {} as any
   if (parent) {
     for (const field of fields) {
@@ -360,7 +360,7 @@ function decode<T>(parent: HTMLElement | null | undefined, fields: string[], cur
   }
   return obj
 }
-function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
+function decode<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
   const dateFormat = form.getAttribute("data-date-format")
   const obj = {} as T
   const len = form.length
@@ -722,7 +722,7 @@ function submitForm(e: Event) {
   const confirmMsg = getConfirmMessage(target, resource)
   showConfirm(confirmMsg, () => {
     showLoading()
-    const data = decodeFromForm(form)
+    const data = decode(form)
     const url = getCurrentURL()
     fetch(url, {
       method: "POST",
