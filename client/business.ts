@@ -146,13 +146,6 @@ function unfollow(target: HTMLElement, id: string, remove?: boolean) {
     .catch((err) => handleError(err, resource.error_network))
 }
 
-function removeParent(target: HTMLElement) {
-  const parent = target.parentElement
-  if (parent) {
-    parent.remove()
-  }
-}
-
 function addAchievement(target: HTMLButtonElement) {
   const parent = target.parentElement?.parentElement
   if (parent) {
@@ -162,17 +155,36 @@ function addAchievement(target: HTMLButtonElement) {
     if (txtSubject) {
       achievement.subject = txtSubject.value.trim()
     }
-
     const txtDescription = parent.querySelector('input[name="description"]') as HTMLInputElement
     if (txtDescription) {
       achievement.description = txtDescription.value.trim()
     }
-
     const checkHighlight = parent.querySelector('input[name="highlight"]') as HTMLInputElement
     if (checkHighlight && checkHighlight.checked) {
       achievement.highlight = true
     }
+
+    const container = parent.parentElement
+    if (container && container.childNodes.length > 2) {
+      let beforeElement = container.querySelector('section[data-value="true"]')
+      if (!beforeElement) {
+        beforeElement = container.querySelector("footer")
+      }
+      if (beforeElement) {
+        const sec = document.createElement("section")
+        sec.setAttribute("data-value", "true")
+        sec.innerHTML = renderAchievement(achievement.subject, achievement.description, achievement.highlight)
+        container.insertBefore(sec, beforeElement)
+      }
+    }
   }
+}
+
+function renderAchievement(subject: string, description: string, highlight?: boolean): string {
+  const star = highlight ? '<i class="star highlight"></i>' : ""
+  return `<h3>${escapeHTML(subject)}${star}</h3>
+<p class="description">${escapeHTML(description)}</p>
+<button type="button" class="btn-remove" onclick="removeParent(this)"></button>`
 }
 
 function toggleView(target: HTMLButtonElement, viewId: string, editorId: string, toolbarId: string) {

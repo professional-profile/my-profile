@@ -2,7 +2,7 @@ import { Authenticator, initializeStatus, SqlAuthTemplateConfig, Token, useUserR
 import { compare } from "bcrypt"
 import { Comparator } from "bcrypt-plus"
 import { MenuBuilder, MenuItemLoader } from "content-menu"
-import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-ext"
+import { HealthController, Logger, resources } from "express-ext"
 import { nanoid } from "nanoid"
 import { MailConfig, MailData, StringMap } from "onecore"
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from "password-service"
@@ -36,8 +36,6 @@ export interface Config {
 }
 export interface ApplicationContext {
   health: HealthController
-  log: LogController
-  middleware: MiddlewareController
   menu: MenuBuilder
   signin: SigninController
   signup: SignUpController
@@ -50,9 +48,7 @@ export interface ApplicationContext {
   job: JobController
 }
 
-export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config): ApplicationContext {
-  const log = new LogController(logger)
-  const middleware = new MiddlewareController(midLogger)
+export function useContext(db: DB, logger: Logger, cfg: Config): ApplicationContext {
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
 
@@ -130,7 +126,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const article = useArticleController(db, logger.error)
   const job = useJobController(db)
 
-  return { health, log, middleware, menu, signin, signup, password, myProfile, myArticles, user, content, article, job }
+  return { health, menu, signin, signup, password, myProfile, myArticles, user, content, article, job }
 }
 
 function generate(): string {

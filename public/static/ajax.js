@@ -120,14 +120,16 @@ function submitPartialForm(e, containerId, successPartialName, toggleClassName, 
   if (confirm) {
     var confirmMsg = getConfirmMessage(target, resource)
     showConfirm(confirmMsg, function () {
-      callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName)
+      callSubmitPartialForm(url, target, data, containerId, successPartialName, toggleClassName)
     })
   } else {
-    callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName)
+    callSubmitPartialForm(url, target, data, containerId, successPartialName, toggleClassName)
   }
 }
-function callSubmitPartialForm(url, form, data, containerId, successPartialName, toggleClassName) {
+function callSubmitPartialForm(url, target, data, containerId, successPartialName, toggleClassName) {
+  var form = target.form
   var resource = getResource()
+  var successMsg = getSuccessMessage(target, resource)
   showLoading()
   fetch(url, {
     method: "POST",
@@ -138,13 +140,30 @@ function callSubmitPartialForm(url, form, data, containerId, successPartialName,
       hideLoading()
       if (response.ok) {
         if (containerId) {
-          var container = document.getElementById(containerId)
-          if (container) {
-            loadAjax(url + "/" + successPartialName, container)
-            if (toggleClassName) {
-              showOtherElements(form, undefined, toggleClassName)
+          var container_1 = document.getElementById(containerId)
+          if (container_1) {
+            var contentType = response.headers.get("Content-Type")
+            if (contentType && contentType.includes("text/html")) {
+              response
+                .text()
+                .then(function (data) {
+                  container_1.innerHTML = data
+                  if (toggleClassName) {
+                    showOtherElements(form, undefined, toggleClassName)
+                  }
+                })
+                .catch(function (err) {
+                  return handleError(err, resource.error_response_body)
+                })
+            } else {
+              loadAjax(url + "/" + successPartialName, container_1)
+              if (toggleClassName) {
+                showOtherElements(form, undefined, toggleClassName)
+              }
             }
           }
+        } else {
+          alertSuccess(successMsg)
         }
       } else {
         handleJsonError(response, resource, form)

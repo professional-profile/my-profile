@@ -52,9 +52,22 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   const html = compiledTemplate.render(obj)
   res.send(html)
 }
-function isChecked(v?: boolean): string {
-  return v ? "checked" : ""
+function isChecked(v: boolean | string | undefined | null, s: string[] | string | undefined): string {
+  if (!v) {
+    return ""
+  }
+  if (typeof v === "boolean") {
+    return v ? "checked" : ""
+  } else if (s) {
+    if (Array.isArray(s)) {
+      return s.includes(v) ? "checked" : ""
+    } else {
+      return s === v ? "checked" : ""
+    }
+  }
+  return ""
 }
+
 export function renderError(req: Request, res: Response, obj?: any): void {
   res.render(getView(req, "error"), obj)
 }

@@ -131,6 +131,13 @@ function handleError(err: any, msg: string) {
   alertError(msg, err)
 }
 
+function removeParent(target: HTMLElement) {
+  const parent = target.parentElement
+  if (parent) {
+    parent.remove()
+  }
+}
+
 const histories: string[] = []
 const historyMax = 10
 function goBack() {

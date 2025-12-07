@@ -113,6 +113,12 @@ function handleError(err, msg) {
   console.log("Error: " + err)
   alertError(msg, err)
 }
+function removeParent(target) {
+  var parent = target.parentElement
+  if (parent) {
+    parent.remove()
+  }
+}
 var histories = []
 var historyMax = 10
 function goBack() {

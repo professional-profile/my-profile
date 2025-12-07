@@ -30,12 +30,8 @@
         <label class="col s12 m12 checkbox-section">
           {{resource.status}}
           <section class="checkbox-group">
-            <label>
-              <input type="checkbox" id="published" name="status" value="P" {% if checked(filter.status, 'P') %} checked {% endif %} />{{resource.published}}
-            </label>
-            <label>
-              <input type="checkbox" id="draft" name="status" value="D" {% if checked(filter.status, 'D') %} checked {% endif %}/>{{resource.draft}}
-            </label>
+            <label> <input type="checkbox" id="published" name="status" value="P" {{isChecked('P', filter.status)}} />{{resource.published}} </label>
+            <label> <input type="checkbox" id="draft" name="status" value="D" {{isChecked('D', filter.status)}}/>{{resource.draft}} </label>
           </section>
         </label>
       </section>
@@ -48,7 +44,7 @@
           <section>
             <div class="cover" style="background-image: url('{{ item.thumbnail }}')"></div>
             <a href="/my-articles/{{ item.id }}" onclick="navigate(event)">{{ item.title }}</a>
-            <p>{{ item.publishedAt }} <i class="material-icons">bookmark</i> <i class="material-icons">bookmark_border</i></p>
+            <p>{{ item.publishedAt }}</p>
             <p>{{ item.description }}</p>
           </section>
         </li>

@@ -2,7 +2,7 @@ import { merge } from "config-plus"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
-import { resources as exResources, generateStarChips, generateTags, MiddlewareLogger } from "express-ext"
+import { resources as exResources, generateStarChips, generateTags } from "express-ext"
 import http from "http"
 import { createLogger } from "logger-core"
 import nunjucks from "nunjucks"
@@ -42,13 +42,13 @@ resources.log = logger.error
 const verifier = new TokenVerifier("account", "token", cfg.auth.token.secret, cfg.auth.token.expires, "remember", cfg.rememberToken.secret)
 app.use(cookieParser(), verifier.verify)
 
-const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
+// const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
 // app.use(allow(conf.allow), json(), middleware.log)
 // app.use(allow(conf.allow), json())
 
 const pool = new Pool(cfg.db)
 const db = new PoolManager(pool)
-const ctx = useContext(db, logger, middleware, cfg)
+const ctx = useContext(db, logger, cfg)
 route(app, ctx)
 
 app.locals.datetimeToString = datetimeToString

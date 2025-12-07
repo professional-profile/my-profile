@@ -108,8 +108,6 @@ function authorized(req: Request, res: Response, next: NextFunction) {
 }
 export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/health", ctx.health.check)
-  app.patch("/log", ctx.log.config)
-  app.patch("/middleware", ctx.middleware.config)
 
   app.get("/login", ctx.signin.render)
   // app.post("/login", json(), parser.none(), ctx.login.submit)
@@ -148,14 +146,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/profiles", ctx.menu.build, ctx.user.search)
   app.get("/profiles/:id", ctx.menu.build, ctx.user.view)
-  app.patch("/profiles/:id", checkAuthen, ctx.user.follow)
-  app.delete("/profiles/:id", checkAuthen, ctx.user.unfollow)
+  app.patch("/profiles/:id", authorized, ctx.user.follow)
+  app.delete("/profiles/:id", authorized, ctx.user.unfollow)
 
   app.get("/news", ctx.menu.build, ctx.article.search)
   app.get("/news/:id", ctx.menu.build, ctx.article.view)
   app.get("/saved-news", checkAuthen, ctx.menu.build, ctx.article.getSavedArticles)
-  app.patch("/news/:id", checkAuthen, ctx.article.save)
-  app.delete("/news/:id", checkAuthen, ctx.article.remove)
+  app.patch("/news/:id", authorized, ctx.article.save)
+  app.delete("/news/:id", authorized, ctx.article.remove)
 
   app.get("/careers", ctx.menu.build, ctx.job.search)
   app.get("/careers/:id", ctx.menu.build, ctx.job.view)

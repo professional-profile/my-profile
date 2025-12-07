@@ -153,12 +153,6 @@ function unfollow(target, id, remove) {
     })
 }
 
-function removeParent(target) {
-  var parent = target.parentElement
-  if (parent) {
-    parent.remove()
-  }
-}
 function addAchievement(target) {
   var _a
   var parent = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
@@ -176,5 +170,29 @@ function addAchievement(target) {
     if (checkHighlight && checkHighlight.checked) {
       achievement.highlight = true
     }
+    var container = parent.parentElement
+    if (container && container.childNodes.length > 2) {
+      var beforeElement = container.querySelector('section[data-value="true"]')
+      if (!beforeElement) {
+        beforeElement = container.querySelector("footer")
+      }
+      if (beforeElement) {
+        var sec = document.createElement("section")
+        sec.setAttribute("data-value", "true")
+        sec.innerHTML = renderAchievement(achievement.subject, achievement.description, achievement.highlight)
+        container.insertBefore(sec, beforeElement)
+      }
+    }
   }
+}
+function renderAchievement(subject, description, highlight) {
+  var star = highlight ? '<i class="star highlight"></i>' : ""
+  return (
+    "<h3>" +
+    escapeHTML(subject) +
+    star +
+    '</h3>\n<p class="description">' +
+    escapeHTML(description) +
+    '</p>\n<button type="button" class="btn-remove" onclick="removeParent(this)"></button>'
+  )
 }

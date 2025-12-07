@@ -6,6 +6,7 @@ import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { MyProfileService, User, userModel, UserSettings } from "./user"
 
+const targetTemplates: string[] = ["interests", "bio", "skills", "achievements"]
 export class MyProfileController {
   constructor(private service: MyProfileService, private log: Log) {
     this.getPartial = this.getPartial.bind(this)
@@ -35,7 +36,7 @@ export class MyProfileController {
         if (!user) {
           res.status(404).end("Cannot load user profile")
         } else {
-          res.render("pages/my-profile/" + name, { resource, user })
+          res.render("pages/my-profile/" + name, { resource, user: escape(user) })
         }
       })
       .catch((err) => handleError(err, res, this.log))
@@ -90,6 +91,13 @@ export class MyProfileController {
     const resource = getResource(lang)
     console.log("Enter submit my profile")
     const user = req.body as User
+    const keys = Object.keys(user)
+    let targetTemplate: string | undefined
+    if (keys.length === 1 && targetTemplates.includes(keys[0])) {
+      targetTemplate = keys[0]
+    } else {
+      targetTemplate = "info"
+    }
     user.id = res.locals.userId as string
     console.log("my profile " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true, true)
@@ -102,7 +110,11 @@ export class MyProfileController {
         if (result === 0) {
           res.status(410).end()
         } else {
-          res.status(200).json(user).end()
+          if (targetTemplate) {
+            res.render("pages/my-profile/" + targetTemplate, { resource, user: escape(user) })
+          } else {
+            res.status(200).json(user).end()
+          }
         }
       })
       .catch((err) => handleError(err, res, this.log))
