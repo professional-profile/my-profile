@@ -10,6 +10,8 @@
       id="txtSkill"
       name="txtSkill"
       data-skip="true"
+      list="skillList"
+      onchange="textChange(event, '/skills')"
       onkeydown="chipOnKeydown(event)"
       placeholder="{{resource.placeholder_user_profile_skill}}"
     />
@@ -21,5 +23,6 @@
   <p class="description"><i class="star highlight"></i>Hirable Skill</p>
 </section>
 <footer>
+  <datalist id="skillList"></datalist>
   <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userSkills', 'skills', 'btn-edit')">{{resource.save}}</button>
 </footer>

@@ -5,10 +5,20 @@
 <section id="userInterests" class="chip-list" data-name="interests">
   {{generateTags(user.interests)}}
   <div class="chip-input-container">
-    <input type="text" id="txtInterest" name="txtInterest" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a tag value..." />
+    <input
+      type="text"
+      id="txtInterest"
+      name="txtInterest"
+      data-skip="true"
+      list="interestList"
+      onchange="textChange(event, '/interests')"
+      onkeydown="chipOnKeydown(event)"
+      placeholder="{{resource.placeholder_user_profile_interest}}"
+    />
     <button type="button" id="btnAddInterest" name="btnAddInterest" class="btn-add" onclick="addChip(this)"></button>
   </div>
 </section>
 <footer>
+  <datalist id="interestList"></datalist>
   <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userInterests', 'interests', 'btn-edit')">{{resource.save}}</button>
 </footer>

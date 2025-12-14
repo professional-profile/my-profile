@@ -136,3 +136,10 @@ insert into categories (id,name,status,path,resource_key,icon,sequence,type,pare
 insert into categories (id,name,status,path,resource_key,icon,sequence,type,parent) values ('leadership','Leadership','A','/leadership','leadership','person',3,'content','about');
 
 update categories set version = 1;
+
+create table skills (
+  skill varchar(120) primary key
+);
+create table interests (
+  interest varchar(120) primary key
+);

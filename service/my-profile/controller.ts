@@ -6,9 +6,10 @@ import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { MyProfileService, User, userModel, UserSettings } from "./user"
 
+export type Save = (values: string[]) => Promise<number>
 const targetTemplates: string[] = ["interests", "bio", "skills", "achievements"]
 export class MyProfileController {
-  constructor(private service: MyProfileService, private log: Log) {
+  constructor(private service: MyProfileService, private log: Log, private saveSkills?: Save, private saveInterests?: Save) {
     this.getPartial = this.getPartial.bind(this)
     this.getInfo = this.getInfo.bind(this)
     this.getBio = this.getBio.bind(this)
@@ -103,6 +104,13 @@ export class MyProfileController {
     const errors = validate<User>(user, userModel, resource, true, true)
     if (errors.length > 0) {
       return respondError(res, errors)
+    }
+    if (this.saveSkills && user.skills) {
+      const skills = user.skills.map((i) => i.skill)
+      this.saveSkills(skills)
+    }
+    if (this.saveInterests && user.interests) {
+      this.saveInterests(user.interests)
     }
     this.service
       .saveMyProfile(user)

@@ -123,6 +123,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/change-password", checkAuthen, ctx.menu.build, ctx.password.renderChangePassword)
   app.post("/change-password", authorized, ctx.menu.build, json(), ctx.password.changePassword)
 
+  app.get("/skills", authorized, ctx.skill.query)
+  app.get("/interests", authorized, ctx.interest.query)
   app.get("/my-profile", checkAuthen, ctx.menu.build, ctx.myProfile.view)
   app.get("/my-profile/info", authorized, ctx.myProfile.getInfo)
   app.get("/my-profile/info_update", authorized, ctx.myProfile.getInfoUpdate)

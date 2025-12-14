@@ -2,11 +2,11 @@ import { Authenticator, initializeStatus, SqlAuthTemplateConfig, Token, useUserR
 import { compare } from "bcrypt"
 import { Comparator } from "bcrypt-plus"
 import { MenuBuilder, MenuItemLoader } from "content-menu"
-import { HealthController, Logger, resources } from "express-ext"
+import { HealthController, ItemController, Logger, resources } from "express-ext"
 import { nanoid } from "nanoid"
 import { MailConfig, MailData, StringMap } from "onecore"
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from "password-service"
-import { CodeRepository } from "pg-extension"
+import { CodeRepository, StringService } from "pg-extension"
 import { createChecker, DB } from "query-core"
 import { initStatus, Signup, SignupSender, SignupService, SignupTemplateConfig, useRepository, Validator } from "signup-service"
 import { check } from "types-validation"
@@ -40,6 +40,8 @@ export interface ApplicationContext {
   signin: SigninController
   signup: SignUpController
   password: PasswordController
+  skill: ItemController<string[]>
+  interest: ItemController<string[]>
   myProfile: MyProfileController
   myArticles: MyArticlesController
   user: UserController
@@ -118,7 +120,11 @@ export function useContext(db: DB, logger: Logger, cfg: Config): ApplicationCont
   )
   const password = new PasswordController(passwordService, logger.error)
 
-  const myProfile = useMyProfileController(db, logger.error)
+  const skillService = new StringService("skills", "skill", db.query, db.exec)
+  const skill = new ItemController<string[]>(logger.error, skillService.load, "q")
+  const interestService = new StringService("interests", "interest", db.query, db.exec)
+  const interest = new ItemController<string[]>(logger.error, interestService.load, "q")
+  const myProfile = useMyProfileController(db, logger.error, skillService.save, interestService.save)
   const myArticles = useMyArticlesController(db, logger.error)
 
   const user = useUserController(db, logger.error)
@@ -126,7 +132,7 @@ export function useContext(db: DB, logger: Logger, cfg: Config): ApplicationCont
   const article = useArticleController(db, logger.error)
   const job = useJobController(db)
 
-  return { health, menu, signin, signup, password, myProfile, myArticles, user, content, article, job }
+  return { health, menu, signin, signup, password, myProfile, skill, interest, myArticles, user, content, article, job }
 }
 
 function generate(): string {
