@@ -1,10 +1,10 @@
 import { Request, Response } from "express"
-import { buildError404, buildError500, checked, generateChips, generateStarChips, generateTags, getView, toString } from "express-ext"
+import { buildError404, buildError500, generateChips, generateStarChips, generateTags, getView, toString } from "express-ext"
 import fs from "fs"
 import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"
 import path from "path"
-import { datetimeToString, formatDate, formatDateTime, formatLongDateTime, formatNumber, formatPhone } from "ui-formatter"
+import { datetimeToString, formatDate, formatDateTime, formatLongDateTime, formatNumber, formatPhone, isChecked, isNotEmpty } from "ui-formatter"
 
 export class resources {
   static nunjucks: nunjucks.Environment
@@ -37,8 +37,8 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
     if (obj.account && !obj.account.displayName) {
       obj.account.displayName = obj.account.username
     }
-    obj.checked = checked
     obj.isChecked = isChecked
+    obj.isNotEmpty = isNotEmpty
     obj.datetimeToString = datetimeToString
     obj.formatLongDateTime = formatLongDateTime
     obj.formatDateTime = formatDateTime
@@ -51,21 +51,6 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   }
   const html = compiledTemplate.render(obj)
   res.send(html)
-}
-function isChecked(v: boolean | string | undefined | null, s: string[] | string | undefined): string {
-  if (!v) {
-    return ""
-  }
-  if (typeof v === "boolean") {
-    return v ? "checked" : ""
-  } else if (s) {
-    if (Array.isArray(s)) {
-      return s.includes(v) ? "checked" : ""
-    } else {
-      return s === v ? "checked" : ""
-    }
-  }
-  return ""
 }
 
 export function renderError(req: Request, res: Response, obj?: any): void {

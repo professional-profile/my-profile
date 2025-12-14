@@ -34,7 +34,7 @@
     "query-core": "^0.2.7",
     "signup-service": "^0.0.8",
     "types-validation": "^0.0.2",
-    "ui-formatter": "^0.0.5",
+    "ui-formatter": "^0.0.8",
     "xvalidators": "^0.5.14"
   },
   "devDependencies": {

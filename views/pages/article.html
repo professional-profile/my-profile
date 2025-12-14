@@ -13,6 +13,8 @@
       {% endif %} {% endif %}
     </h4>
     <div class="article-content">{{article.content}}</div>
+    {% if isNotEmpty(article.tags) %}
     <div class="chip-list">{{generateTags(article.tags, true)}}</div>
+    {% endif %}
   </div>
 </article>
