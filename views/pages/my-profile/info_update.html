@@ -15,16 +15,16 @@
   <input type="text" id="location" name="location" value="{{user.location}}" maxlength="100" required placeholder="{{resource.placeholder_location}}" />
 </p>
 <p class="icon-text">
-  <i class="material-icons">bookmark</i>
-  <input type="text" id="website" name="website" value="{{user.website}}" maxlength="255" required placeholder="{{resource.placeholder_website}}" />
-</p>
-<p class="icon-text">
   <i class="material-icons">email</i>
   <input type="text" id="email" name="email" value="{{user.email}}" maxlength="255" required placeholder="{{resource.placeholder_email}}" />
 </p>
 <p class="icon-text">
   <i class="material-icons">phone</i>
   <input type="text" id="phone" name="phone" value="{{user.phone}}" maxlength="255" required placeholder="{{resource.placeholder_phone}}" />
+</p>
+<p class="icon-text">
+  <i class="material-icons">bookmark</i>
+  <input type="text" id="website" name="website" value="{{user.website}}" maxlength="255" required placeholder="{{resource.placeholder_website}}" />
 </p>
 <footer>
   <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userInfo', 'info', 'btn-edit')">{{resource.save}}</button>

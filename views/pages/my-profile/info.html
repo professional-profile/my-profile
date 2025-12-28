@@ -17,11 +17,6 @@
   <i class="material-icons">location_on</i>
   {{user.location}}
 </p>
-{% endif %} {% if user.website %}
-<p class="icon-text">
-  <i class="material-icons">bookmark</i>
-  {{user.website}}
-</p>
 {% endif %} {% if user.email %}
 <p class="icon-text">
   <i class="material-icons">email</i>
@@ -31,5 +26,10 @@
 <p class="icon-text">
   <i class="material-icons">phone</i>
   {{user.phone}}
+</p>
+{% endif %} {% if user.website %}
+<p class="icon-text">
+  <i class="material-icons">bookmark</i>
+  <a href="{{user.website}}" title="website" target="_blank" rel="noreferrer">{{user.website}}</a>
 </p>
 {% endif %}

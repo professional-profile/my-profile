@@ -340,12 +340,15 @@ ul.list > li > section:first-child > div > p {
 .card p.article-meta {
   font-size: 16px;
 }
-.card > p.icon-text {
+.card p.icon-text {
   display: flex;
   justify-content: left;
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
+}
+.card p.icon-text:last-child {
+  margin-bottom: 0;
 }
 .icon-text .material-icons {
   font-size: 20px;
