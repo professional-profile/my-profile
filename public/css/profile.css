@@ -143,16 +143,6 @@
   right: -15px;
 }
 
-.profile-followers {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 8px;
-}
-header.nav > .profile-followers {
-  margin-bottom: 0;
-}
-
 .profile-title {
   position: relative;
   width: 100%;
@@ -171,6 +161,16 @@ header.nav > .profile-followers {
   font-size: 16px;
 }
 
+
+.profile-followers {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 8px;
+}
+header.nav > .profile-followers {
+  margin-bottom: 0;
+}
 .profile-followers > p {
   display: flex;
   margin-left: 16px;
@@ -273,11 +273,6 @@ header.nav > .profile-followers {
   background-color: #fff;
 }
 
-.profile > form > div {
-  padding-top: 0;
-  max-height: none;
-}
-
 .profile .list.row.card-grid {
   margin-top: 0;
 }
@@ -350,12 +345,6 @@ header.nav > .profile-followers {
   content: "\2B";
   top: -4px;
   left: 4px;
-}
-
-.profile .card > div {
-  width: 100%;
-  margin-top: -3px;
-  margin-bottom: -3px;
 }
 
 .dropdown-upload-cover {
