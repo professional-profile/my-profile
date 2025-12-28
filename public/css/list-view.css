@@ -270,8 +270,8 @@ ul.list > li > section:first-child > div > p {
 
 .card > footer {
   width: 100%;
-  height: 75px;
-  padding-top: 20px;
+  height: 58px;
+  padding-top: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -351,6 +351,7 @@ ul.list > li > section:first-child > div > p {
   font-size: 20px;
 }
 .card > section > h3,
+.card > section > h4,
 .card > section > a,
 .card > section > p,
 .video > section > p {

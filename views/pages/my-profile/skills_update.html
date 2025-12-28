@@ -13,6 +13,7 @@
       list="skillList"
       onchange="textChange(event, '/skills')"
       onkeydown="chipOnKeydown(event)"
+      data-duplicate="{{resource.error_duplicated_skill}}"
       placeholder="{{resource.placeholder_user_profile_skill}}"
     />
     <input type="checkbox" id="hirable" name="hirable" data-skip="true" />

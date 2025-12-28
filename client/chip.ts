@@ -51,11 +51,27 @@ function addChip(triggerElement: HTMLButtonElement | HTMLInputElement, inputName
     chipList = findParent(triggerElement, "chip-list")
   }
   if (!chipList) return
-
+  if (checkDuplicateChip(chipList, value)) {
+    let msg = input.getAttribute("data-duplicate")
+    if (!msg) {
+      msg = "Duplicate value"
+    }
+    alertError(msg)
+    return
+  }
   createChip(chipList, value, value, parent, isCheck)
   input.value = ""
 }
-
+function checkDuplicateChip(chipList: HTMLElement, value: string): boolean {
+  const chips = chipList.querySelectorAll(".chip")
+  for (let i = 0; i < chips.length; i++) {
+    const chip = chips[i] as HTMLDivElement
+    if (chip.getAttribute("data-value") === value) {
+      return true
+    }
+  }
+  return false
+}
 function chipOnKeydown(e: KeyboardEvent, chipId: string) {
   if (e.key === "Enter") {
     e.preventDefault()

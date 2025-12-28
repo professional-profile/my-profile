@@ -13,6 +13,7 @@
       list="interestList"
       onchange="textChange(event, '/interests')"
       onkeydown="chipOnKeydown(event)"
+      data-duplicate="{{resource.error_duplicated_interest}}"
       placeholder="{{resource.placeholder_user_profile_interest}}"
     />
     <button type="button" id="btnAddInterest" name="btnAddInterest" class="btn-add" onclick="addChip(this)"></button>

@@ -29,7 +29,8 @@ export class PasswordController {
     const resource = getResource(req)
     const contact = req.body.contact as string
     if (isEmpty(contact)) {
-      return res.status(401).end(formatText(resource.required, resource.username_or_email))
+      res.status(401).end(formatText(resource.required, resource.username_or_email))
+      return
     }
     this.service
       .forgot(contact)
@@ -54,13 +55,16 @@ export class PasswordController {
     const resource = getResource(req)
     const user: PasswordReset = req.body
     if (isEmpty(user.username)) {
-      return res.status(401).end(formatText(resource.required, resource.username))
+      res.status(401).end(formatText(resource.required, resource.username))
+      return
     }
     if (isEmpty(user.passcode)) {
-      return res.status(401).end(formatText(resource.required, resource.passcode))
+      res.status(401).end(formatText(resource.required, resource.passcode))
+      return
     }
     if (isEmpty(user.password)) {
-      return res.status(401).end(formatText(resource.required, resource.new_password))
+      res.status(401).end(formatText(resource.required, resource.new_password))
+      return
     }
     this.service
       .reset(user)
@@ -86,10 +90,12 @@ export class PasswordController {
     const user: PasswordChange = req.body
     user.username = res.locals.username
     if (isEmpty(user.currentPassword)) {
-      return res.status(401).end(formatText(resource.required, resource.current_password))
+      res.status(401).end(formatText(resource.required, resource.current_password))
+      return
     }
     if (isEmpty(user.password)) {
-      return res.status(401).end(formatText(resource.required, resource.new_password))
+      res.status(401).end(formatText(resource.required, resource.new_password))
+      return
     }
     this.service
       .change(user)

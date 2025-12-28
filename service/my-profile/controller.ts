@@ -143,9 +143,6 @@ export class MyProfileController {
   saveSettings(req: Request, res: Response) {
     const userId: string = res.locals.userId
     const settings: UserSettings = req.body
-    if (!settings) {
-      return res.status(400).send("data cannot be empty")
-    }
     this.service
       .saveMySettings(userId, settings)
       .then((result) => {

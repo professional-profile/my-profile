@@ -107,7 +107,6 @@ label.focused,
 .view-body > label.focused,
 .card > footer > button,
 .btn-select,
-.btn-add,
 .btn-new,
 a.btn-new,
 .btn-table,
@@ -135,6 +134,7 @@ header > .btn-group > button,
   }
 }
 
+.card > section > p.description,
 label,
 .diff .row .col p > span,
 .data-list dt,

@@ -5,7 +5,8 @@
         <img src="{{user.coverURL}}" alt="cover" />
         {% if account and account.id != user.id %}
         <div class="contact-group">
-          <button id="btnPhone" name="btnPhone" class="btn-phone"></button><button id="btnEmail" name="btnEmail" class="btn-email"></button>
+          <button type="button" id="btnPhone" name="btnPhone" class="btn-phone"></button>
+          <button type="button" id="btnEmail" name="btnEmail" class="btn-email"></button>
         </div>
         {% if user.followingAt %}
         <button
@@ -35,7 +36,7 @@
         </button>
         {% endif %} {% endif %}
       </div>
-      <button id="btnCamera" name="btnCamera" class="btn-camera"></button>
+      <button type="button" id="btnCamera" name="btnCamera" class="btn-camera"></button>
       <div class="avatar-wrapper">
         <img class="avatar" src="{{user.imageURL}}" alt="user avatar" />
         <img class="profile-status" src="/images/online.svg" alt="status" />

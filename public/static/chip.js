@@ -51,8 +51,26 @@ function addChip(triggerElement, inputName, chipId) {
     chipList = findParent(triggerElement, "chip-list")
   }
   if (!chipList) return
+  if (checkDuplicateChip(chipList, value)) {
+    var msg = input.getAttribute("data-duplicate")
+    if (!msg) {
+      msg = "Duplicate value"
+    }
+    alertError(msg)
+    return
+  }
   createChip(chipList, value, value, parent, isCheck)
   input.value = ""
+}
+function checkDuplicateChip(chipList, value) {
+  var chips = chipList.querySelectorAll(".chip")
+  for (var i = 0; i < chips.length; i++) {
+    var chip = chips[i]
+    if (chip.getAttribute("data-value") === value) {
+      return true
+    }
+  }
+  return false
 }
 function chipOnKeydown(e, chipId) {
   if (e.key === "Enter") {

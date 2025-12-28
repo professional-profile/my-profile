@@ -11,7 +11,6 @@ export interface User {
   familyName?: string
   middleName?: string
   status?: string
-  title?: string
   //image?: UploadSize[]
   imageURL?: string
   coverURL?: string
@@ -180,12 +179,6 @@ export const userModel: Attributes = {
   status: {
     length: 1,
     operator: "=",
-  },
-  title: {
-    length: 20,
-  },
-  position: {
-    length: 20,
   },
   imageURL: {
     column: "image_url",

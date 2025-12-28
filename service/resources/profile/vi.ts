@@ -65,8 +65,8 @@ export const vi = {
   button_add_achievement: "Add Achievement",
   button_add_skill: "Add Skill",
 
-  error_duplicated_skill: "This skill is duplicated.",
-  error_duplicated_looking_for: "This looking for is duplicated.",
+  error_duplicated_skill: "This skill is duplicated. Please input another skill.",
+  error_duplicated_looking_for: "This looking for is duplicated. Please input another interest.",
   error_duplicated_interest: "This interest is duplicated.",
   error_duplicated_achievement: "This achievement is duplicated.",
   error_load_user_profile: "Error: Cannot load user profile.",

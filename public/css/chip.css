@@ -144,10 +144,10 @@
 .chip .star::before {
   top: -12px;
 }
-h3 > .star.float-right {
+h4 > .star.float-right {
   margin-left: 0;
 }
-h3 > .star::before {
+h4 > .star::before {
   font-size: 20px;
 }
 p.description > .star {

@@ -19,8 +19,6 @@ create table users (
   family_name character varying(100),
   middle_name character varying(100),
   status char(1) not null,
-  title varchar(10),
-  position varchar(40),
   image_url varchar(500),
   cover_url character varying(255),
   bio character varying(255),
