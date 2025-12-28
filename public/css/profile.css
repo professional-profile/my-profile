@@ -43,8 +43,8 @@
 
 .profile-header > .btn-camera {
   position: absolute;
-  top: 9px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
 }
 .profile-header .btn-follow {
   position: absolute;
@@ -223,9 +223,6 @@ header.nav > .profile-followers {
   header.nav > .profile-title > p {
     margin-block-end: 3px;
   }
-  .profile-followers > a {
-    margin-right: 0;
-  }
   .profile-followers {
     height: 48px;
     padding-top: 8px;
@@ -244,10 +241,6 @@ header.nav > .profile-followers {
     padding-left: 152px;
     margin-bottom: 3px;
     color: #fff;
-  }
-  header.nav > .profile-followers > a {
-    margin-left: 0;
-    margin-right: 16px;
   }
 }
 
@@ -328,16 +321,15 @@ header.nav > .profile-followers {
 .profile .btn-group {
   display: inline-flex;
   align-items: center;
-  font-size: 15px;
-  min-height: 40px;
+  font-size: 16px;
+  margin-top: 10px;
 }
 .profile .btn-group > .btn-add {
   width: 22px;
   height: 22px;
-  margin-top: -4px;
-  margin-right: 6px;
+  margin: -2px 8px 0 0;
   border: 1px solid;
-  border-radius: 21px;
+  border-radius: 22px;
 }
 .profile .btn-group > .btn-add::before {
   font-size: 23px;
