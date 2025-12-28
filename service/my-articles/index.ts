@@ -5,7 +5,6 @@ import { slugify } from "../common/slug"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
 import { MyArticlesController } from "./controller"
 import { buildQuery } from "./query"
-
 export * from "./controller"
 
 export class SqlArticleRepository extends Repository<Article, string, ArticleFilter> implements ArticleRepository {

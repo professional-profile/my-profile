@@ -22,7 +22,6 @@ import { render, renderError404, renderError500 } from "../template"
 import { UserFilter, UserService } from "./user"
 
 const fields = ["id", "username", "email", "displayName", "status"]
-
 export class UserController extends FollowController {
   constructor(protected service: UserService, protected log: Log) {
     super(service, log, "id", "userId")

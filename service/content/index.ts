@@ -2,18 +2,14 @@ import { MenuItemLoader } from "content-menu"
 import { DB } from "query-core"
 import { Content, ContentRepository, ContentService } from "./content"
 import { ContentController } from "./controller"
-
 export * from "./controller"
 
 export class SqlContentRepository implements ContentRepository {
   constructor(protected db: DB) {}
   load(id: string, lang: string): Promise<Content | null> {
-    return this.db.query<Content>("select id, lang, body from contents where id = $1 and lang = $2", [id, lang]).then((rows) => {
-      if (rows.length === 0) {
-        return null
-      }
-      return rows[0]
-    })
+    return this.db
+      .query<Content>(`select id, lang, body from contents where id = ${this.db.param(1)} and lang = ${this.db.param(2)}`, [id, lang])
+      .then((rows) => (rows.length === 0 ? null : rows[0]))
   }
 }
 export class ContentUseCase implements ContentService {

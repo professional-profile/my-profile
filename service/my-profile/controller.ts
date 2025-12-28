@@ -1,15 +1,14 @@
 import { Request, Response } from "express"
 import { escape, handleError, respondError } from "express-ext"
-import { isSuccessful, Log } from "onecore"
+import { isSuccessful, Log, SaveStrings } from "onecore"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { MyProfileService, User, userModel, UserSettings } from "./user"
 
-export type Save = (values: string[]) => Promise<number>
 const targetTemplates: string[] = ["interests", "bio", "skills", "achievements"]
 export class MyProfileController {
-  constructor(private service: MyProfileService, private log: Log, private saveSkills?: Save, private saveInterests?: Save) {
+  constructor(private service: MyProfileService, private log: Log, private saveSkills?: SaveStrings, private saveInterests?: SaveStrings) {
     this.getPartial = this.getPartial.bind(this)
     this.getInfo = this.getInfo.bind(this)
     this.getBio = this.getBio.bind(this)
