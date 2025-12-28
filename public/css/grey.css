@@ -124,7 +124,6 @@
 .grey .view-body > label.focused,
 .grey .card > footer > button,
 .grey .btn-select,
-.grey .btn-add,
 .grey .btn-new,
 .grey a.btn-new,
 .grey .btn-table,
@@ -151,6 +150,7 @@
   }
 }
 
+.grey .card > section > p.description,
 .grey label,
 .grey .table > tbody,
 .grey .diff .row .col p > span,
