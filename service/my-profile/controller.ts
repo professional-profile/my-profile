@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { escape, handleError, respondError } from "express-ext"
-import { Log } from "onecore"
+import { isSuccessful, Log } from "onecore"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -116,14 +116,13 @@ export class MyProfileController {
       .saveMyProfile(user)
       .then((result) => {
         if (result === 0) {
-          res.status(410).end()
+          return res.status(410).end()
+        }
+        if (targetTemplate) {
+          res.render("pages/my-profile/" + targetTemplate, { resource, user: escape(user) })
         } else {
-          if (targetTemplate) {
-            res.render("pages/my-profile/" + targetTemplate, { resource, user: escape(user) })
-          } else {
-            delete user.id
-            res.status(200).json(user).end()
-          }
+          delete user.id
+          res.status(200).json(user).end()
         }
       })
       .catch((err) => handleError(err, res, this.log))
@@ -136,10 +135,9 @@ export class MyProfileController {
       .getMySettings(userId)
       .then((settings) => {
         if (!settings) {
-          renderError404(req, res, resource)
-        } else {
-          render(req, res, "settings", { resource, settings: escape(settings) })
+          return renderError404(req, res, resource)
         }
+        render(req, res, "settings", { resource, settings: escape(settings) })
       })
       .catch((err) => renderError500(req, res, resource, err))
   }
@@ -152,11 +150,8 @@ export class MyProfileController {
     this.service
       .saveMySettings(userId, settings)
       .then((result) => {
-        if (result === 0) {
-          res.status(410).end()
-        } else {
-          res.status(200).json(result).end()
-        }
+        const status = isSuccessful(result) ? 200 : 410
+        res.status(status).json(result).end()
       })
       .catch((err) => handleError(err, res, this.log))
   }

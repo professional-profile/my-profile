@@ -147,13 +147,12 @@ export const userSettingsModel: Attributes = {
 export const userModel: Attributes = {
   id: {
     key: true,
-    match: "equal",
+    operator: "=",
   },
   username: {},
   email: {
     format: "email",
     required: true,
-    match: "prefix",
   },
   phone: {
     format: "phone",
@@ -179,8 +178,8 @@ export const userModel: Attributes = {
     length: 100,
   },
   status: {
-    match: "equal",
     length: 1,
+    operator: "=",
   },
   title: {
     length: 20,

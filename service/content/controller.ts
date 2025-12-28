@@ -28,10 +28,9 @@ export class ContentController {
       .load(id, lang)
       .then((content) => {
         if (!content) {
-          renderError404(req, res, resource)
-        } else {
-          res.render(getView(req, "content"), { lang, resource, content })
+          return renderError404(req, res, resource)
         }
+        res.render(getView(req, "content"), { lang, resource, content })
       })
       .catch((err) => renderError500(req, res, resource, err))
   }

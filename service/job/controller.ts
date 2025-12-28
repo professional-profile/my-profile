@@ -63,7 +63,6 @@ export class JobController {
       })
       .catch((err) => renderError500(req, res, resource, err))
   }
-
   view(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
@@ -73,11 +72,10 @@ export class JobController {
       .load(id)
       .then((job) => {
         if (!job) {
-          renderError404(req, res, resource)
-        } else {
-          job.publishedAt = formatDateTime(job.publishedAt, dateFormat)
-          render(req, res, "job", { resource, job })
+          return renderError404(req, res, resource)
         }
+        job.publishedAt = formatDateTime(job.publishedAt, dateFormat)
+        render(req, res, "job", { resource, job })
       })
       .catch((err) => renderError500(req, res, resource, err))
   }

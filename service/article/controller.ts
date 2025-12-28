@@ -13,7 +13,7 @@ import {
   queryLimit,
   queryPage,
   resources,
-  SavedController
+  SavedController,
 } from "express-ext"
 import { Log } from "onecore"
 import { formatDateTime } from "ui-formatter"
@@ -122,11 +122,10 @@ export class ArticleController extends SavedController {
       .load(id, userId)
       .then((article) => {
         if (!article) {
-          renderError404(req, res, resource)
-        } else {
-          article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-          render(req, res, "article", { resource, article })
+          return renderError404(req, res, resource)
         }
+        article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
+        render(req, res, "article", { resource, article })
       })
       .catch((err) => renderError500(req, res, resource, err))
   }

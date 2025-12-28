@@ -80,16 +80,6 @@ export class PasswordController {
       },
       message: "Enter login",
     })
-    /*
-    res.render("change-password", {
-      resource,
-      user: {
-        username: "kaka",
-        password: "Password1!",
-      },
-      message: "Enter login",
-    })
-      */
   }
   changePassword(req: Request, res: Response) {
     const resource = getResource(req)

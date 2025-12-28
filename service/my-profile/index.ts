@@ -1,5 +1,5 @@
 import { Log } from "onecore"
-import { DB, Repository } from "query-core"
+import { CRUDRepository, DB } from "query-core"
 import { MyProfileController, Save } from "./controller"
 import { MyProfileService, User, userModel, UserRepository, UserSettings } from "./user"
 
@@ -26,7 +26,7 @@ const settings: UserSettings = {
   notifyFeedUpdates: false,
   notifyEventInvitations: false,
 }
-export class SqlUserRepository extends Repository<User, string> implements UserRepository {
+export class SqlUserRepository extends CRUDRepository<User, string> implements UserRepository {
   constructor(db: DB) {
     super(db, "users", userModel)
   }

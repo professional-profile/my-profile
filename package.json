@@ -27,15 +27,15 @@
     "multer": "^2.0.2",
     "nanoid": "^3.3.4",
     "nunjucks": "^3.2.4",
-    "onecore": "^0.2.0",
+    "onecore": "^0.5.2",
     "password-service": "^0.0.4",
     "pg": "^8.14.1",
     "pg-extension": "^0.2.6",
-    "query-core": "^0.2.7",
+    "query-core": "^0.5.1",
     "signup-service": "^0.0.8",
     "types-validation": "^0.0.2",
     "ui-formatter": "^0.0.8",
-    "xvalidators": "^0.5.14"
+    "xvalidators": "^0.5.15"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

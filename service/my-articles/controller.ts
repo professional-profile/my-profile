@@ -17,7 +17,7 @@ import {
   resources,
   respondError,
 } from "express-ext"
-import { Log } from "onecore"
+import { isSuccessful, Log } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getDateFormat, getLang, getResource } from "../resources"
@@ -82,11 +82,10 @@ export class MyArticlesController {
       .load(id)
       .then((article) => {
         if (!article || article.authorId !== userId) {
-          renderError404(req, res, resource)
-        } else {
-          article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-          render(req, res, "my-article", { resource, article: escape(article) })
+          return renderError404(req, res, resource)
         }
+        article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
+        render(req, res, "my-article", { resource, article: escape(article) })
       })
       .catch((err) => renderError500(req, res, resource, err))
   }
@@ -97,42 +96,35 @@ export class MyArticlesController {
     const article = req.body as Article
     const errors = validate<Article>(article, articleModel, resource)
     if (errors.length > 0) {
-      respondError(res, errors)
+      return respondError(res, errors)
+    }
+    const id = req.params.id
+    const editMode = id !== "new"
+    if (!editMode) {
+      article.authorId = userId
+      this.service
+        .create(article)
+        .then((result) => {
+          const status = isSuccessful(result) ? 201 : 409
+          res.status(status).json(result).end()
+        })
+        .catch((err) => handleError(err, res, this.log))
     } else {
-      const id = req.params.id
-      const editMode = id !== "new"
-      if (!editMode) {
-        article.authorId = userId
+      this.service.load(id).then((existingArticle) => {
+        if (!existingArticle) {
+          return res.status(410).end()
+        }
+        if (existingArticle.authorId !== userId) {
+          return res.status(404).end()
+        }
         this.service
-          .create(article)
+          .update(article)
           .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(201).json(result).end()
-            }
+            const status = isSuccessful(result) ? 200 : 410
+            res.status(status).json(result).end()
           })
           .catch((err) => handleError(err, res, this.log))
-      } else {
-        this.service.load(id).then((existingArticle) => {
-          if (!existingArticle) {
-            return res.status(410).end()
-          }
-          if (existingArticle.authorId !== userId) {
-            return res.status(404).end()
-          }
-          this.service
-            .update(article)
-            .then((result) => {
-              if (result === 0) {
-                res.status(410).end()
-              } else {
-                res.status(200).json(result).end()
-              }
-            })
-            .catch((err) => handleError(err, res, this.log))
-        })
-      }
+      })
     }
   }
 }

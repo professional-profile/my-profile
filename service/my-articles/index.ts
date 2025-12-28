@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid"
-import { Log, Search, UseCase } from "onecore"
-import { DB, Repository, SearchBuilder } from "query-core"
+import { Log, UseCase } from "onecore"
+import { DB, Repository } from "query-core"
 import { slugify } from "../common/slug"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
 import { MyArticlesController } from "./controller"
@@ -8,15 +8,15 @@ import { buildQuery } from "./query"
 
 export * from "./controller"
 
-export class SqlArticleRepository extends Repository<Article, string> implements ArticleRepository {
+export class SqlArticleRepository extends Repository<Article, string, ArticleFilter> implements ArticleRepository {
   constructor(db: DB) {
-    super(db, "articles", articleModel)
+    super(db, "articles", articleModel, buildQuery)
   }
 }
 
 export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
-  constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
-    super(search, repository)
+  constructor(repository: ArticleRepository) {
+    super(repository)
   }
   create(article: Article, ctx?: any): Promise<number> {
     article.id = nanoid(10)
@@ -52,8 +52,7 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
 }
 
 export function useMyArticlesController(db: DB, log: Log): MyArticlesController {
-  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "articles", articleModel, db.driver, buildQuery)
   const repository = new SqlArticleRepository(db)
-  const service = new ArticleUseCase(builder.search, repository)
+  const service = new ArticleUseCase(repository)
   return new MyArticlesController(service, log)
 }

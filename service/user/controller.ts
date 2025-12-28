@@ -77,13 +77,12 @@ export class UserController extends FollowController {
       .load(id, userId)
       .then((user) => {
         if (!user) {
-          renderError404(req, res, resource)
-        } else {
-          render(req, res, "user", {
-            resource,
-            user: escape(user),
-          })
+          return renderError404(req, res, resource)
         }
+        render(req, res, "user", {
+          resource,
+          user: escape(user),
+        })
       })
       .catch((err) => renderError500(req, res, resource, err))
   }
