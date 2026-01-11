@@ -122,8 +122,7 @@
   position: relative;
   width: 120px;
   height: 120px;
-  margin-top: -79px;
-  margin-bottom: 8px;
+1  margin-top: -83px;
   -ms-flex-item-align: center;
   align-self: center;
   background-color: transparent;
@@ -150,6 +149,7 @@
 .profile-title {
   position: relative;
   width: 100%;
+  margin-top: 8px;
   text-align: center;
   word-break: break-word;
   -moz-word-break: break-word;
@@ -176,8 +176,8 @@ header.nav > .profile-followers {
 }
 .profile-followers > p {
   display: flex;
-  margin-left: 16px;
-  margin-right: 16px;
+  margin-left: 8px;
+  margin-right: 8px;
   margin-bottom: 8px;
 }
 .profile-followers > p > i {
@@ -213,15 +213,11 @@ header.nav > .profile-followers {
     background-color: transparent;
   }
   .profile-title {
-    margin-top: -60px;
+    margin-top: 12px;
     padding-left: 152px;
     text-align: left;
     background-color: transparent;
     width: calc(100% - 246px);
-  }
-  .profile-title > h3,
-  .profile-title > p {
-    color: #fff;
   }
   header.nav > .profile-title {
     margin-top: -79px;
@@ -231,7 +227,6 @@ header.nav > .profile-followers {
   }
   .profile-followers {
     height: 48px;
-    padding-top: 8px;
     justify-content: flex-start;
     align-items: center;
     margin-right: 18px;
@@ -240,6 +235,10 @@ header.nav > .profile-followers {
     padding-left: 150px;
     background-color: transparent;
     width: calc(100% - 246px)
+  }
+  .profile-followers > p {
+    margin-left: 0;
+    margin-right: 16px;
   }
   header.nav > .profile-followers {
     justify-content: flex-start;
