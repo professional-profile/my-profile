@@ -4,7 +4,6 @@ import {
   buildPages,
   buildPageSearch,
   buildSortSearch,
-  cloneFilter,
   escape,
   escapeArray,
   FollowController,
@@ -12,9 +11,7 @@ import {
   getOffset,
   getSearch,
   hasSearch,
-  queryLimit,
-  queryPage,
-  resources,
+  resources
 } from "express-ext"
 import { Log } from "onecore"
 import { getLang, getResource } from "../resources"
@@ -38,12 +35,11 @@ export class UserController extends FollowController {
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     filter.userId = res.locals.userId
     this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
+      .search(filter, limit, page)
       .then((result) => {
         const list = escapeArray(result.list, offset, "sequence")
         if (list && list.length > 0) {
@@ -61,7 +57,7 @@ export class UserController extends FollowController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

@@ -47,10 +47,9 @@ export class ArticleController extends SavedController {
     }
     filter.status = Published
     filter.userId = res.locals.userId
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
+      .search(filter, limit, page)
       .then((result) => {
         const list = escapeArray(result.list)
         for (const item of result.list) {
@@ -64,7 +63,7 @@ export class ArticleController extends SavedController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

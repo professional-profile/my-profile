@@ -4,7 +4,6 @@ import {
   buildPages,
   buildPageSearch,
   buildSortSearch,
-  cloneFilter,
   escape,
   escapeArray,
   format,
@@ -12,10 +11,8 @@ import {
   getSearch,
   handleError,
   hasSearch,
-  queryLimit,
-  queryPage,
   resources,
-  respondError,
+  respondError
 } from "express-ext"
 import { isSuccessful, Log } from "onecore"
 import { formatDateTime } from "ui-formatter"
@@ -49,10 +46,9 @@ export class MyArticlesController {
     if (!filter.sort) {
       filter.sort = "-publishedAt"
     }
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
+      .search(filter, limit, page)
       .then((result) => {
         const list = escapeArray(result.list)
         for (const item of result.list) {
@@ -66,7 +62,7 @@ export class MyArticlesController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

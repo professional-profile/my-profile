@@ -4,15 +4,12 @@ import {
   buildPages,
   buildPageSearch,
   buildSortSearch,
-  cloneFilter,
   escapeArray,
   format,
   fromRequest,
   getSearch,
   hasSearch,
-  queryLimit,
-  queryPage,
-  resources,
+  resources
 } from "express-ext"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
@@ -40,10 +37,9 @@ export class JobController {
     if (!filter.sort) {
       filter.sort = "-publishedAt"
     }
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     this.jobService
-      .search(cloneFilter(filter, limit, page), limit, page)
+      .search(filter, limit, page)
       .then((result) => {
         const list = escapeArray(result.list)
         for (const item of list) {
@@ -57,7 +53,7 @@ export class JobController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })
