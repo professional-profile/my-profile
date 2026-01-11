@@ -1,58 +1,58 @@
 <div class="profile view-container">
+  <header class="profile-header border-bottom-highlight">
+    <div class="cover-image">
+      <img src="{{user.coverURL}}" alt="cover" />
+      {% if account and account.id != user.id %}
+      <div class="contact-group">
+        <button type="button" id="btnPhone" name="btnPhone" class="btn-phone"></button>
+        <button type="button" id="btnEmail" name="btnEmail" class="btn-email"></button>
+      </div>
+      {% if user.followingAt %}
+      <button
+        type="button"
+        id="btnFollow"
+        name="btnFollow"
+        class="btn-follow"
+        data-follow-text="{{resource.button_follow}}"
+        data-unfollow-text="{{resource.button_unfollow}}"
+        data-followers="{{user.followerCount}}"
+        onclick="unfollow(this, '{{user.id}}', true)"
+      >
+        {{resource.button_unfollow}}
+      </button>
+      {% else %}
+      <button
+        type="button"
+        id="btnFollow"
+        name="btnFollow"
+        class="btn-follow"
+        data-follow-text="{{resource.button_follow}}"
+        data-unfollow-text="{{resource.button_unfollow}}"
+        data-followers="{{user.followerCount}}"
+        onclick="follow(this, '{{user.id}}', true)"
+      >
+        {{resource.button_follow}}
+      </button>
+      {% endif %} {% endif %}
+    </div>
+    <button type="button" id="btnCamera" name="btnCamera" class="btn-camera"></button>
+    <div class="avatar-wrapper">
+      <img class="avatar" src="{{user.imageURL}}" alt="user avatar" />
+      <img class="profile-status" src="/images/online.svg" alt="status" />
+    </div>
+    <div class="profile-title">
+      <h3>{{user.displayName}} {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}</h3>
+      <p>{{user.headline}}</p>
+    </div>
+    <div class="profile-followers">
+      {% if user.followerCount %}
+      <p id="followerCount"><i class="material-icons highlight">group</i>{{user.followerCount}} followers</p>
+      {% endif %} {% if user.followingCount %}
+      <p><i class="material-icons highlight">group_add</i>{{user.followingCount}} followings</p>
+      {% endif %}
+    </div>
+  </header>
   <form id="userForm" name="userForm">
-    <header class="profile-header border-bottom-highlight">
-      <div class="cover-image">
-        <img src="{{user.coverURL}}" alt="cover" />
-        {% if account and account.id != user.id %}
-        <div class="contact-group">
-          <button type="button" id="btnPhone" name="btnPhone" class="btn-phone"></button>
-          <button type="button" id="btnEmail" name="btnEmail" class="btn-email"></button>
-        </div>
-        {% if user.followingAt %}
-        <button
-          type="button"
-          id="btnFollow"
-          name="btnFollow"
-          class="btn-follow"
-          data-follow-text="{{resource.button_follow}}"
-          data-unfollow-text="{{resource.button_unfollow}}"
-          data-followers="{{user.followerCount}}"
-          onclick="unfollow(this, '{{user.id}}', true)"
-        >
-          {{resource.button_unfollow}}
-        </button>
-        {% else %}
-        <button
-          type="button"
-          id="btnFollow"
-          name="btnFollow"
-          class="btn-follow"
-          data-follow-text="{{resource.button_follow}}"
-          data-unfollow-text="{{resource.button_unfollow}}"
-          data-followers="{{user.followerCount}}"
-          onclick="follow(this, '{{user.id}}', true)"
-        >
-          {{resource.button_follow}}
-        </button>
-        {% endif %} {% endif %}
-      </div>
-      <button type="button" id="btnCamera" name="btnCamera" class="btn-camera"></button>
-      <div class="avatar-wrapper">
-        <img class="avatar" src="{{user.imageURL}}" alt="user avatar" />
-        <img class="profile-status" src="/images/online.svg" alt="status" />
-      </div>
-      <div class="profile-title">
-        <h3>{{user.displayName}} {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}</h3>
-        <p>{{user.headline}}</p>
-      </div>
-      <div class="profile-followers">
-        {% if user.followerCount %}
-        <p id="followerCount"><i class="material-icons highlight">group</i>{{user.followerCount}} followers</p>
-        {% endif %} {% if user.followingCount %}
-        <p><i class="material-icons highlight">group_add</i>{{user.followingCount}} followings</p>
-        {% endif %}
-      </div>
-    </header>
     <div class="row list card-grid">
       <div class="col m12 l4">
         <div id="userInfo" class="card">{% include "pages/my-profile/info.html" %}</div>

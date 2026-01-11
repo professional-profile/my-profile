@@ -32,6 +32,8 @@
   justify-content: center;
   border: none;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
+  color: inherit;
+  background-image: none;
 }
 
 @media screen and (max-width: 600px) {
@@ -64,6 +66,7 @@
   position: absolute;
   bottom: 20px;
   left: 20px;
+  background-color: transparent;
 }
 .profile-header .contact-group > button {
   width: 35px;
@@ -123,6 +126,7 @@
   margin-bottom: 8px;
   -ms-flex-item-align: center;
   align-self: center;
+  background-color: transparent;
 }
 .avatar-wrapper .avatar {
   border: 4px solid #fff;
@@ -160,7 +164,6 @@
   margin-block-end: 8px;
   font-size: 16px;
 }
-
 
 .profile-followers {
   display: flex;
@@ -207,11 +210,13 @@ header.nav > .profile-followers {
     bottom: 4px;
     margin-top: 0;
     margin-bottom: 0;
+    background-color: transparent;
   }
   .profile-title {
     margin-top: -60px;
     padding-left: 152px;
     text-align: left;
+    background-color: transparent;
   }
   .profile-title > h3,
   .profile-title > p {
@@ -232,6 +237,7 @@ header.nav > .profile-followers {
     margin-bottom: 0;
     z-index: 1000;
     padding-left: 150px;
+    background-color: transparent;
   }
   header.nav > .profile-followers {
     justify-content: flex-start;
