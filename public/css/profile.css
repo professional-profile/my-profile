@@ -281,6 +281,7 @@ header.nav > .profile-followers {
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
+  width: calc(100% - 36px);
   line-height: 20px;
 }
 .profile .card > hr {
@@ -319,7 +320,7 @@ header.nav > .profile-followers {
   border-radius: 22px;
 }
 .profile .btn-group > .btn-add::before {
-  font-size: 23px;
+  font-size: 22px;
   font-weight: 100;
   content: "\2B";
   top: -4px;
