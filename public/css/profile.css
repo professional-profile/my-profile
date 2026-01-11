@@ -26,6 +26,7 @@
 .profile-header {
   position: relative;
   height: 314px; /* 394px */
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -253,12 +254,7 @@ header.nav > .profile-followers {
 
 .profile-header > .card,
 .profile .card {
-  margin: 20px 0;
-  padding: 16px;
   border-radius: 4px;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
   word-wrap: break-word;
   -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
   -moz-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
@@ -282,36 +278,22 @@ header.nav > .profile-followers {
 }
 
 .profile .card p.description {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
   line-height: 20px;
 }
-
-.profile .card > section:first-of-type {
-  margin-top: 0;
+.profile .card > hr {
+  margin-bottom: 16px;
 }
 .profile .card > section {
-  position: relative;
-  margin-top: 16px;
   border: none;
-  margin-bottom: unset;
   flex-direction: unset;
-}
-.profile .card > section > h4 {
-  display: block;
-  font-size: 16px;
-  font-weight: 400;
-  padding-top: unset;
-  margin-bottom: 0.5rem;
-  line-height: 1.2;
-  color: inherit;
-}
-.profile .card > section > .btn-remove {
-  position: absolute;
-  top: 7px;
-  right: 2px;
 }
 
 .profile .card > section > label.checkbox-container {
-  width: 100%;
+  margin-left: 16px;
+  width: calc(100% - 32px);
   height: 40px;
   padding-left: 22px;
 }
@@ -325,6 +307,9 @@ header.nav > .profile-followers {
   align-items: center;
   font-size: 16px;
   margin-top: 10px;
+}
+.profile .item > .btn-group {
+  margin-left: 16px;
 }
 .profile .btn-group > .btn-add {
   width: 22px;

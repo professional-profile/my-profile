@@ -20,9 +20,9 @@
     <span>{{resource.user_profile_hirable_skill}}</span>
     <button type="button" id="btnAddSkill" name="btnAddSkill" class="btn-add" onclick="addChip(this)"></button>
   </div>
-  <hr />
-  <p class="description"><i class="star highlight"></i>Hirable Skill</p>
 </section>
+<hr />
+<p class="description"><i class="star highlight"></i>{{resource.user_profile_hirable_skill}}</p>
 <footer>
   <datalist id="skillList"></datalist>
   <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userSkills', 'skills', 'btn-edit')">{{resource.save}}</button>
