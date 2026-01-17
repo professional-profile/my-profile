@@ -292,41 +292,6 @@ header.nav > .profile-followers {
   flex-direction: unset;
 }
 
-.profile .card > section > label.checkbox-container {
-  margin-left: 16px;
-  width: calc(100% - 32px);
-  height: 40px;
-  padding-left: 22px;
-}
-
-.profile .card > section > label.checkbox-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
-  left: 0;
-  top: 16px;
-}
-.profile .btn-group {
-  display: inline-flex;
-  align-items: center;
-  font-size: 16px;
-  margin-top: 10px;
-}
-.profile .item > .btn-group {
-  margin-left: 16px;
-}
-.profile .btn-group > .btn-add {
-  width: 22px;
-  height: 22px;
-  margin: -2px 8px 0 0;
-  border: 1px solid;
-  border-radius: 22px;
-}
-.profile .btn-group > .btn-add::before {
-  font-size: 22px;
-  font-weight: 100;
-  content: "\2B";
-  top: -4px;
-  left: 4px;
-}
-
 .dropdown-upload-cover {
   display: none;
   position: absolute;
