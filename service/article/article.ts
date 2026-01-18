@@ -35,7 +35,6 @@ export interface ArticleRepository {
 export interface ArticleService {
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
   load(id: string, userId?: string): Promise<Article | null>
-  isSaved(userId: string, id: string): Promise<boolean>
   save(userId: string, id: string): Promise<number>
   remove(userId: string, id: string): Promise<number>
 }

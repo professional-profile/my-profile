@@ -1,4 +1,4 @@
-import { Log, SavedRepository, SavedService, SearchResult } from "onecore"
+import { Log, SavedRepository, SearchResult } from "onecore"
 import { SqlSavedRepository } from "pg-extension"
 import { DB, SearchRepository } from "query-core"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
@@ -28,15 +28,26 @@ export class SqlArticleRepository extends SearchRepository<Article, ArticleFilte
   }
 }
 
-export class ArticleUseCase extends SavedService<string, string> implements ArticleService {
-  constructor(private repository: ArticleRepository, savedRepository: SavedRepository<string, string>, max: number) {
-    super(savedRepository, max)
+export class ArticleUseCase implements ArticleService {
+  constructor(private repository: ArticleRepository, private savedRepository: SavedRepository<string, string>, private max: number) {
   }
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)
   }
   load(id: string, userId?: string): Promise<Article | null> {
     return this.repository.load(id, userId)
+  }
+  save(userId: string, id: string): Promise<number> {
+    return this.savedRepository.count(userId).then((count) => {
+      if (count >= this.max) {
+        return -1
+      } else {
+        return this.savedRepository.save(userId, id)
+      }
+    })
+  }
+  remove(userId: string, id: string): Promise<number> {
+    return this.savedRepository.remove(userId, id)
   }
 }
 
