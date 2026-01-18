@@ -1,19 +1,19 @@
-.profile.view-container {
+.profile {
   max-height: calc(100vh - 52px);
   overflow-x: auto;
 }
 @media screen and (min-width: 769px) {
-  .top-menu .profile.view-container {
+  .top-menu .profile {
     max-height: calc(100vh - 52px - 46px);
   }
-  .classic.top-menu .profile.view-container {
+  .classic.top-menu .profile {
     max-height: auto;
     overflow-x: unset;
   }
 }
-@media only screen and (min-width: 601px) {
-  .profile.view-container {
-    padding: 10px 5%;
+@media only screen and (min-width: 1201px) {
+  .profile {
+    padding: 8 5% 0 5%;
   }
 
   .page-body > div > header.profile-header,
@@ -274,7 +274,7 @@ header.nav > .profile-followers {
 }
 
 .profile .card:last-child {
-  margin-bottom: 4px;
+  margin-bottom: 16px;
 }
 
 .profile .card p.description {
