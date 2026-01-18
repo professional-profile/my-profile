@@ -35,7 +35,7 @@
     "signup-service": "^0.0.8",
     "types-validation": "^0.0.2",
     "ui-formatter": "^0.0.8",
-    "xvalidators": "^0.5.15"
+    "xvalidators": "^0.5.16"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -48,10 +48,10 @@
     "nodemon": "^3.1.11",
     "ts-loader": "^9.5.4",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.2",
-    "webpack": "^5.98.0",
-    "webpack-bundle-analyzer": "^4.10.2",
+    "typescript": "^5.9.3",
+    "webpack": "^5.104.1",
+    "webpack-bundle-analyzer": "^5.1.1",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.0"
+    "webpack-dev-server": "^5.2.2"
   }
 }
