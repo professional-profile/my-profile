@@ -1,6 +1,9 @@
 import { Log, SavedRepository, SearchResult } from "onecore"
-import { SqlSavedRepository } from "pg-extension"
+import { buildToSave, SqlSavedRepository } from "pg-extension"
 import { DB, SearchRepository } from "query-core"
+import { BaseRepository, Info, infoModel, InfoRepository, Rate, rateModel, ShortRate } from "rate-core"
+import { SqlRateRepository } from "rate-query"
+import { SqlInfoRepository } from "review-reaction-query"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
 import { ArticleController } from "./controller"
 import { buildQuery } from "./query"
@@ -29,7 +32,7 @@ export class SqlArticleRepository extends SearchRepository<Article, ArticleFilte
 }
 
 export class ArticleUseCase implements ArticleService {
-  constructor(private repository: ArticleRepository, private savedRepository: SavedRepository<string, string>, private max: number) {
+  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, public rateRepository: BaseRepository<Rate>, public infoRepository: InfoRepository) {
   }
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)
@@ -49,11 +52,36 @@ export class ArticleUseCase implements ArticleService {
   remove(userId: string, id: string): Promise<number> {
     return this.savedRepository.remove(userId, id)
   }
+  async rate(rate: Rate): Promise<number> {
+    rate.time = new Date();
+    const info = await this.infoRepository.exist(rate.id);
+    if (!info) {
+      const r0 = await this.rateRepository.create(rate, true);
+      return r0;
+    }
+    const exist = await this.rateRepository.load(rate.id, rate.author);
+    if (!exist) {
+      const r1 = await this.rateRepository.create(rate);
+      return r1;
+    }
+    const sr: ShortRate = { review: exist.review, rate: exist.rate, time: exist.time };
+    if (exist.histories && exist.histories.length > 0) {
+      const history = exist.histories;
+      history.push(sr);
+      rate.histories = history;
+    } else {
+      rate.histories = [sr];
+    }
+    const res = await this.rateRepository.update(rate, exist.rate);
+    return res;
+  }
 }
 
 export function useArticleController(db: DB, log: Log): ArticleController {
   const repository = new SqlArticleRepository(db)
   const savedRepository = new SqlSavedRepository(db, "saved_articles", "user_id", "id", "saved_at")
-  const service = new ArticleUseCase(repository, savedRepository, 200)
+  const rateRepository = new SqlRateRepository<Rate>(db, 'article_rates', rateModel, buildToSave, 5, 'article_info', 'rate', 'count', 'score', 'author', 'id');
+  const infoRepository = new SqlInfoRepository<Info>(db, 'article_info', infoModel, buildToSave);
+  const service = new ArticleUseCase(repository, savedRepository, 200, rateRepository, infoRepository)
   return new ArticleController(service, log)
 }
