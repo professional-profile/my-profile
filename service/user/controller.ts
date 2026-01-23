@@ -11,6 +11,7 @@ import {
   getOffset,
   getSearch,
   hasSearch,
+  isPartial,
   resources
 } from "express-ext"
 import { Log } from "onecore"
@@ -76,8 +77,8 @@ export class UserController extends FollowController {
         if (!user) {
           return renderError404(req, res, resource)
         }
-        const partial = req.query.partial as string
-        const view = partial === "true" ? "user/main" : "user"
+        const partial = isPartial(req)
+        const view = partial ? "user/main" : "user"
         render(req, res, view, {
           resource,
           user: escape(user),
@@ -118,8 +119,8 @@ export class UserController extends FollowController {
               })
             }
             const search = getSearch(req.url)
-            const partial = req.query.partial as string
-            const view = partial === "true" ? "user/followers" : "user-followers"
+            const partial = isPartial(req)
+            const view = partial ? "user/followers" : "user-followers"
             render(req, res, view, {
               resource,
               user: escape(user),
@@ -168,8 +169,8 @@ export class UserController extends FollowController {
               })
             }
             const search = getSearch(req.url)
-            const partial = req.query.partial as string
-            const view = partial === "true" ? "user/following" : "user-following"
+            const partial = isPartial(req)
+            const view = partial ? "user/following" : "user-following"
             render(req, res, view, {
               resource,
               user: escape(user),
