@@ -6,7 +6,7 @@ export const en = {
   interests: "Interests",
   achievements: "Achievements",
   followers: "Followers",
-  followings: "Followings",
+  following: "Following",
 
   button_follow: "Follow",
   button_unfollow: "Unfollow",

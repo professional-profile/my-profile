@@ -1,5 +1,9 @@
 import { Request, Response } from "express"
-import { escape, handleError, respondError } from "express-ext"
+import {
+  escape,
+  handleError,
+  respondError
+} from "express-ext"
 import { isSuccessful, Log, SaveStrings } from "onecore"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
@@ -9,6 +13,9 @@ import { MyProfileService, User, userModel, UserSettings } from "./user"
 const targetTemplates: string[] = ["interests", "bio", "skills", "achievements"]
 export class MyProfileController {
   constructor(private service: MyProfileService, private log: Log, private saveSkills?: SaveStrings, private saveInterests?: SaveStrings) {
+    this.viewSettings = this.viewSettings.bind(this)
+    this.saveSettings = this.saveSettings.bind(this)
+
     this.getPartial = this.getPartial.bind(this)
     this.getInfo = this.getInfo.bind(this)
     this.getBio = this.getBio.bind(this)
@@ -23,23 +30,46 @@ export class MyProfileController {
 
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
-    this.viewSettings = this.viewSettings.bind(this)
-    this.saveSettings = this.saveSettings.bind(this)
   }
-  getPartial(req: Request, res: Response, name: string) {
+  viewSettings(req: Request, res: Response) {
     const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
     this.service
-      .getMyProfile(userId)
-      .then((user) => {
-        if (!user) {
-          res.status(404).end("Cannot load user profile")
-        } else {
-          res.render("pages/my-profile/" + name, { resource, user: escape(user) })
+      .getMySettings(userId)
+      .then((settings) => {
+        if (!settings) {
+          return renderError404(req, res, resource)
         }
+        render(req, res, "settings", { resource, settings: escape(settings) })
+      })
+      .catch((err) => renderError500(req, res, resource, err))
+  }
+  saveSettings(req: Request, res: Response) {
+    const userId: string = res.locals.userId
+    const settings: UserSettings = req.body
+    this.service
+      .saveMySettings(userId, settings)
+      .then((result) => {
+        const status = isSuccessful(result) ? 200 : 410
+        res.status(status).json(result).end()
       })
       .catch((err) => handleError(err, res, this.log))
+  }
+  async getPartial(req: Request, res: Response, name: string) {
+    const userId: string = res.locals.userId
+    const lang = getLang(req)
+    const resource = getResource(lang)
+    try {
+      const user = await this.service.getMyProfile(userId)
+      if (!user) {
+        res.status(404).end("Cannot load user profile")
+      } else {
+        res.render("pages/my-profile/" + name, { resource, user: escape(user) })
+      }
+    } catch (err) {
+      handleError(err, res, this.log)
+    }
   }
   getInfo(req: Request, res: Response) {
     this.getPartial(req, res, "info")
@@ -71,22 +101,22 @@ export class MyProfileController {
   getAchievementsUpdate(req: Request, res: Response) {
     this.getPartial(req, res, "achievements_update")
   }
-  view(req: Request, res: Response) {
+  async view(req: Request, res: Response) {
     const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
-    this.service
-      .getMyProfile(userId)
-      .then((user) => {
-        if (!user) {
+    try {
+      const user = await this.service.getMyProfile(userId)
+      if (!user) {
           renderError404(req, res, resource)
         } else {
           render(req, res, "my-profile", { resource, user: escape(user) })
         }
-      })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  submit(req: Request, res: Response) {
+  async submit(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
     console.log("Enter submit my profile")
@@ -102,7 +132,8 @@ export class MyProfileController {
     console.log("my profile " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true, true)
     if (errors.length > 0) {
-      return respondError(res, errors)
+      respondError(res, errors)
+      return
     }
     if (this.saveSkills && user.skills) {
       const skills = user.skills.map((i) => i.skill)
@@ -111,44 +142,18 @@ export class MyProfileController {
     if (this.saveInterests && user.interests) {
       this.saveInterests(user.interests)
     }
-    this.service
-      .saveMyProfile(user)
-      .then((result) => {
-        if (result === 0) {
-          return res.status(410).end()
-        }
-        if (targetTemplate) {
-          res.render("pages/my-profile/" + targetTemplate, { resource, user: escape(user) })
-        } else {
-          delete user.id
-          res.status(200).json(user).end()
-        }
-      })
-      .catch((err) => handleError(err, res, this.log))
-  }
-  viewSettings(req: Request, res: Response) {
-    const userId: string = res.locals.userId
-    const lang = getLang(req)
-    const resource = getResource(lang)
-    this.service
-      .getMySettings(userId)
-      .then((settings) => {
-        if (!settings) {
-          return renderError404(req, res, resource)
-        }
-        render(req, res, "settings", { resource, settings: escape(settings) })
-      })
-      .catch((err) => renderError500(req, res, resource, err))
-  }
-  saveSettings(req: Request, res: Response) {
-    const userId: string = res.locals.userId
-    const settings: UserSettings = req.body
-    this.service
-      .saveMySettings(userId, settings)
-      .then((result) => {
-        const status = isSuccessful(result) ? 200 : 410
-        res.status(status).json(result).end()
-      })
-      .catch((err) => handleError(err, res, this.log))
+    try {
+      const result = await this.service.saveMyProfile(user)
+      if (result === 0) {
+        res.status(410).end()
+      } else if (targetTemplate) {
+        res.render("pages/my-profile/" + targetTemplate, { resource, user: escape(user) })
+      } else {
+        delete user.id
+        res.status(200).json(user).end()
+      }
+    } catch (err) {
+      handleError(err, res, this.log)
+    }
   }
 }

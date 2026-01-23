@@ -80,8 +80,9 @@ export interface UserFilter extends Filter {
   email?: string
   phone?: string
   dateOfBirth?: DateRange
-  interests: string[]
-  skills: Skill[]
+  interests?: string[]
+  skills?: Skill[]
+  userId?: string
 }
 
 export interface UserRepository {
