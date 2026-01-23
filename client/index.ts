@@ -18,6 +18,7 @@ class resources {
   static defaultLimit = 12
   static max = 20
   static containerClass = "form-input"
+  static pageBody = "pageBody"
   static hiddenMessage = "hidden-message"
   static token = "token"
 

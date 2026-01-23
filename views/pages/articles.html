@@ -1,31 +1,22 @@
 <div>
-  <header><h2>{{resource.news}}</h2></header>
-  <div>
+  <header>
+    <h2>{{resource.news}}</h2>
+  </header>
+  <div class="search-body">
     <form id="articlesForm" name="articlesForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
-      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}
+      </section>
       <section class="row search-group inline advance-search">
         <label class="col s12 m6">
           {{resource.published_at_from}}
-          <input
-            type="datetime-local"
-            id="publishedAt_min"
-            name="publishedAt_min"
-            data-field="publishedAt.min"
-            value="{{datetimeToString(filter.publishedAt.min)}}"
-            step=".010"
-          />
+          <input type="datetime-local" id="publishedAt_min" name="publishedAt_min" data-field="publishedAt.min"
+            value="{{datetimeToString(filter.publishedAt.min)}}" step=".010" />
         </label>
         <label class="col s12 m6">
           {{resource.published_at_to}}
-          <input
-            type="datetime-local"
-            id="publishedAt_max"
-            name="publishedAt_max"
-            data-field="publishedAt.max"
-            value="{{datetimeToString(filter.publishedAt.max)}}"
-            step=".010"
-          />
+          <input type="datetime-local" id="publishedAt_max" name="publishedAt_max" data-field="publishedAt.max"
+            value="{{datetimeToString(filter.publishedAt.max)}}" step=".010" />
         </label>
       </section>
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />

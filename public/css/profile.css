@@ -13,7 +13,7 @@
 }
 @media only screen and (min-width: 1201px) {
   .profile {
-    padding: 8 5% 0 5%;
+    padding: 8px 5% 0 5%;
   }
 
   .page-body > div > header.profile-header,
@@ -161,6 +161,9 @@
   font-size: 20px;
   color: inherit;
 }
+.profile-title > h3 > a {
+  margin-left: 0;
+}
 .profile-title > p {
   margin-block-end: 8px;
   font-size: 16px;
@@ -175,16 +178,16 @@
 header.nav > .profile-followers {
   margin-bottom: 0;
 }
-.profile-followers > p {
+.profile-followers > a {
   display: flex;
   margin-left: 8px;
   margin-right: 8px;
   margin-bottom: 8px;
 }
-.profile-followers > p > i {
+.profile-followers > a > i {
   margin-right: 8px;
 }
-.profile-followers > p > i.material-icons {
+.profile-followers > a > i.material-icons {
   font-size: 19px;
 }
 

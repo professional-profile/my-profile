@@ -200,14 +200,6 @@ td > button {
   padding-right: 8px;
   margin: 0 0 16px 0;
 }
-/*
-.section:first-child {
-  margin-top: 8px;
-}
-.section:last-child {
-  margin-bottom: 0;
-}
-*/
 .page-body > .form > div.background-content > section:nth-child(2),
 .view-body > section:nth-child(2) {
   background-image: none;
@@ -313,10 +305,10 @@ h4:not(:first-child):not(:nth-child(2)) {
   margin-top: 10px;
 }
 */
-.page-body > div > div > h2:first-child,
-.page-body > div > div > h3:first-child,
-.page-body > div > div > h4:first-child,
-.page-body > div > div > p:first-child {
+.search-body > h2:first-child,
+.search-body > h3:first-child,
+.search-body > h4:first-child,
+.search-body > p:first-child {
   margin-top: 8px;
 }
 header > h1,

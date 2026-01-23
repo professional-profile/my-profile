@@ -107,7 +107,7 @@ function toggleMenuItem(e: Event) {
   }
 }
 const cacheScript = new Map<string, string>()
-function navigate(e: Event, ignoreLang?: boolean) {
+function navigate(e: Event, ignoreLang?: boolean, partId?: string) {
   e.preventDefault()
   const target = e.target as HTMLElement
   const link = findParentNode(target, "A") as HTMLLinkElement
@@ -134,7 +134,8 @@ function navigate(e: Event, ignoreLang?: boolean) {
           response
             .text()
             .then((data) => {
-              const pageBody = document.getElementById("pageBody")
+              const pageId = partId && partId.length > 0 ? partId : resource.pageBody
+              const pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data
                 if (resources.refreshLoad) {
