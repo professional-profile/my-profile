@@ -240,7 +240,7 @@ header.nav > .profile-followers {
     background-color: transparent;
     width: calc(100% - 246px)
   }
-  .profile-followers > p {
+  .profile-followers > a {
     margin-left: 0;
     margin-right: 16px;
   }
