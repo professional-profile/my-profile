@@ -1,1 +1,33 @@
-user followers page
+<header>
+  <h3>{{resource.followers}}</h3>
+</header>
+<div class="search-body">
+  <form id="followersForm" name="followersForm" class="form" novalidate>
+    <span class="hidden-message">{{message}}</span>
+    <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}
+    </section>
+    <section class="row search-group inline advance-search">
+      <label class="col s12 m4">
+        {{resource.email}}
+        <input type="text" id="email" name="email" value="{{filter.email}}" />
+      </label>
+    </section>
+    <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+  </form>
+  <ul class="row list">
+    {% for item in list %}
+    <li class="col s12 m6 l4 xl3 img-item">
+      <img src="{{item.imageURL}}" alt="user avatar" class="round-border" />
+      <a href="/profiles/{{item.username}}" onclick="navigate(event)">{{item.displayName}}</a>
+      <button class="btn-detail"></button>
+      <p class="center-align-items">
+        {{item.occupation}} {% if account and account.id != item.id %} {% if item.followingAt %}
+        <i class="material-icons" onclick="unfollow(this, '{{item.id}}')">bookmark</i>
+        {% else %}
+        <i class="material-icons" onclick="follow(this, '{{item.id}}')">bookmark_border</i>
+        {% endif %} {% endif %}
+      </p>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

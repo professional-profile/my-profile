@@ -130,7 +130,7 @@ function navigate(e, ignoreLang, partId) {
         response
           .text()
           .then(function (data) {
-          var pageId = partId && partId.length > 0 ? partId : resource.pageBody;
+          var pageId = partId && partId.length > 0 ? partId : resources.pageBody;
           var pageBody = document.getElementById(pageId);
           if (pageBody) {
             pageBody.innerHTML = data;

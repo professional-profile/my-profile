@@ -8,6 +8,7 @@ export const en = {
   milestones: "Milestones",
   companies: "Companies",
   leadership: "Leadership",
+  users: "Users",
 
   saved_articles: "My saved articles",
   my_articles: "My articles",

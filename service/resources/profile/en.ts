@@ -5,6 +5,8 @@ export const en = {
   skills: "Skills",
   interests: "Interests",
   achievements: "Achievements",
+  followers: "Followers",
+  followings: "Followings",
 
   button_follow: "Follow",
   button_unfollow: "Unfollow",

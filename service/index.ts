@@ -148,6 +148,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/profiles", ctx.menu.build, ctx.user.search)
   app.get("/profiles/:id", ctx.menu.build, ctx.user.view)
+  app.get("/profiles/:id/followers", ctx.menu.build, ctx.user.getFollowers)
+  app.get("/profiles/:id/following", ctx.menu.build, ctx.user.getFollowing)
   app.patch("/profiles/:id", authorized, ctx.user.follow)
   app.delete("/profiles/:id", authorized, ctx.user.unfollow)
 

@@ -134,7 +134,7 @@ function navigate(e: Event, ignoreLang?: boolean, partId?: string) {
           response
             .text()
             .then((data) => {
-              const pageId = partId && partId.length > 0 ? partId : resource.pageBody
+              const pageId = partId && partId.length > 0 ? partId : resources.pageBody
               const pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data

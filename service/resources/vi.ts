@@ -8,6 +8,7 @@ export const vi = {
   milestones: "Các cột mốc quan trọng",
   companies: "Công ty thành viên",
   leadership: "Khả năng lãnh đạo",
+  users: "Người dùng",
 
   saved_articles: "Bài viết đã lưu",
   my_articles: "Bài viết của tôi",
