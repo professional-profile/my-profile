@@ -57,20 +57,7 @@ export function buildQuery(filter: UserFilter): Statement {
     where.push(`username ilike ${param(i++)}`)
     params.push("%" + filter.phone + "%")
   }
-  /*
-  if (s.settings) {
-    params.push(s.settings);
-    where.push(`settings @> ${param(i++)}`);
-  }
-  if (s.achievements && s.achievements.length > 0) {
-    const achievements = [];
-    for (const achievement of s.achievements) {
-      achievements.push(`${param(i++)} <@ ANY(achievements)`);
-      params.push(achievement);
-    }
-    where.push(`(${achievements.join(' or ')})`);
-  }
-  */
+
   if (where.length > 0) {
     query = query + ` where ` + where.join(" and ")
   }
@@ -78,11 +65,6 @@ export function buildQuery(filter: UserFilter): Statement {
   if (orderBy.length > 0) {
     query = query + ` order by ${orderBy}`
   }
-  /*
-  if (filter.limit && filter.limit > 0) {
-    query = query + ` limit ${filter.limit}`
-  }
-  */
   return { query, params }
 }
 // CREATE INDEX interests_index ON users (interests);

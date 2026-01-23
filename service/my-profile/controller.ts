@@ -31,30 +31,30 @@ export class MyProfileController {
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
   }
-  viewSettings(req: Request, res: Response) {
+  async viewSettings(req: Request, res: Response) {
     const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
-    this.service
-      .getMySettings(userId)
-      .then((settings) => {
-        if (!settings) {
-          return renderError404(req, res, resource)
-        }
-        render(req, res, "settings", { resource, settings: escape(settings) })
-      })
-      .catch((err) => renderError500(req, res, resource, err))
+    try {
+      const settings = await this.service.getMySettings(userId)
+      if (!settings) {
+        return renderError404(req, res, resource)
+      }
+      render(req, res, "settings", { resource, settings: escape(settings) })
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  saveSettings(req: Request, res: Response) {
+  async saveSettings(req: Request, res: Response) {
     const userId: string = res.locals.userId
     const settings: UserSettings = req.body
-    this.service
-      .saveMySettings(userId, settings)
-      .then((result) => {
-        const status = isSuccessful(result) ? 200 : 410
-        res.status(status).json(result).end()
-      })
-      .catch((err) => handleError(err, res, this.log))
+    try {
+      const result = await this.service.saveMySettings(userId, settings)
+      const status = isSuccessful(result) ? 200 : 410
+      res.status(status).json(result).end()
+    } catch (err) {
+      handleError(err, res, this.log)
+    }
   }
   async getPartial(req: Request, res: Response, name: string) {
     const userId: string = res.locals.userId
