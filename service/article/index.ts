@@ -1,9 +1,9 @@
 import { Log, SavedRepository, SearchResult } from "onecore"
 import { buildToSave, SqlSavedRepository } from "pg-extension"
 import { DB, SearchRepository } from "query-core"
-import { BaseRepository, Info, infoModel, InfoRepository, Rate, rateModel, ShortRate } from "rate-core"
 import { SqlRateRepository } from "rate-query"
 import { SqlInfoRepository } from "review-reaction-query"
+import { Info, infoModel, InfoRepository, Rate, rateModel, RateRepository, ShortRate } from "../shared/rate"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
 import { ArticleController } from "./controller"
 import { buildQuery } from "./query"
@@ -32,7 +32,7 @@ export class SqlArticleRepository extends SearchRepository<Article, ArticleFilte
 }
 
 export class ArticleUseCase implements ArticleService {
-  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, public rateRepository: BaseRepository<Rate>, public infoRepository: InfoRepository) {
+  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateRepository: RateRepository, protected infoRepository: InfoRepository) {
   }
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)

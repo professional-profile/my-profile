@@ -125,8 +125,14 @@ function navigate(e: Event, ignoreLang?: boolean, partId?: string) {
       url = url + (url.indexOf("?") > 0 ? "&" : "?") + lang
     }
     */
+    let pageId = resources.pageBody
+    let sub = ""
+    if (partId && partId.length > 0) {
+      pageId = partId
+      sub = `&${resources.subPartial}=true`
+    }
     const lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
-    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true" + lang1
+    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + `${resources.partial}=true${sub}` + lang1
     showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
@@ -134,7 +140,6 @@ function navigate(e: Event, ignoreLang?: boolean, partId?: string) {
           response
             .text()
             .then((data) => {
-              const pageId = partId && partId.length > 0 ? partId : resources.pageBody
               const pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data

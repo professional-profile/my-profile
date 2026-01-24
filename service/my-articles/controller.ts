@@ -96,17 +96,13 @@ export class MyArticlesController {
     }
     const id = req.params.id
     const editMode = id !== "new"
-    if (!editMode) {
-      article.authorId = userId
-      try {
+    try {
+      if (!editMode) {
+        article.authorId = userId
         const result = await this.service.create(article)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
-      } catch (err) {
-        handleError(err, res, this.log)
-      }
-    } else {
-      try {
+      } else {
         const existingArticle = await this.service.load(id)
         if (!existingArticle) {
           res.status(410).end()
@@ -116,9 +112,9 @@ export class MyArticlesController {
         const result = await this.service.update(article)
         const status = isSuccessful(result) ? 200 : 410
         res.status(status).json(result).end()
-      } catch (err) {
-        handleError(err, res, this.log)
       }
+    } catch (err) {
+      handleError(err, res, this.log)
     }
   }
 }

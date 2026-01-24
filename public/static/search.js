@@ -63,20 +63,20 @@ function getPrefix(url) {
 }
 function buildSearchUrl(ft, page, limit, fields) {
   if (!page || page.length === 0) {
-    page = "page"
+    page = resources.page
   }
   if (!limit || limit.length === 0) {
-    limit = "limit"
+    limit = resources.limit
   }
   if (!fields || fields.length === 0) {
-    fields = "fields"
+    fields = resources.fields
   }
   var pageIndex = ft.page
   if (pageIndex && !isNaN(pageIndex) && pageIndex <= 1) {
     delete ft.page
   }
   var keys = Object.keys(ft)
-  var url = "?partial=true"
+  var url = "?" + resources.partial + "=true"
   for (var _i = 0, keys_2 = keys; _i < keys_2.length; _i++) {
     var key = keys_2[_i]
     var objValue = ft[key]
@@ -149,20 +149,20 @@ function removeField(search, fieldName) {
   var j = search.indexOf("&", i + fieldName.length)
   return j >= 0 ? search.substring(0, i) + search.substring(j + 1) : search.substring(0, i - 1)
 }
-function changePage(e) {
+function changePage(e, partId) {
   e.preventDefault()
   var target = e.target
   var search = target.search
   if (search.length > 0) {
     search = search.substring(1)
   }
-  search = removeField(search, "partial")
-  var p = getField(search, "page")
-  if (p === "page=1") {
-    search = removeField(search, "page")
+  search = removeField(search, resources.partial)
+  var p = getField(search, resources.page)
+  if (p === resources.page + "=1") {
+    search = removeField(search, resources.page)
   }
   var url = window.location.origin + window.location.pathname
-  url = url + (search.length === 0 ? "?partial=true" : "?" + search + "&partial=true")
+  url = url + (search.length === 0 ? "?" + resources.partial + "=true" : "?" + search + "&" + resources.partial + "=true")
   var newUrl = window.location.origin + window.location.pathname
   if (search.length > 0) {
     newUrl = newUrl + "?" + search
@@ -178,7 +178,8 @@ function changePage(e) {
         response
           .text()
           .then(function (data) {
-            var pageBody = document.getElementById("pageBody")
+            var pageId = partId && partId.length > 0 ? partId : resources.pageBody
+            var pageBody = document.getElementById(pageId)
             if (pageBody) {
               pageBody.innerHTML = data
               afterLoaded(pageBody)
@@ -198,7 +199,7 @@ function changePage(e) {
       return handleError(err, resource.error_network)
     })
 }
-function search(e) {
+function search(e, partId) {
   e.preventDefault()
   var target = e.target
   var form = target.form
@@ -209,7 +210,7 @@ function search(e) {
   var url = getCurrentURL() + search
   var newUrl = getCurrentURL()
   if (search.length > 0) {
-    var s = removeField(search.substring(1), "partial")
+    var s = removeField(search.substring(1), resources.partial)
     if (s.length > 0) {
       newUrl = newUrl + "?" + s
     }
@@ -225,7 +226,8 @@ function search(e) {
         response
           .text()
           .then(function (data) {
-            var pageBody = document.getElementById("pageBody")
+            var pageId = partId && partId.length > 0 ? partId : resources.pageBody
+            var pageBody = document.getElementById(pageId)
             if (pageBody) {
               pageBody.innerHTML = data
               afterLoaded(pageBody)

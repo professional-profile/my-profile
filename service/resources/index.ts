@@ -41,9 +41,9 @@ export const resources: Resources = {
 
 export function getDateFormat(lang?: string): string {
   if (lang === "vi") {
-    return "D/M/YYYY"
+    return "d/M/yyyy"
   }
-  return "M/D/YYYY"
+  return "M/d/yyyy"
 }
 export function getLang(req: Request): string {
   let lang = query(req, "lang")

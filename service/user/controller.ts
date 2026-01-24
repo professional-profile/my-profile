@@ -12,6 +12,7 @@ import {
   getSearch,
   hasSearch,
   isPartial,
+  isSubPartial,
   resources
 } from "express-ext"
 import { Log } from "onecore"
@@ -77,7 +78,8 @@ export class UserController extends FollowController {
         return renderError404(req, res, resource)
       }
       const partial = isPartial(req)
-      const view = partial ? "user/main" : "user"
+      const subPartial = isSubPartial(req)
+      const view = partial && subPartial? "user/main" : "user"
       render(req, res, view, {
         resource,
         user: escape(user),
@@ -121,7 +123,8 @@ export class UserController extends FollowController {
         message: buildMessage(resource, list, limit, page, result.total),
       }
       const partial = isPartial(req)
-      const view = partial ? "user/followers" : "user-followers"
+      const subPartial = isSubPartial(req)
+      const view = partial && subPartial? "user/followers" : "user-followers"
       if (!partial) {
         const id = req.params.id
         const userId: string = res.locals.userId
@@ -171,7 +174,8 @@ export class UserController extends FollowController {
         message: buildMessage(resource, list, limit, page, result.total),
       }
       const partial = isPartial(req)
-      const view = partial ? "user/following" : "user-following"
+      const subPartial = isSubPartial(req)
+      const view = partial && subPartial ? "user/following" : "user-following"
       if (!partial) {
         const id = req.params.id
         const userId: string = res.locals.userId

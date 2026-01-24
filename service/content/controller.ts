@@ -9,7 +9,7 @@ export class ContentController {
   constructor(private service: ContentService, private langs: string[], private menuLoader: MenuItemLoader) {
     this.view = this.view.bind(this)
   }
-  view(req: Request, res: Response) {
+  async view(req: Request, res: Response) {
     let id = req.params.id
     let lang = req.params.lang
     if (!id && !lang) {
@@ -24,14 +24,14 @@ export class ContentController {
       id = "home"
     }
     const resource = getResource(lang)
-    this.service
-      .load(id, lang)
-      .then((content) => {
-        if (!content) {
-          return renderError404(req, res, resource)
-        }
-        res.render(getView(req, "content"), { lang, resource, content })
-      })
-      .catch((err) => renderError500(req, res, resource, err))
+    try {
+      const content = await this.service.load(id, lang)
+      if (!content) {
+        return renderError404(req, res, resource)
+      }
+      res.render(getView(req, "content"), { lang, resource, content })
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
 }
