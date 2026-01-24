@@ -157,12 +157,23 @@ function changePage(e, partId) {
     search = search.substring(1)
   }
   search = removeField(search, resources.partial)
+  search = removeField(search, resources.subPartial)
   var p = getField(search, resources.page)
   if (p === resources.page + "=1") {
     search = removeField(search, resources.page)
   }
+  if (!partId) {
+    var form = findParentNode(target, "FORM")
+    if (form) {
+      partId = form.getAttribute("data-part")
+    }
+  }
   var url = window.location.origin + window.location.pathname
-  url = url + (search.length === 0 ? "?" + resources.partial + "=true" : "?" + search + "&" + resources.partial + "=true")
+  var sub = ""
+  if (partId && partId.length > 0) {
+    sub = "&" + resources.subPartial + "=true"
+  }
+  url = url + (search.length === 0 ? "?" + resources.partial + "=true" + sub : "?" + search + "&" + resources.partial + "=true" + sub)
   var newUrl = window.location.origin + window.location.pathname
   if (search.length > 0) {
     newUrl = newUrl + "?" + search
@@ -203,14 +214,22 @@ function search(e, partId) {
   e.preventDefault()
   var target = e.target
   var form = target.form
+  if (!partId) {
+    partId = form.getAttribute("data-part")
+  }
   var initFilter = decode(form)
   var filter = trimNull(initFilter)
   filter.page = 1
   var search = buildSearchUrl(filter)
+  if (partId && partId.length > 0) {
+    search = search + ("&" + resources.subPartial + "=true")
+  }
   var url = getCurrentURL() + search
   var newUrl = getCurrentURL()
   if (search.length > 0) {
-    var s = removeField(search.substring(1), resources.partial)
+    var s = search.substring(1)
+    s = removeField(s, resources.partial)
+    s = removeField(s, resources.subPartial)
     if (s.length > 0) {
       newUrl = newUrl + "?" + s
     }

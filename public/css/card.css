@@ -290,7 +290,7 @@ ul.list > li > section:first-child > div > p {
   display: flex;
   align-items: center;
   margin: 0 16px;
-  padding-bottom: 8px;
+  padding-bottom: 16px;
 }
 
 .card > section > hr,
@@ -344,27 +344,11 @@ ul.list > li > section:first-child > div > p {
   width: calc(100% - 32px);
 }
 
-.video-container > p,
-.card > section > p,
-.video > section > p,
-.video > p,
-.card > p {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-}
 .video p,
 .card p {
-  width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
   font-size: 14px;
+  font-weight: 400;
 }
-.card > p:last-child {
-  padding-bottom: 16px;
-}
-
 .card p.article-meta {
   font-size: 16px;
 }
@@ -380,6 +364,22 @@ ul.list > li > section:first-child > div > p {
   font-size: 20px;
 }
 
+.video-container > p,
+.card > section > p,
+.video > section > p,
+.video > p,
+.card > p {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.card > p:last-child {
+  padding-bottom: 16px;
+}
+
 .card > section > h3,
 .card > section > h4,
 .card > section > a,
@@ -389,13 +389,11 @@ ul.list > li > section:first-child > div > p {
   margin-left: 16px;
   margin-right: 16px;
   margin-bottom: 8px;
-  font-weight: 400;
 }
 .card > section > h3 {
   margin-top: 8px;
 }
 .card > section > a {
-  margin-top: 8px;
   font-size: 16px;
   font-weight: 600;
 }
@@ -415,7 +413,7 @@ ul.list > li > section:first-child > div > p {
   flex: none;
   width: 100%;
   height: 220px;
-  margin-right: 0;
+  margin-bottom: 16px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position-x: center;

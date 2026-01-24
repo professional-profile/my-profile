@@ -186,6 +186,7 @@ header.nav > .profile-followers {
   margin-left: 8px;
   margin-right: 8px;
   margin-bottom: 8px;
+  color: inherit;
 }
 .profile-followers > a > i {
   margin-right: 8px;
