@@ -108,10 +108,9 @@ export class MyProfileController {
     try {
       const user = await this.service.getMyProfile(userId)
       if (!user) {
-          renderError404(req, res, resource)
-        } else {
-          render(req, res, "my-profile", { resource, user: escape(user) })
-        }
+        return renderError404(req, res, resource)
+      }
+      render(req, res, "my-profile", { resource, user: escape(user) })
     } catch (err) {
       renderError500(req, res, resource, err)
     }
@@ -119,7 +118,6 @@ export class MyProfileController {
   async submit(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    console.log("Enter submit my profile")
     const user = req.body as User
     const keys = Object.keys(user)
     let targetTemplate: string | undefined
@@ -129,11 +127,9 @@ export class MyProfileController {
       targetTemplate = "info"
     }
     user.id = res.locals.userId as string
-    console.log("my profile " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true, true)
     if (errors.length > 0) {
-      respondError(res, errors)
-      return
+      return respondError(res, errors)
     }
     if (this.saveSkills && user.skills) {
       const skills = user.skills.map((i) => i.skill)

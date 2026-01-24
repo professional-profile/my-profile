@@ -63,7 +63,7 @@ export class UserController extends FollowController {
         message: buildMessage(resource, list, limit, page, result.total),
       })
     } catch (err) {
-      return renderError500(req, res, resource, err)
+      renderError500(req, res, resource, err)
     }
   }
   async view(req: Request, res: Response) {
@@ -83,7 +83,7 @@ export class UserController extends FollowController {
         user: escape(user),
       })
     } catch (err) {
-      return renderError500(req, res, resource, err)
+      renderError500(req, res, resource, err)
     }
   }
   async getFollowers(req: Request, res: Response) {
@@ -133,7 +133,7 @@ export class UserController extends FollowController {
       }
       render(req, res, view, ctx)
     } catch (err) {
-      return renderError500(req, res, resource, err)
+      renderError500(req, res, resource, err)
     }
   }
   async getFollowing(req: Request, res: Response) {
@@ -183,7 +183,7 @@ export class UserController extends FollowController {
       }
       render(req, res, view, ctx)
     } catch (err) {
-      return renderError500(req, res, resource, err)
+      renderError500(req, res, resource, err)
     }
   }
 }

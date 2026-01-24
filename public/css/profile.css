@@ -307,8 +307,8 @@ header.nav > .profile-followers {
   margin-bottom: 4px;
 }
 .profile .profile-body > header h3 {
-  margin-left: 16px;
-  margin-bottom: 0;
+  width: calc(100% - 32px);
+  margin: 0 16px;
 }
 
 .dropdown-upload-cover {

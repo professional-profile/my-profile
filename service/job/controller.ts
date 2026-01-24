@@ -18,11 +18,11 @@ import { JobFilter, JobService } from "./job"
 
 const fields = ["id", "title", "publishedAt", "description"]
 export class JobController {
-  constructor(private jobService: JobService) {
+  constructor(private service: JobService) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
   }
-  search(req: Request, res: Response) {
+  async search(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
@@ -38,41 +38,41 @@ export class JobController {
       filter.sort = "-publishedAt"
     }
     const { page, limit, sort } = filter
-    this.jobService
-      .search(filter, limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list)
-        for (const item of list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
-        const search = getSearch(req.url)
-        render(req, res, "jobs", {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    try {
+      const result = await this.service.search(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const search = getSearch(req.url)
+      render(req, res, "jobs", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  view(req: Request, res: Response) {
+  async view(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const id = req.params.id
-    this.jobService
-      .load(id)
-      .then((job) => {
-        if (!job) {
-          return renderError404(req, res, resource)
-        }
-        job.publishedAt = formatDateTime(job.publishedAt, dateFormat)
-        render(req, res, "job", { resource, job })
-      })
-      .catch((err) => renderError500(req, res, resource, err))
+    try {
+      const job = await this.service.load(id)
+      if (!job) {
+        return renderError404(req, res, resource)
+      }
+      job.publishedAt = formatDateTime(job.publishedAt, dateFormat)
+      render(req, res, "job", { resource, job })
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
 }

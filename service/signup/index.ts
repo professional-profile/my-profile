@@ -51,7 +51,6 @@ export class SignUpController {
     const info: UserSignUp = req.body
     const errors = validate<UserSignUp>(info, userModel, resource, true)
     if (errors.length > 0) {
-      console.log("Sign up error: " + JSON.stringify(errors))
       res.status(422).json(errors)
     } else {
       const user: User = {

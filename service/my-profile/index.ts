@@ -33,15 +33,13 @@ export class SqlUserRepository extends CRUDRepository<User, string> implements U
 
 export class MyProfileUseCase implements MyProfileService {
   constructor(private repository: UserRepository) {}
-  getMyProfile(id: string): Promise<User | null> {
-    return this.repository.load(id).then((user) => {
-      let rs = null
-      if (user) {
-        delete user.settings
-        rs = user
-      }
-      return rs
-    })
+  async getMyProfile(id: string): Promise<User | null> {
+    const user = await this.repository.load(id)
+    if (user) {
+      delete user.settings
+      return user
+    }
+    return null
   }
   saveMyProfile(user: User): Promise<number> {
     return this.repository.patch(user)
