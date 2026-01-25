@@ -215,7 +215,7 @@ article.view-container > div,
   .top-menu .page-container > .page-body > .form,
   .top-menu .page-body > article,
   .top-menu .page-container > .page-body > article > div,
-  .top-menu .page-container > .search-body {
+  .top-menu .page-container .search-body {
     max-height: calc(100vh - 46px - 52px);
   }
   /* Set height for table container, prevent the parent scroll of whole page  */

@@ -280,16 +280,15 @@ header.nav > .profile-followers {
   margin-top: 0;
 }
 
-.profile .card:last-child {
+.profile .card > section > p.description {
+  margin-bottom: 8px;
+  line-height: 20px;
+}
+.profile .card > p.description {
   margin-bottom: 16px;
 }
-
-.profile .card p.description {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  width: calc(100% - 36px);
-  line-height: 20px;
+.profile .card > p.description:last-child {
+  padding-bottom: 16px;
 }
 .profile .card > hr {
   margin-bottom: 16px;

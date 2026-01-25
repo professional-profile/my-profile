@@ -1,4 +1,3 @@
-import { MenuItemLoader } from "content-menu"
 import { Request, Response } from "express"
 import { getView } from "express-ext"
 import { getResource } from "../resources"
@@ -6,7 +5,7 @@ import { renderError404, renderError500 } from "../template"
 import { ContentService } from "./content"
 
 export class ContentController {
-  constructor(private service: ContentService, private langs: string[], private menuLoader: MenuItemLoader) {
+  constructor(private service: ContentService, private langs: string[]) {
     this.view = this.view.bind(this)
   }
   async view(req: Request, res: Response) {

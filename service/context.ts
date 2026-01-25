@@ -128,7 +128,7 @@ export function useContext(db: DB, logger: Logger, cfg: Config): ApplicationCont
   const myArticles = useMyArticlesController(db, logger.error)
 
   const user = useUserController(db, logger.error)
-  const content = useContentController(db, ["vi"], menuItemsLoader)
+  const content = useContentController(db, ["vi"])
   const article = useArticleController(db, logger.error)
   const job = useJobController(db)
 

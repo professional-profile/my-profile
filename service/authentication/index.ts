@@ -62,7 +62,7 @@ export class SigninController {
     const errors = validate<User>(user, userModel, resource, true)
     if (errors.length > 0) {
       console.log("Login error = " + JSON.stringify(errors))
-      res.status(422).json(errors)
+      res.status(422).json(errors).end()
     } else {
       this.authenticator
         .authenticate(user)

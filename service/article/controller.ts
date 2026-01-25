@@ -26,7 +26,7 @@ export class ArticleController extends SavedController {
     this.view = this.view.bind(this)
     this.getSavedArticles = this.getSavedArticles.bind(this)
   }
-  search(req: Request, res: Response) {
+  async search(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
@@ -45,28 +45,28 @@ export class ArticleController extends SavedController {
     filter.status = Published
     filter.userId = res.locals.userId
     const { page, limit, sort } = filter
-    this.service
-      .search(filter, limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list)
-        for (const item of result.list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
-        const search = getSearch(req.url)
-        render(req, res, "articles", {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    try {
+      const result = await this.service.search(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of result.list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const search = getSearch(req.url)
+      render(req, res, "articles", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  getSavedArticles(req: Request, res: Response) {
+  async getSavedArticles(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
@@ -86,42 +86,42 @@ export class ArticleController extends SavedController {
     filter.userId = res.locals.userId
     filter.isSaved = true
     const { page, limit, sort } = filter
-    this.service
-      .search(filter, limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list)
-        for (const item of result.list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
-        const search = getSearch(req.url)
-        render(req, res, "articles", {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    try {
+      const result = await this.service.search(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of result.list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const search = getSearch(req.url)
+      render(req, res, "articles", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  view(req: Request, res: Response) {
+  async view(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const id = req.params.id
     const userId: string = res.locals.userId
-    this.service
-      .load(id, userId)
-      .then((article) => {
-        if (!article) {
-          return renderError404(req, res, resource)
-        }
-        article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-        render(req, res, "article", { resource, article })
-      })
-      .catch((err) => renderError500(req, res, resource, err))
+    try {
+      const article = await this.service.load(id, userId)
+      if (!article) {
+        return renderError404(req, res, resource)
+      }
+      article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
+      render(req, res, "article", { resource, article })
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
 }
