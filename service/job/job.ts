@@ -2,6 +2,7 @@ import { Attributes, Filter, SearchResult, TimeRange } from "onecore"
 
 export interface Job {
   id: string
+  slug: string
   title: string
   description: string
   publishedAt?: Date
@@ -18,6 +19,7 @@ export interface Job {
 }
 export interface JobFilter extends Filter {
   id?: string
+  slug?: string
   title?: string
   description?: string
   requirements?: string
@@ -46,6 +48,9 @@ export const jobModel: Attributes = {
     length: 40,
     required: true,
     key: true,
+  },
+  slug: {
+    length: 150,
   },
   title: {
     length: 300,

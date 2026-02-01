@@ -3,7 +3,7 @@ create table articles (
   slug varchar(255) unique,
   title varchar(255) not null,
   description varchar(1200) not null,
-  content varchar(9500),
+  content text,
   published_at timestamptz,
   tags character varying[],
   thumbnail varchar(400),
@@ -19,6 +19,55 @@ create table saved_articles (
   saved_at timestamptz,
   primary key (user_id, id)
 );
+
+create table article_info (
+    id varchar(40) primary key,
+    rate numeric default 0,
+    rate1 integer default 0,
+    rate2 integer default 0,
+    rate3 integer default 0,
+    rate4 integer default 0,
+    rate5 integer default 0,
+    count integer default 0,
+    score numeric default 0
+);
+create table article_rates (
+    id varchar(40) primary key,
+    author varchar(40) not null,
+    rate integer not null,
+    time timestamptz,
+    review text,
+    useful_count integer default 0,
+    reply_count integer default 0,
+    histories jsonb[],
+    anonymous boolean
+);
+create table article_rate_comments (
+    comment_id varchar(40) primary key,
+    id varchar(40) not null,
+    author varchar(40) not null,
+    user_id varchar(40) not null,
+    comment text,
+    time timestamptz,
+    updated_at timestamptz,
+    histories jsonb[],
+    anonymous boolean
+);
+create table article_rate_reactions (
+    id varchar(40) primary key,
+    author varchar(40) not null,
+    user_id varchar(40) not null,
+    time timestamptz,
+    reaction smallint
+);
+
+-- insert into article_comment_thread_reaction values ('7qUfAFE_z', 'axzYT4jyEa', 'axzYT4jyEa', '2023-04-03 14:22:45.504+07', 1);
+insert into article_info values ('s9zKgiZEr7', 3.2, 0, 0, 4, 1, 0, 5, 16);
+insert into article_rates values ('s9zKgiZEr7', 'xmlGhv7ftq', 3, '2023-03-27 16:37:42.861', 'A great awards of FPT in 2024', 1, 2, '{"{\"rate\": 4, \"time\": \"2023-03-27T02:27:57.032Z\", \"review\": \"hi\"}","{\"rate\": 5, \"time\": \"2023-03-27T02:32:15.778Z\", \"review\": \"yolo\"}"}', NULL);
+insert into article_rate_reactions values ('s9zKgiZEr7', 'xmlGhv7ftq', 'axzYT4jyEa', '2023-04-03 09:21:09.311', 1);
+
+insert into article_rate_comments values ('LPRa64I3p', 's9zKgiZEr7', 'xmlGhv7ftq', 'xmlGhv7ftq', 'Their growth rate is impressive', '2023-03-27 09:58:46.409', null, null, true);
+insert into article_rate_comments values ('jf1hIVDHf', 's9zKgiZEr7', 'xmlGhv7ftq', 'xmlGhv7ftq', 'The company is also attracting foreign talent', '2023-03-27 11:01:08.198', null, null, false);
 
 insert into articles (id,slug,title,description,content,published_at,tags,thumbnail,high_thumbnail,author_id,status,created_at) values
 	 ('s9zKgiZEr7','fpt-software-wins-job-creation-award-at-esgbusiness-awards-2-s9zKgiZEr7','FPT Software Wins Job Creation Award at ESGBusiness Awards 2024','This recognition highlights FPT Software''s commitment to nurturing top talent and fostering diverse and inclusive workplaces across the global IT industry.','<figure>

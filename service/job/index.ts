@@ -10,7 +10,7 @@ export class SqlJobRepository extends SearchRepository<Job, JobFilter> implement
     super(db.query, "jobs", jobModel, db.driver, buildQuery)
   }
   async load(id: string): Promise<Job | null> {
-    const query = `select * from jobs where id = ${this.param(1)}`
+    const query = `select * from jobs where slug = ${this.param(1)}`
     const jobs = await this.query<Job>(query, [id], this.map)
     return jobs && jobs.length > 0 ? jobs[0] : null
   }

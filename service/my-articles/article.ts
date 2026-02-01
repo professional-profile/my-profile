@@ -51,7 +51,7 @@ export const articleModel: Attributes = {
     required: true,
   },
   slug: {
-    length: 80,
+    length: 150,
   },
   title: {
     length: 255,
