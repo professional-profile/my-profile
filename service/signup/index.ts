@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { handleError } from "express-ext"
-import { Attributes, ErrorMessage, Log } from "onecore"
+import { Attributes, ErrorMessage } from "onecore"
 import { SignupService, Status, User } from "signup-service"
 import { validate } from "xvalidators"
 import { getResource } from "../resources"
@@ -29,7 +29,7 @@ export interface UserSignUp {
 }
 
 export class SignUpController {
-  constructor(private service: SignupService<string, User>, private status: Status, private log: Log) {
+  constructor(private service: SignupService<string, User>, private status: Status) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
     this.verify = this.verify.bind(this)
@@ -81,7 +81,7 @@ export class SignUpController {
             res.status(500).json("Fail").end()
           }
         })
-        .catch((err) => handleError(err, res, this.log))
+        .catch((err) => handleError(err, res))
     }
   }
   verify(req: Request, res: Response) {
@@ -94,6 +94,6 @@ export class SignUpController {
         const message = success ? resource.success_activate_account : resource.fail_activate_account
         res.render("verify-account", { resource, message })
       })
-      .catch((err) => handleError(err, res, this.log))
+      .catch((err) => handleError(err, res))
   }
 }

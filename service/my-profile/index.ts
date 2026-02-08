@@ -1,4 +1,4 @@
-import { Log, SaveStrings } from "onecore"
+import { SaveStrings } from "onecore"
 import { CRUDRepository, DB } from "query-core"
 import { MyProfileController } from "./controller"
 import { MyProfileService, User, userModel, UserRepository, UserSettings } from "./user"
@@ -52,8 +52,8 @@ export class MyProfileUseCase implements MyProfileService {
   }
 }
 
-export function useMyProfileController(db: DB, log: Log, saveSkills?: SaveStrings, saveInterests?: SaveStrings): MyProfileController {
+export function useMyProfileController(db: DB, saveSkills?: SaveStrings, saveInterests?: SaveStrings): MyProfileController {
   const repository = new SqlUserRepository(db)
   const service = new MyProfileUseCase(repository)
-  return new MyProfileController(service, log, saveSkills, saveInterests)
+  return new MyProfileController(service, saveSkills, saveInterests)
 }

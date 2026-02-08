@@ -1,13 +1,12 @@
 import { Request, Response } from "express"
 import { formatText, handleError } from "express-ext"
-import { Log } from "onecore"
 import { PasswordChange, PasswordReset, PasswordService } from "password-service"
 import { isEmpty } from "xvalidators"
 import { getResource } from "../resources"
 import { render } from "../template"
 
 export class PasswordController {
-  constructor(private service: PasswordService<string>, private log: Log) {
+  constructor(private service: PasswordService<string>) {
     this.renderForgotPassword = this.renderForgotPassword.bind(this)
     this.forgotPassword = this.forgotPassword.bind(this)
     this.renderResetPassword = this.renderResetPassword.bind(this)
@@ -38,7 +37,7 @@ export class PasswordController {
         const status = result ? 200 : 404
         res.status(status).json(result).end()
       })
-      .catch((err) => handleError(err, res, this.log))
+      .catch((err) => handleError(err, res))
   }
   renderResetPassword(req: Request, res: Response) {
     const resource = getResource(req)
@@ -72,7 +71,7 @@ export class PasswordController {
         const status = result > 0 ? 200 : result < 0 ? 409 : 403
         res.status(status).json(result).end()
       })
-      .catch((err) => handleError(err, res, this.log))
+      .catch((err) => handleError(err, res))
   }
   renderChangePassword(req: Request, res: Response) {
     const resource = getResource(req)
@@ -106,6 +105,6 @@ export class PasswordController {
           res.status(200).json(result).end()
         }
       })
-      .catch((err) => handleError(err, res, this.log))
+      .catch((err) => handleError(err, res))
   }
 }

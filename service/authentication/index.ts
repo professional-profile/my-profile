@@ -2,7 +2,7 @@ import { Authenticator } from "authen-service"
 import { Request, Response } from "express"
 import { handleError, query } from "express-ext"
 import { sign } from "jsonwebtoken"
-import { Attributes, Log, StringMap } from "onecore"
+import { Attributes, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource } from "../resources"
 
@@ -38,7 +38,6 @@ export class SigninController {
     private remember: string,
     private rememberSecret: string,
     private rememberExpiresIn: number,
-    private log: Log,
   ) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
@@ -95,7 +94,7 @@ export class SigninController {
             res.render("signin", { resource, user, message })
           }
         })
-        .catch((err) => handleError(err, res, this.log))
+        .catch((err) => handleError(err, res))
     }
   }
 }

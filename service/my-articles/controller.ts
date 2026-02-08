@@ -11,10 +11,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isSuccessful,
   resources,
   respondError
 } from "express-ext"
-import { isSuccessful, Log } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getDateFormat, getLang, getResource } from "../resources"
@@ -23,7 +23,7 @@ import { Article, ArticleFilter, articleModel, ArticleService } from "./article"
 
 const fields = ["title", "publishedAt", "description"]
 export class MyArticlesController {
-  constructor(private service: ArticleService, private log: Log) {
+  constructor(private service: ArticleService) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -114,7 +114,7 @@ export class MyArticlesController {
         res.status(status).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

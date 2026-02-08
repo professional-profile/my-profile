@@ -12,7 +12,6 @@ import {
   resources,
   SavedController
 } from "express-ext"
-import { Log } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -20,8 +19,8 @@ import { ArticleFilter, ArticleService, Published } from "./article"
 
 const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController extends SavedController {
-  constructor(protected service: ArticleService, protected log: Log) {
-    super(service, log, "id", "userId")
+  constructor(protected service: ArticleService) {
+    super(service, "id", "userId")
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.getSavedArticles = this.getSavedArticles.bind(this)

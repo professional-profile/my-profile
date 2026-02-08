@@ -72,7 +72,6 @@ export function useContext(db: DB, logger: Logger, cfg: Config): ApplicationCont
     "remember",
     cfg.rememberToken.secret,
     cfg.rememberToken.expires,
-    logger.error,
   )
 
   const comparator = new Comparator()
@@ -101,7 +100,7 @@ export function useContext(db: DB, logger: Logger, cfg: Config): ApplicationCont
     cfg.signup.expires,
     validator.validate,
   )
-  const signup = new SignUpController(signupService, signupStatus, logger.error)
+  const signup = new SignUpController(signupService, signupStatus)
   const resetPasswordMailSender = new MailSender(sendMail, cfg.mail.from, cfg.password.templates.reset.body, cfg.password.templates.reset.subject)
   const changePasswordMailSender = new MailSender(sendMail, cfg.mail.from, cfg.password.templates.change.body, cfg.password.templates.change.subject)
   // const codeRepository = new CodeRepository<string>(db, "passwordcodes")
@@ -118,18 +117,18 @@ export function useContext(db: DB, logger: Logger, cfg: Config): ApplicationCont
     undefined,
     changePasswordMailSender.send,
   )
-  const password = new PasswordController(passwordService, logger.error)
+  const password = new PasswordController(passwordService)
 
-  const skillService = new StringService("skills", "skill", db.query, db.exec)
-  const skill = new ItemController<string[]>(logger.error, skillService.load, "q")
-  const interestService = new StringService("interests", "interest", db.query, db.exec)
-  const interest = new ItemController<string[]>(logger.error, interestService.load, "q")
-  const myProfile = useMyProfileController(db, logger.error, skillService.save, interestService.save)
-  const myArticles = useMyArticlesController(db, logger.error)
+  const skillService = new StringService("skills", "skill", db.query, db.execute)
+  const skill = new ItemController<string[]>(skillService.load, "q")
+  const interestService = new StringService("interests", "interest", db.query, db.execute)
+  const interest = new ItemController<string[]>(interestService.load, "q")
+  const myProfile = useMyProfileController(db, skillService.save, interestService.save)
+  const myArticles = useMyArticlesController(db)
 
-  const user = useUserController(db, logger.error)
+  const user = useUserController(db)
   const content = useContentController(db, ["vi"])
-  const article = useArticleController(db, logger.error)
+  const article = useArticleController(db)
   const job = useJobController(db)
 
   return { health, menu, signin, signup, password, myProfile, skill, interest, myArticles, user, content, article, job }

@@ -1,4 +1,4 @@
-import { Log, SearchResult } from "onecore"
+import { SearchResult } from "onecore"
 import { FollowRepository } from "pg-extension"
 import { DB, SearchRepository } from "query-core"
 import { UserController } from "./controller"
@@ -8,7 +8,7 @@ export * from "./controller"
 
 export class SqlUserRepository extends SearchRepository<User, UserFilter> implements UserRepository {
   constructor(db: DB) {
-    super(db.query, "users", userModel, db.driver, buildQuery)
+    super(db, "users", userModel, buildQuery)
   }
   async load(id: string, userId?: string): Promise<User | null> {
     let params = []
@@ -18,42 +18,42 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
       query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
         from users u
         left join user_info ui on u.id = ui.id
-        left join user_followings uf on uf.id = ${this.param(1)} and uf.following = u.id
-        left join user_followers ur on ur.id = ${this.param(2)} and ur.follower = u.id
-        where u.username = ${this.param(3)}`
+        left join user_followings uf on uf.id = ${this.db.param(1)} and uf.following = u.id
+        left join user_followers ur on ur.id = ${this.db.param(2)} and ur.follower = u.id
+        where u.username = ${this.db.param(3)}`
       params.push(userId, userId)
     } else {
       query = `select u.*, ui.follower_count, ui.following_count
         from users u
         left join user_info ui on u.id = ui.id
-        where u.username = ${this.param(1)}`
+        where u.username = ${this.db.param(1)}`
     }
     params.push(id)
 
-    let users = await this.query<User>(query, params, this.map)
+    let users = await this.db.query<User>(query, params, this.map)
     if (users && users.length > 0) {
       return users[0]
     }
 
     params = []
-    query = `select * from users where id = ${this.param(1)}`
+    query = `select * from users where id = ${this.db.param(1)}`
     if (userId && userId.length > 0) {
       query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
         from users u
         left join user_info ui on u.id = ui.id
-        left join user_followings uf on uf.id = ${this.param(1)} and uf.following = u.id
-        left join user_followers ur on ur.id = ${this.param(2)} and ur.follower = u.id
-        where u.id = ${this.param(3)}`
+        left join user_followings uf on uf.id = ${this.db.param(1)} and uf.following = u.id
+        left join user_followers ur on ur.id = ${this.db.param(2)} and ur.follower = u.id
+        where u.id = ${this.db.param(3)}`
       params.push(userId, userId)
     } else {
       query = `select u.*, ui.follower_count, ui.following_count
         from users u
         left join user_info ui on u.id = ui.id
-        where u.id = ${this.param(1)}`
+        where u.id = ${this.db.param(1)}`
     }
     params.push(id)
 
-    users = await this.query<User>(query, [id], this.map)
+    users = await this.db.query<User>(query, [id], this.map)
     return users && users.length > 0 ? users[0] : null
   }
 }
@@ -77,9 +77,9 @@ export class UserUseCase implements UserService {
   }
 }
 
-export function useUserController(db: DB, log: Log): UserController {
+export function useUserController(db: DB): UserController {
   const followRepository = new FollowRepository<string>(
-    db.execBatch,
+    db.executeBatch,
     "user_followings",
     "id",
     "following",
@@ -95,5 +95,5 @@ export function useUserController(db: DB, log: Log): UserController {
   )
   const repository = new SqlUserRepository(db)
   const service = new UserUseCase(repository, followRepository)
-  return new UserController(service, log)
+  return new UserController(service)
 }

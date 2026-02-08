@@ -2,9 +2,10 @@ import { Request, Response } from "express"
 import {
   escape,
   handleError,
+  isSuccessful,
   respondError
 } from "express-ext"
-import { isSuccessful, Log, SaveStrings } from "onecore"
+import { SaveStrings } from "onecore"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -12,7 +13,7 @@ import { MyProfileService, User, userModel, UserSettings } from "./user"
 
 const targetTemplates: string[] = ["interests", "bio", "skills", "achievements"]
 export class MyProfileController {
-  constructor(private service: MyProfileService, private log: Log, private saveSkills?: SaveStrings, private saveInterests?: SaveStrings) {
+  constructor(private service: MyProfileService, private saveSkills?: SaveStrings, private saveInterests?: SaveStrings) {
     this.viewSettings = this.viewSettings.bind(this)
     this.saveSettings = this.saveSettings.bind(this)
 
@@ -53,7 +54,7 @@ export class MyProfileController {
       const status = isSuccessful(result) ? 200 : 410
       res.status(status).json(result).end()
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
   async getPartial(req: Request, res: Response, name: string) {
@@ -68,7 +69,7 @@ export class MyProfileController {
         res.render("pages/my-profile/" + name, { resource, user: escape(user) })
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
   getInfo(req: Request, res: Response) {
@@ -149,7 +150,7 @@ export class MyProfileController {
         res.status(200).json(user).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

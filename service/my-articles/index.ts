@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid"
-import { Log, UseCase } from "onecore"
+import { UseCase } from "onecore"
 import { DB, Repository } from "query-core"
 import { slugify } from "../common/slug"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
@@ -50,8 +50,8 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
   }
 }
 
-export function useMyArticlesController(db: DB, log: Log): MyArticlesController {
+export function useMyArticlesController(db: DB): MyArticlesController {
   const repository = new SqlArticleRepository(db)
   const service = new ArticleUseCase(repository)
-  return new MyArticlesController(service, log)
+  return new MyArticlesController(service)
 }

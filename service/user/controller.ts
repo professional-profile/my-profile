@@ -15,15 +15,14 @@ import {
   isSubPartial,
   resources
 } from "express-ext"
-import { Log } from "onecore"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { UserFilter, UserService } from "./user"
 
 const fields = ["id", "username", "email", "displayName", "status"]
 export class UserController extends FollowController {
-  constructor(protected service: UserService, protected log: Log) {
-    super(service, log, "id", "userId")
+  constructor(protected service: UserService) {
+    super(service, "id", "userId")
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.getFollowers = this.getFollowers.bind(this)

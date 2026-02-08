@@ -84,6 +84,7 @@ export const articleModel: Attributes = {
     column: "created_at",
     type: "datetime",
     noupdate: true,
+    createdAt: true,
   },
   savedAt: {
     column: "saved_at",
