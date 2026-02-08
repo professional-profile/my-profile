@@ -14,6 +14,7 @@ export interface User {
   //image?: UploadSize[]
   imageURL?: string
   coverURL?: string
+  headline?: string
   bio?: string
   website?: string
   occupation?: string

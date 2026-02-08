@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid"
-import { UseCase } from "onecore"
+import { SearchUseCase } from "onecore"
 import { DB, Repository } from "query-core"
 import { slugify } from "../common/slug"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
@@ -13,16 +13,19 @@ export class SqlArticleRepository extends Repository<Article, string, ArticleFil
   }
 }
 
-export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
-  constructor(repository: ArticleRepository) {
+export class ArticleUseCase extends SearchUseCase<Article, ArticleFilter> implements ArticleService {
+  constructor(protected repository: ArticleRepository) {
     super(repository)
   }
-  create(article: Article, ctx?: any): Promise<number> {
+  load(id: string): Promise<Article | null> {
+    return this.repository.load(id)
+  }
+  create(article: Article): Promise<number> {
     article.id = nanoid(10)
     article.slug = slugify(article.title, article.id)
-    return this.repository.create(article, ctx)
+    return this.repository.create(article)
   }
-  async update(article: Article, ctx?: any): Promise<number> {
+  async update(article: Article): Promise<number> {
     const existingArticle = await this.repository.load(article.id)
     if (!existingArticle) {
       return 0
@@ -30,9 +33,9 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
     if (existingArticle.status === Draft) {
       article.slug = slugify(article.title, article.id)
     }
-    return this.repository.update(article, ctx)
+    return this.repository.update(article)
   }
-  async patch(article: Partial<Article>, ctx?: any): Promise<number> {
+  async patch(article: Partial<Article>): Promise<number> {
     if (article.title && article.title.length > 0) {
       const id = article.id as string
       const existingArticle = await this.repository.load(id)
@@ -42,11 +45,14 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
       if (existingArticle.status === Draft) {
         article.slug = slugify(article.title, id)
       }
-      return this.repository.patch(article, ctx)
+      return this.repository.patch(article)
     } else {
       delete article.slug
-      return this.repository.patch(article, ctx)
+      return this.repository.patch(article)
     }
+  }
+  delete(id: string): Promise<number> {
+    return this.repository.delete(id)
   }
 }
 

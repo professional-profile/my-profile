@@ -1,7 +1,7 @@
 import { Attributes, DateRange, Filter } from "onecore"
 
 export interface User {
-  id?: string
+  id: string
   username: string
   email?: string
   phone?: string
@@ -14,6 +14,7 @@ export interface User {
   //image?: UploadSize[]
   imageURL?: string
   coverURL?: string
+  headline?: string
   bio?: string
   website?: string
   occupation?: string
@@ -56,7 +57,6 @@ export interface Skill {
 export interface Achievement {
   subject: string
   description: string
-  hirable?: boolean
 }
 export interface Work {
   name: string
@@ -80,13 +80,11 @@ export interface UserFilter extends Filter {
   email?: string
   phone?: string
   dateOfBirth?: DateRange
-  interests?: string[]
-  skills?: Skill[]
-  userId?: string
+  interests: string[]
+  skills: Skill[]
 }
 
 export interface UserRepository {
-  // search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   load(id: string): Promise<User | null>
   create(user: User): Promise<number>
   update(user: User): Promise<number>
@@ -192,7 +190,9 @@ export const userModel: Attributes = {
   bio: {
     length: 255,
   },
-  website: {},
+  website: {
+    length: 255,
+  },
   occupation: {
     length: 100,
   },
