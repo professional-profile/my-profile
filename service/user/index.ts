@@ -18,7 +18,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
       query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
         from users u
         left join user_info ui on u.id = ui.id
-        left join user_followings uf on uf.id = ${this.db.param(1)} and uf.following = u.id
+        left join user_following uf on uf.id = ${this.db.param(1)} and uf.following = u.id
         left join user_followers ur on ur.id = ${this.db.param(2)} and ur.follower = u.id
         where u.username = ${this.db.param(3)}`
       params.push(userId, userId)
@@ -41,7 +41,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
       query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
         from users u
         left join user_info ui on u.id = ui.id
-        left join user_followings uf on uf.id = ${this.db.param(1)} and uf.following = u.id
+        left join user_following uf on uf.id = ${this.db.param(1)} and uf.following = u.id
         left join user_followers ur on ur.id = ${this.db.param(2)} and ur.follower = u.id
         where u.id = ${this.db.param(3)}`
       params.push(userId, userId)
@@ -80,7 +80,7 @@ export class UserUseCase implements UserService {
 export function useUserController(db: DB): UserController {
   const followRepository = new FollowRepository<string>(
     db.executeBatch,
-    "user_followings",
+    "user_following",
     "id",
     "following",
     "following_at",

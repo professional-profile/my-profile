@@ -12,7 +12,7 @@ export function buildQuery(filter: UserFilter): Statement {
         ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
       from users u
       left join user_info ui on u.id = ui.id
-      left join user_followings uf on uf.id = ${param(i++)} and uf.following = u.id
+      left join user_following uf on uf.id = ${param(i++)} and uf.following = u.id
       left join user_followers ur on ur.id = ${param(i++)} and ur.follower = u.id`
     params.push(filter.userId, filter.userId)
   } else {
