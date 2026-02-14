@@ -24,7 +24,7 @@
     <ul class="row list">
       {% for item in list %}
       <li class="col s12 m6 l4 xl3 list-item">
-        <a href="/careers/{{item.id}}" onclick="navigate(event)">{{item.title}}</a>
+        <a href="/careers/{{item.slug}}" onclick="navigate(event)">{{item.title}}</a>
         <p>
           {{item.location}} {{item.quantity}}
           <span>{{item.publishedAt}}</span>
