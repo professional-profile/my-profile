@@ -1,35 +1,13 @@
 import { SavedRepository, SearchResult } from "onecore"
 import { buildToSave, SqlSavedRepository } from "pg-extension"
-import { DB, SearchRepository } from "query-core"
+import { DB } from "query-core"
 import { SqlRateRepository } from "rate-query"
 import { SqlInfoRepository } from "review-reaction-query"
 import { Info, infoModel, InfoRepository, Rate, rateModel, RateRepository, ShortRate } from "../shared/rate"
-import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
+import { Article, ArticleFilter, ArticleRepository, ArticleService } from "./article"
 import { ArticleController } from "./controller"
-import { buildQuery } from "./query"
+import { SqlArticleRepository } from "./repository"
 export * from "./controller"
-
-export class SqlArticleRepository extends SearchRepository<Article, ArticleFilter> implements ArticleRepository {
-  constructor(db: DB) {
-    super(db, "articles", articleModel, buildQuery)
-  }
-  async load(id: string, userId?: string): Promise<Article | null> {
-    const params = []
-    let query: string
-    if (userId && userId.length > 0) {
-      query = `select a.*, sa.saved_at 
-        from articles a 
-        left join saved_articles sa 
-          on sa.id = a.id and sa.user_id = ${this.db.param(1)} where a.slug = ${this.db.param(2)}`
-      params.push(userId)
-    } else {
-      query = `select a.* from articles a where a.slug = ${this.db.param(1)}`
-    }
-    params.push(id)
-    const articles = await this.db.query<Article>(query, params, this.map)
-    return articles && articles.length > 0 ? articles[0] : null
-  }
-}
 
 export class ArticleUseCase implements ArticleService {
   constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateRepository: RateRepository, protected infoRepository: InfoRepository) {

@@ -1,6 +1,13 @@
+import { DB } from "onecore"
 import { param } from "pg-extension"
-import { buildSort, Statement } from "query-core"
-import { ArticleFilter, articleModel } from "./article"
+import { buildSort, Repository, Statement } from "query-core"
+import { Article, ArticleFilter, articleModel, ArticleRepository } from "./article"
+
+export class SqlArticleRepository extends Repository<Article, string, ArticleFilter> implements ArticleRepository {
+  constructor(db: DB) {
+    super(db, "articles", articleModel, buildQuery)
+  }
+}
 
 export function buildQuery(filter: ArticleFilter): Statement {
   let query = `select * from articles `

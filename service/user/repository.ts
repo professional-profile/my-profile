@@ -1,6 +1,66 @@
+import { DB } from "onecore"
 import { param } from "pg-extension"
-import { buildSort, Statement } from "query-core"
-import { UserFilter, userModel } from "./user"
+import { buildSort, SearchRepository, Statement } from "query-core"
+import { User, UserFilter, userModel, UserRepository } from "./user"
+
+export class SqlUserRepository extends SearchRepository<User, UserFilter> implements UserRepository {
+  constructor(db: DB) {
+    super(db, "users", userModel, buildQuery)
+  }
+
+  async load(id: string, userId?: string): Promise<User | null> {
+    let params = []
+    let query: string
+
+    if (userId && userId.length > 0) {
+      query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
+        from users u
+        left join user_info ui on u.id = ui.id
+        left join user_following uf on uf.id = ${this.db.param(1)} and uf.following = u.id
+        left join user_followers ur on ur.id = ${this.db.param(2)} and ur.follower = u.id
+        where u.username = ${this.db.param(3)}`
+      params.push(userId, userId)
+    } else {
+      query = `select u.*, ui.follower_count, ui.following_count
+        from users u
+        left join user_info ui on u.id = ui.id
+        where u.username = ${this.db.param(1)}`
+    }
+    params.push(id)
+
+    let users = await this.db.query<User>(query, params, this.map)
+    if (users && users.length > 0) {
+      return users[0]
+    }
+
+    params = []
+    query = `select * from users where id = ${this.db.param(1)}`
+    if (userId && userId.length > 0) {
+      query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
+        from users u
+        left join user_info ui on u.id = ui.id
+        left join user_following uf on uf.id = ${this.db.param(1)} and uf.following = u.id
+        left join user_followers ur on ur.id = ${this.db.param(2)} and ur.follower = u.id
+        where u.id = ${this.db.param(3)}`
+      params.push(userId, userId)
+    } else {
+      query = `select u.*, ui.follower_count, ui.following_count
+        from users u
+        left join user_info ui on u.id = ui.id
+        where u.id = ${this.db.param(1)}`
+    }
+    params.push(id)
+
+    users = await this.db.query<User>(query, [id], this.map)
+    return users && users.length > 0 ? users[0] : null
+  }
+
+  async getIdBySlug(slug: string): Promise<string> {
+    const query = `select u.id from users u where u.username = ${this.db.param(1)}`
+    const users = await this.db.query<User>(query, [slug], this.map)
+    return (users && users.length > 0 ? users[0].id : slug)
+  }
+}
 
 export function buildQuery(filter: UserFilter): Statement {
   const where = []

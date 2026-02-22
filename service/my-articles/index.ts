@@ -1,17 +1,11 @@
 import { nanoid } from "nanoid"
 import { SearchUseCase } from "onecore"
-import { DB, Repository } from "query-core"
+import { DB } from "query-core"
 import { slugify } from "../common/slug"
-import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
+import { Article, ArticleFilter, ArticleRepository, ArticleService, Draft } from "./article"
 import { MyArticlesController } from "./controller"
-import { buildQuery } from "./query"
+import { SqlArticleRepository } from "./repository"
 export * from "./controller"
-
-export class SqlArticleRepository extends Repository<Article, string, ArticleFilter> implements ArticleRepository {
-  constructor(db: DB) {
-    super(db, "articles", articleModel, buildQuery)
-  }
-}
 
 export class ArticleUseCase extends SearchUseCase<Article, ArticleFilter> implements ArticleService {
   constructor(protected repository: ArticleRepository) {
