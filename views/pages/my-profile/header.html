@@ -26,8 +26,8 @@
     <img class="profile-status" src="/images/online.svg" alt="status" />
   </div>
   <div class="profile-title">
-    <h2><a id="followerCount" href="/my-profile"
-        onclick="navigate(event, true, 'myProfileBody')">{{user.displayName}}</a>
+    <h2>
+      <a id="aUser" href="/my-profile" onclick="navigate(event, true, 'myProfileBody')">{{user.displayName}}</a>
       {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
     </h2>
     <p>{{user.headline}}</p>

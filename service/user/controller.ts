@@ -78,7 +78,7 @@ export class UserController extends FollowController {
       }
       const partial = isPartial(req)
       const subPartial = isSubPartial(req)
-      const view = partial && subPartial? "user/main" : "user"
+      const view = partial && subPartial ? "user/main" : "user"
       render(req, res, view, {
         resource,
         user: escape(user),
@@ -97,6 +97,8 @@ export class UserController extends FollowController {
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
+    const id = await this.service.getIdBySlug(req.params.id)
+    filter.followedUserId = id
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     filter.userId = res.locals.userId
@@ -123,7 +125,7 @@ export class UserController extends FollowController {
       }
       const partial = isPartial(req)
       const subPartial = isSubPartial(req)
-      const view = partial && subPartial? "user/followers" : "user-followers"
+      const view = partial && subPartial ? "user/followers" : "user-followers"
       if (!partial) {
         const id = req.params.id
         const userId: string = res.locals.userId
@@ -148,6 +150,8 @@ export class UserController extends FollowController {
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
+    const id = await this.service.getIdBySlug(req.params.id)
+    filter.followingUserId = id
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     filter.userId = res.locals.userId

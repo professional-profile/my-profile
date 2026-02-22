@@ -26,22 +26,18 @@
   </div>
   <div class="profile-title">
     <h2>
-      <a id="followerCount" href="/profiles/{{user.username}}"
+      <a id="aUser" href="/profiles/{{user.username}}"
         onclick="navigate(event, true, 'userBody')">{{user.displayName}}</a>
       {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
     </h2>
     <p>{{user.headline}}</p>
   </div>
   <div class="profile-followers">
-    {% if user.followerCount %}
     <a id="followerCount" href="/profiles/{{user.username}}/followers" onclick="navigate(event, true, 'userBody')">
       <i class="material-icons highlight">group</i>{{user.followerCount}} followers
     </a>
-    {% endif %}
-    {% if user.followingCount %}
     <a id="followingCount" href="/profiles/{{user.username}}/following" onclick="navigate(event, true, 'userBody')">
       <i class="material-icons highlight">group_add</i>{{user.followingCount}} followings
     </a>
-    {% endif %}
   </div>
 </header>

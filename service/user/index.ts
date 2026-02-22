@@ -10,6 +10,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
   constructor(db: DB) {
     super(db, "users", userModel, buildQuery)
   }
+
   async load(id: string, userId?: string): Promise<User | null> {
     let params = []
     let query: string
@@ -56,6 +57,12 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
     users = await this.db.query<User>(query, [id], this.map)
     return users && users.length > 0 ? users[0] : null
   }
+
+  async getIdBySlug(slug: string): Promise<string> {
+    const query = `select u.id from users u where u.username = ${this.db.param(1)}`
+    const users = await this.db.query<User>(query, [slug], this.map)
+    return (users && users.length > 0 ? users[0].id : slug)
+  }
 }
 
 export class UserUseCase implements UserService {
@@ -65,6 +72,9 @@ export class UserUseCase implements UserService {
   }
   load(id: string, userId?: string): Promise<User | null> {
     return this.repository.load(id, userId)
+  }
+  getIdBySlug(slug: string): Promise<string> {
+    return this.repository.getIdBySlug(slug)
   }
   follow(id: string, target: string): Promise<number> {
     return this.followRepository.follow(id, target)

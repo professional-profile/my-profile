@@ -7,16 +7,24 @@ export function buildQuery(filter: UserFilter): Statement {
   const params = []
   let i = 1
   let query: string
+  let sub = ""
+  if (filter.followingUserId) {
+    sub = ` inner join user_following ufm on ufm.id = ${param(i++)} and ufm.following = u.id `
+    params.push(filter.followingUserId)
+  } else if (filter.followedUserId) {
+    sub = ` inner join user_followers urm on urm.id = ${param(i++)} and urm.follower = u.id `
+    params.push(filter.followedUserId)
+  }
   if (filter.userId) {
     query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline,
         ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
-      from users u
+      from users u ${sub}
       left join user_info ui on u.id = ui.id
       left join user_following uf on uf.id = ${param(i++)} and uf.following = u.id
       left join user_followers ur on ur.id = ${param(i++)} and ur.follower = u.id`
     params.push(filter.userId, filter.userId)
   } else {
-    query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline from users u`
+    query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline from users u ${sub}`
   }
 
   if (filter.interests && filter.interests.length > 0) {
@@ -45,6 +53,13 @@ export function buildQuery(filter: UserFilter): Statement {
     where.push(`id = ${param(i++)}`)
     params.push(filter.id)
   }
+
+  if (filter.q && filter.q.length > 0) {
+    const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
+    where.push(`(username ilike ${param(i++)} or display_name ilike ${param(i++)})`)
+    params.push(q, q)
+  }
+
   if (filter.username && filter.username.length > 0) {
     where.push(`username ilike ${param(i++)}`)
     params.push("%" + filter.username + "%")
