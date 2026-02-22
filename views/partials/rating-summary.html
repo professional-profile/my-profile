@@ -1,0 +1,39 @@
+<div class="rating-summary">
+  <div class="score">
+    <div class="value">{{rate.rate}}</div>
+    <div class="stars">★★★★★</div>
+    <span>{{rate.count}} ratings</span>
+  </div>
+  <div class="bars">
+    <div class="bar">
+      <span class="bar-stars">★★★★★</span>
+      <div class="track">
+        <div class="fill" {{rate.rate5}}></div>
+      </div>
+    </div>
+    <div class="bar">
+      <span class="bar-stars">★★★★☆</span>
+      <div class="track">
+        <div class="fill" {{rate.rate4}}></div>
+      </div>
+    </div>
+    <div class="bar">
+      <span class="bar-stars">★★★☆☆</span>
+      <div class="track">
+        <div class="fill" {{rate.rate3}}></div>
+      </div>
+    </div>
+    <div class="bar">
+      <span class="bar-stars">★★☆☆☆</span>
+      <div class="track">
+        <div class="fill" {{rate.rate2}}></div>
+      </div>
+    </div>
+    <div class="bar">
+      <span class="bar-stars">★☆☆☆☆</span>
+      <div class="track">
+        <div class="fill" {{rate.rate1}}></div>
+      </div>
+    </div>
+  </div>
+</div>

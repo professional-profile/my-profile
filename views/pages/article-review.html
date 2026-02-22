@@ -1,0 +1,13 @@
+<article class="article">
+  <header>
+    <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
+    <h2>{{resource.ratings_and_reviews}}</h2>
+  </header>
+  <div class="article-body">
+    {% include "partials/rating-summary.html" %}
+    <div class="article-content">{{article.content}}</div>
+    {% if isNotEmpty(article.tags) %}
+    <div class="chip-list">{{generateTags(article.tags, true)}}</div>
+    {% endif %}
+  </div>
+</article>

@@ -14,10 +14,10 @@ export interface Rate extends BaseRate {
   review: string;
   usefulCount: number;
   replyCount: number;
-  histories?: ShortRate[];
+  histories?: History[];
 }
 
-export interface ShortRate {
+export interface History {
   rate: number;
   time: Date;
   review: string;
@@ -43,7 +43,7 @@ export interface ShortRates {
   review: string;
 }
 
-export interface Info {
+export interface RateSummary {
   id: string;
   rate: number;
   rate1: number;
@@ -60,8 +60,9 @@ export interface RateRepository {
   update(rate: Rate, oldRate: number): Promise<number>;
   load(id: string, author: string): Promise<Rate | null>;
 }
-export interface InfoRepository {
-  exist(id: string, ctx?: any): Promise<boolean>;
+export interface RateSummaryRepository {
+  exist(id: string): Promise<boolean>;
+  load(id: string): Promise<RateSummary | null>
 }
 
 export const rateHistoryModel: Attributes = {
@@ -115,7 +116,7 @@ export const rateModel: Attributes = {
   }
 };
 
-export const infoModel: Attributes = {
+export const rateSummaryModel: Attributes = {
   id: {
     key: true,
   },
@@ -144,3 +145,38 @@ export const infoModel: Attributes = {
     type: 'number',
   }
 };
+
+export const zeroSummary: RateSummary = {
+  id: "",
+  rate: 0, 
+  rate1: 0,
+  rate2: 0,
+  rate3: 0,
+  rate4: 0,
+  rate5: 0,
+  count: 0,
+  score: 0
+}
+export interface RateFormat {
+  rate: number;
+  rate1: string;
+  rate2: string;
+  rate3: string;
+  rate4: string;
+  rate5: string;
+  count: number;
+}
+
+export function formatRate(r: RateSummary): RateFormat  {
+  const count = r.count > 0 ? r.count : 1
+  const f: RateFormat = {
+    rate: r.rate,
+    count: r.count,
+    rate1: `style="width: ${(r.rate1 * 100)/count}%"`,
+    rate2: `style="width: ${(r.rate2 * 100)/count}%"`,
+    rate3: `style="width: ${(r.rate3 * 100)/count}%"`,
+    rate4: `style="width: ${(r.rate4 * 100)/count}%"`,
+    rate5: `style="width: ${(r.rate5 * 100)/count}%"`,
+  }
+  return f
+}

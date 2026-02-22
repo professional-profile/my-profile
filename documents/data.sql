@@ -20,8 +20,9 @@ create table users (
   middle_name character varying(100),
   status char(1) not null,
   image_url varchar(500),
-  cover_url character varying(255),
-  bio character varying(255),
+  cover_url varchar(500),
+  headline character varying(500),
+  bio character varying(3000),
   website character varying(255),
   occupation character varying(255),
   company character varying(255),
@@ -51,6 +52,67 @@ create table passcodes (
   code varchar(500) not null,
   expired_at timestamptz not null
 );
+
+create table user_info (
+  id varchar(40) primary key,
+  follower_count bigint default 0,
+  following_count bigint default 0
+);
+create table user_followers (
+  id varchar(40) not null,
+  follower varchar(40) not null,
+  followed_at timestamptz not null,
+  primary key (id, follower)
+);
+create table user_following (
+  id varchar(40) not null,
+  following varchar(40) not null,
+  following_at timestamptz not null,
+  primary key (id, following)
+);
+
+create table skills (
+  skill varchar(120) primary key
+);
+create table interests (
+  interest varchar(120) primary key
+);
+
+insert into skills (skill) values
+  ('Angular'),
+  ('Azure'),
+  ('Apigee'),
+  ('AWS'),
+  ('C'),
+  ('C++'),
+  ('CICD'),
+  ('Data'),
+  ('GO'),
+  ('Google Cloud'),
+  ('IOT'),
+  ('Java'),
+  ('Javascript'),
+  ('Kotlin'),
+  ('Management'),
+  ('Microservices'),
+  ('nodejs'),
+  ('PHP'),
+  ('Python'),
+  ('Reactjs'),
+  ('Salesforce'),
+  ('Swift'),
+  ('Typescript');
+
+insert into interests (interest) values
+  ('Blockchain'),
+  ('Cloud'),
+  ('Data'),
+  ('Fintech'),
+  ('IOT'),
+  ('Mobile'),
+  ('Open source'),
+  ('Outsourcing'),
+  ('Web');
 
 insert into code_masters(master, code, name, sequence, status) values ('language','en','English',1,'A');
 insert into code_masters(master, code, name, sequence, status) values ('language','vi','Tiếng Việt',2,'A');
@@ -120,10 +182,3 @@ insert into categories (id,name,status,path,resource_key,icon,sequence,type,pare
 insert into categories (id,name,status,path,resource_key,icon,sequence,type,parent) values ('profiles','Profiles','A','/profiles','profiles','work',21,'','');
 
 update categories set version = 1;
-
-create table skills (
-  skill varchar(120) primary key
-);
-create table interests (
-  interest varchar(120) primary key
-);

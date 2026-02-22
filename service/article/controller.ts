@@ -14,6 +14,7 @@ import {
 } from "express-ext"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
+import { formatRate } from "../shared/rate"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
 
@@ -22,8 +23,9 @@ export class ArticleController extends SavedController {
   constructor(protected service: ArticleService) {
     super(service, "id", "userId")
     this.search = this.search.bind(this)
-    this.view = this.view.bind(this)
     this.getSavedArticles = this.getSavedArticles.bind(this)
+    this.view = this.view.bind(this)
+    this.review = this.review.bind(this)
   }
   async search(req: Request, res: Response) {
     const lang = getLang(req)
@@ -110,15 +112,28 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const id = req.params.id
+    const slug = req.params.id
     const userId: string = res.locals.userId
     try {
-      const article = await this.service.load(id, userId)
+      const article = await this.service.load(slug, userId)
       if (!article) {
         return renderError404(req, res, resource)
       }
+      const id = await this.service.getIdBySlug(slug)
+      const rate = await this.service.getRateSummary(id)
       article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-      render(req, res, "article", { resource, article })
+      render(req, res, "article", { resource, article, rate: formatRate(rate) })
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
+  }
+  async review(req: Request, res: Response) {
+    const lang = getLang(req)
+    const resource = getResource(lang)
+    const id = await this.service.getIdBySlug(req.params.id)
+    try {
+      const rate = await this.service.getRateSummary(id)
+      render(req, res, "article-review", { resource, rate: formatRate(rate)})
     } catch (err) {
       renderError500(req, res, resource, err)
     }

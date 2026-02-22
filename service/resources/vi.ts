@@ -129,4 +129,6 @@ export const vi = {
 
   quantity: "Số lượng",
   location: "Vị trí",
+
+  ratings_and_reviews: "Đánh giá và nhận xét"
 }

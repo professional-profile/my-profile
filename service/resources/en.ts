@@ -129,4 +129,6 @@ export const en = {
 
   quantity: "Quantity",
   location: "Location",
+
+  ratings_and_reviews: "Ratings and Reviews"
 }
