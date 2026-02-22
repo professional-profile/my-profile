@@ -710,36 +710,52 @@ function getSuccessMessage(ele: HTMLButtonElement, resource: StringMap): string 
   let successMsg = ele.getAttribute("data-success")
   return successMsg ? successMsg : resource.msg_save_success
 }
-function submitForm(e: Event) {
+function submitForm(e: Event, skipValidate?: boolean, skipConfirm?: boolean, f1?: string, v1?: string | number, f2?: string, v2?: string | number) {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
   const form = target.form as HTMLFormElement
-  const valid = validateForm(form)
-  if (!valid) {
-    return
+  if (skipValidate) {
+    const valid = validateForm(form)
+    if (!valid) {
+      return
+    }
   }
   const resource = getResource()
   const successMsg = getSuccessMessage(target, resource)
-  const confirmMsg = getConfirmMessage(target, resource)
-  showConfirm(confirmMsg, () => {
-    showLoading()
-    const data = decode(form)
-    const url = getCurrentURL()
-    fetch(url, {
-      method: "POST",
-      headers: getHttpHeaders(),
-      body: JSON.stringify(data), // Convert the form data to JSON format
+  if (skipConfirm) {
+    handleSubmitForm(form, successMsg, f1, v1, f2, v2)
+  } else {
+    const confirmMsg = getConfirmMessage(target, resource)
+    showConfirm(confirmMsg, () => {
+      handleSubmitForm(form, successMsg, f1, v1, f2, v2)
     })
-      .then((response) => {
-        hideLoading()
-        if (response.ok) {
-          alertSuccess(successMsg)
-        } else {
-          handleJsonError(response, resource, form)
-        }
-      })
-      .catch((err) => handleError(err, resource.error_network))
+  }
+}
+function handleSubmitForm(form: HTMLFormElement, successMsg: string, f1?: string, v1?: string | number, f2?: string, v2?: string | number) {
+  showLoading()
+  const data: any = decode(form)
+  if (f1 && f1.length > 0) {
+    data[f1] = v1
+  }
+  if (f2 && f2.length > 0) {
+    data[f2] = v2
+  }
+  const resource = getResource()
+  const url = getCurrentURL()
+  fetch(url, {
+    method: "POST",
+    headers: getHttpHeaders(),
+    body: JSON.stringify(data), // Convert the form data to JSON format
   })
+    .then((response) => {
+      hideLoading()
+      if (response.ok) {
+        alertSuccess(successMsg)
+      } else {
+        handleJsonError(response, resource, form)
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
 }
 function handleJsonError(response: Response, resource: StringMap, form: HTMLFormElement, showErrors?: (errs: ErrorMessage[]) => void, allErrors?: boolean) {
   if (response.status === 401) {
