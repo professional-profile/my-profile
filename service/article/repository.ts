@@ -1,6 +1,29 @@
+import { DB } from "onecore"
 import { param } from "pg-extension"
-import { buildSort, Statement } from "query-core"
-import { ArticleFilter, articleModel } from "./article"
+import { buildSort, SearchRepository, Statement } from "query-core"
+import { Article, ArticleFilter, articleModel, ArticleRepository } from "./article"
+
+export class SqlArticleRepository extends SearchRepository<Article, ArticleFilter> implements ArticleRepository {
+  constructor(db: DB) {
+    super(db, "articles", articleModel, buildQuery)
+  }
+  async load(id: string, userId?: string): Promise<Article | null> {
+    const params = []
+    let query: string
+    if (userId && userId.length > 0) {
+      query = `select a.*, sa.saved_at 
+        from articles a 
+        left join saved_articles sa 
+          on sa.id = a.id and sa.user_id = ${this.db.param(1)} where a.slug = ${this.db.param(2)}`
+      params.push(userId)
+    } else {
+      query = `select a.* from articles a where a.slug = ${this.db.param(1)}`
+    }
+    params.push(id)
+    const articles = await this.db.query<Article>(query, params, this.map)
+    return articles && articles.length > 0 ? articles[0] : null
+  }
+}
 
 export function buildQuery(filter: ArticleFilter): Statement {
   const where = []
