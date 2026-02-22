@@ -120,16 +120,16 @@ export function buildQuery(filter: UserFilter): Statement {
     params.push(q, q)
   }
 
-  if (filter.username && filter.username.length > 0) {
-    where.push(`username ilike ${param(i++)}`)
-    params.push("%" + filter.username + "%")
-  }
   if (filter.email && filter.email.length > 0) {
     where.push(`email ilike ${param(i++)}`)
     params.push(filter.email + "%")
   }
-  if (filter.phone && filter.phone.length > 0) {
+  if (filter.username && filter.username.length > 0) {
     where.push(`username ilike ${param(i++)}`)
+    params.push("%" + filter.username + "%")
+  }
+  if (filter.phone && filter.phone.length > 0) {
+    where.push(`phone ilike ${param(i++)}`)
     params.push("%" + filter.phone + "%")
   }
 
