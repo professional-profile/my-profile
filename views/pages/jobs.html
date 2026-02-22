@@ -5,9 +5,10 @@
   <div class="search-body">
     <form id="jobsForm" name="jobsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
-      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}
+      <section class="row search-group">{% include "partials/advance-search.html" %} {% include
+        "partials/pagination.html" %}
       </section>
-      <section class="row search-group inline advance-search">
+      <section class="row search-group inline advance-search" hidden>
         <label class="col s12 m6">
           {{resource.published_at_from}}
           <input type="datetime-local" id="publishedAt_min" name="publishedAt_min" data-field="publishedAt.min"
@@ -24,7 +25,7 @@
     <ul class="row list">
       {% for item in list %}
       <li class="col s12 m6 l4 xl3 list-item">
-        <a href="/careers/{{item.slug}}" onclick="navigate(event)">{{item.title}}</a>
+        <a href="/jobs/{{item.slug}}" onclick="navigate(event)">{{item.title}}</a>
         <p>
           {{item.location}} {{item.quantity}}
           <span>{{item.publishedAt}}</span>

@@ -1,14 +1,8 @@
 export const en = {
-  home: "Home",
-  services: "Services",
   news: "News",
-  careers: "Careers",
-  contact: "Contact",
+  jobs: "Jobs",
+  profiles: "Profiles",
   about: "About",
-  milestones: "Milestones",
-  companies: "Companies",
-  leadership: "Leadership",
-  users: "Users",
 
   saved_articles: "My saved articles",
   my_articles: "My articles",

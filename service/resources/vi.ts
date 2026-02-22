@@ -1,14 +1,8 @@
 export const vi = {
-  home: "Trang chủ",
-  services: "Dịch vụ",
   news: "Tin tức",
-  careers: "Việc làm",
-  contact: "Liên hệ",
-  about: "Về chúng tôi",
-  milestones: "Các cột mốc quan trọng",
-  companies: "Công ty thành viên",
-  leadership: "Khả năng lãnh đạo",
-  users: "Người dùng",
+  jobs: "Việc làm",
+  profiles: "Hồ sơ",
+  about: "Giới thiệu",
 
   saved_articles: "Bài viết đã lưu",
   my_articles: "Bài viết của tôi",

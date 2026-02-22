@@ -159,8 +159,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch("/news/:id", authorized, ctx.article.save)
   app.delete("/news/:id", authorized, ctx.article.remove)
 
-  app.get("/careers", ctx.menu.build, ctx.job.search)
-  app.get("/careers/:id", ctx.menu.build, ctx.job.view)
+  app.get("/jobs", ctx.menu.build, ctx.job.search)
+  app.get("/jobs/:id", ctx.menu.build, ctx.job.view)
 
   app.get("/", ctx.menu.build, ctx.content.view)
   app.get("/:id", ctx.menu.build, ctx.content.view)
