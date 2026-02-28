@@ -15,12 +15,12 @@ export function buildQuery(filter: ArticleFilter): Statement {
   const params = []
   let i = 1
 
-  if (filter.id && filter.id.length > 0) {
+  if (filter.id) {
     where.push(`id = ${param(i++)}`)
     params.push(filter.id)
   }
 
-  if (filter.authorId && filter.authorId.length > 0) {
+  if (filter.authorId) {
     params.push(filter.authorId)
     where.push(`author_id = ${param(i++)}`)
   }
@@ -50,7 +50,7 @@ export function buildQuery(filter: ArticleFilter): Statement {
     where.push(`status in (${arr.join(",")})`)
   }
 
-  if (filter.q && filter.q.length > 0) {
+  if (filter.q) {
     const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
     where.push(`(title ilike ${param(i++)} or description ilike ${param(i++)})`)
     params.push(q)
@@ -60,7 +60,7 @@ export function buildQuery(filter: ArticleFilter): Statement {
     query = query + ` where ` + where.join(` and `)
   }
   const orderBy = buildSort(filter.sort, articleModel)
-  if (orderBy.length > 0) {
+  if (orderBy) {
     query = query + ` order by ${orderBy}`
   }
   return { query, params }

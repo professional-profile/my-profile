@@ -100,7 +100,7 @@ export function buildQuery(filter: ArticleFilter): Statement {
     query = query + ` where ` + where.join(` and `)
   }
   const orderBy = buildSort(filter.sort, articleModel)
-  if (orderBy.length > 0) {
+  if (orderBy) {
     query = query + ` order by ${orderBy}`
   }
   return { query, params }

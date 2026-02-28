@@ -12,7 +12,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
     let params = []
     let query: string
 
-    if (userId && userId.length > 0) {
+    if (userId) {
       query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
         from users u
         left join user_info ui on u.id = ui.id
@@ -109,26 +109,26 @@ export function buildQuery(filter: UserFilter): Statement {
       params.push(filter.dateOfBirth.max)
     }
   }
-  if (filter.id && filter.id.length > 0) {
+  if (filter.id) {
     where.push(`id = ${param(i++)}`)
     params.push(filter.id)
   }
 
-  if (filter.q && filter.q.length > 0) {
+  if (filter.q) {
     const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
     where.push(`(username ilike ${param(i++)} or display_name ilike ${param(i++)})`)
     params.push(q, q)
   }
 
-  if (filter.email && filter.email.length > 0) {
+  if (filter.email) {
     where.push(`email ilike ${param(i++)}`)
     params.push(filter.email + "%")
   }
-  if (filter.username && filter.username.length > 0) {
+  if (filter.username) {
     where.push(`username ilike ${param(i++)}`)
     params.push("%" + filter.username + "%")
   }
-  if (filter.phone && filter.phone.length > 0) {
+  if (filter.phone) {
     where.push(`phone ilike ${param(i++)}`)
     params.push("%" + filter.phone + "%")
   }
@@ -137,7 +137,7 @@ export function buildQuery(filter: UserFilter): Statement {
     query = query + ` where ` + where.join(" and ")
   }
   const orderBy = buildSort(filter.sort, userModel)
-  if (orderBy.length > 0) {
+  if (orderBy) {
     query = query + ` order by ${orderBy}`
   }
   return { query, params }

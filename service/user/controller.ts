@@ -44,7 +44,7 @@ export class UserController extends FollowController {
     try {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list, offset, "sequence")
-      if (list && list.length > 0) {
+      if (list.length > 0) {
         list.forEach((user) => {
           if (!user.username) {
             user.username = user.id
@@ -97,15 +97,14 @@ export class UserController extends FollowController {
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
+    filter.userId = res.locals.userId
     const id = await this.service.getIdBySlug(req.params.id)
     filter.followedUserId = id
     const { page, limit, sort } = filter
-    const offset = getOffset(limit, page)
-    filter.userId = res.locals.userId
     try {
       const result = await this.service.search(filter, limit, page)
-      const list = escapeArray(result.list, offset, "sequence")
-      if (list && list.length > 0) {
+      const list = escapeArray(result.list)
+      if (list.length > 0) {
         list.forEach((user) => {
           if (!user.username) {
             user.username = user.id
@@ -150,15 +149,14 @@ export class UserController extends FollowController {
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
+    filter.userId = res.locals.userId
     const id = await this.service.getIdBySlug(req.params.id)
     filter.followingUserId = id
     const { page, limit, sort } = filter
-    const offset = getOffset(limit, page)
-    filter.userId = res.locals.userId
     try {
       const result = await this.service.search(filter, limit, page)
-      const list = escapeArray(result.list, offset, "sequence")
-      if (list && list.length > 0) {
+      const list = escapeArray(result.list)
+      if (list.length > 0) {
         list.forEach((user) => {
           if (!user.username) {
             user.username = user.id

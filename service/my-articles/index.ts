@@ -30,7 +30,7 @@ export class ArticleUseCase extends SearchUseCase<Article, ArticleFilter> implem
     return this.repository.update(article)
   }
   async patch(article: Partial<Article>): Promise<number> {
-    if (article.title && article.title.length > 0) {
+    if (article.title) {
       const id = article.id as string
       const existingArticle = await this.repository.load(id)
       if (!existingArticle) {

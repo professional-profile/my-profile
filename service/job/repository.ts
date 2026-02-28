@@ -51,7 +51,7 @@ export function buildQuery(filter: JobFilter): Statement {
     query = query + ` where ` + where.join(` and `)
   }
   const orderBy = buildSort(filter.sort, jobModel)
-  if (orderBy.length > 0) {
+  if (orderBy) {
     query = query + ` order by ${orderBy}`
   }
   return { query, params }
