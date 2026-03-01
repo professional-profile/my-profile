@@ -48,7 +48,7 @@ app.use(cookieParser(), verifier.verify)
 
 const pool = new Pool(cfg.db)
 const db = new PoolManager(pool)
-const ctx = useContext(db, logger, cfg)
+const ctx = useContext(db, cfg)
 route(app, ctx)
 
 app.locals.datetimeToString = datetimeToString

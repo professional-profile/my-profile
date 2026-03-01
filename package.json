@@ -13,8 +13,7 @@
   "author": "",
   "dependencies": {
     "authen-service": "^0.4.1",
-    "bcrypt": "^6.0.0",
-    "bcrypt-plus": "^0.0.1",
+    "bcryptjs": "^3.0.3",
     "config-plus": "^0.0.4",
     "content-menu": "^0.0.3",
     "cookie-parser": "^1.4.7",
@@ -33,14 +32,12 @@
     "pg-extension": "^0.3.5",
     "query-core": "^0.6.6",
     "rate-query": "^0.4.0",
-    "review-reaction-query": "^0.1.0",
     "signup-service": "^0.1.0",
     "types-validation": "^0.0.2",
     "ui-formatter": "^0.1.0",
     "xvalidators": "^0.5.19"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
