@@ -17,7 +17,7 @@ export class SqlArticleRepository extends SearchRepository<Article, ArticleFilte
   async load(id: string, userId?: string): Promise<Article | null> {
     const params = []
     let query: string
-    if (userId && userId.length > 0) {
+    if (userId) {
       query = `select a.*, sa.saved_at 
         from articles a 
         left join saved_articles sa 
@@ -59,12 +59,12 @@ export function buildQuery(filter: ArticleFilter): Statement {
     query = `select a.id, a.thumbnail, a.slug, a.title, a.description, a.published_at from articles a`
   }
 
-  if (filter.id && filter.id.length > 0) {
+  if (filter.id) {
     where.push(`id = ${param(i++)}`)
     params.push(filter.id)
   }
 
-  if (filter.authorId && filter.authorId.length > 0) {
+  if (filter.authorId) {
     params.push(filter.authorId)
     where.push(`author_id = ${param(i++)}`)
   }
@@ -90,7 +90,7 @@ export function buildQuery(filter: ArticleFilter): Statement {
     where.push(`status = ${param(i++)}`)
   }
 
-  if (filter.q && filter.q.length > 0) {
+  if (filter.q) {
     const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
     where.push(`(title ilike ${param(i++)} or description ilike ${param(i++)})`)
     params.push(q)

@@ -36,12 +36,12 @@ export function buildQuery(filter: JobFilter): Statement {
     }
   }
 
-  if (filter.id && filter.id.length > 0) {
+  if (filter.id) {
     where.push(`id = ${param(i++)}`)
     params.push(filter.id)
   }
 
-  if (filter.q && filter.q.length > 0) {
+  if (filter.q) {
     const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
     where.push(`title ilike ${param(i++)}`)
     params.push(q)

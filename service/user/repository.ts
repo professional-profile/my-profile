@@ -114,12 +114,6 @@ export function buildQuery(filter: UserFilter): Statement {
     params.push(filter.id)
   }
 
-  if (filter.q) {
-    const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
-    where.push(`(username ilike ${param(i++)} or display_name ilike ${param(i++)})`)
-    params.push(q, q)
-  }
-
   if (filter.email) {
     where.push(`email ilike ${param(i++)}`)
     params.push(filter.email + "%")
@@ -131,6 +125,12 @@ export function buildQuery(filter: UserFilter): Statement {
   if (filter.phone) {
     where.push(`phone ilike ${param(i++)}`)
     params.push("%" + filter.phone + "%")
+  }
+
+  if (filter.q) {
+    const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
+    where.push(`(username ilike ${param(i++)} or display_name ilike ${param(i++)})`)
+    params.push(q, q)
   }
 
   if (where.length > 0) {
