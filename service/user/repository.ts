@@ -35,7 +35,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
 
     params = []
     query = `select * from users where id = ${this.db.param(1)}`
-    if (userId && userId.length > 0) {
+    if (userId) {
       query = `select u.*, ui.follower_count, ui.following_count, uf.following_at, ur.followed_at
         from users u
         left join user_info ui on u.id = ui.id
@@ -63,7 +63,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
 }
 
 export function buildQuery(filter: UserFilter): Statement {
-  const where = []
+  const where: string[] = []
   const params = []
   let i = 1
   let query: string
@@ -87,6 +87,10 @@ export function buildQuery(filter: UserFilter): Statement {
     query = `select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline from users u ${sub}`
   }
 
+  if (filter.id) {
+    where.push(`id = ${param(i++)}`)
+    params.push(filter.id)
+  }
   if (filter.interests && filter.interests.length > 0) {
     params.push(filter.interests)
     where.push(`interests && ${param(i++)}`)
@@ -109,28 +113,24 @@ export function buildQuery(filter: UserFilter): Statement {
       params.push(filter.dateOfBirth.max)
     }
   }
-  if (filter.id) {
-    where.push(`id = ${param(i++)}`)
-    params.push(filter.id)
-  }
 
   if (filter.email) {
     where.push(`email ilike ${param(i++)}`)
-    params.push(filter.email + "%")
+    params.push(`${filter.email}%`)
   }
   if (filter.username) {
     where.push(`username ilike ${param(i++)}`)
-    params.push("%" + filter.username + "%")
+    params.push(`%${filter.username}%`)
   }
   if (filter.phone) {
     where.push(`phone ilike ${param(i++)}`)
-    params.push("%" + filter.phone + "%")
+    params.push(`%${filter.phone}%`)
   }
 
   if (filter.q) {
-    const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
+    const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
     where.push(`(username ilike ${param(i++)} or display_name ilike ${param(i++)})`)
-    params.push(q, q)
+    params.push(`%${q}%`, `%${q}%`)
   }
 
   if (where.length > 0) {

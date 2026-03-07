@@ -16,7 +16,7 @@ export class SqlJobRepository extends SearchRepository<Job, JobFilter> implement
 
 export function buildQuery(filter: JobFilter): Statement {
   let query = `select * from jobs`
-  const where = []
+  const where: string[] = []
   const params = []
   let i = 1
 
@@ -36,15 +36,10 @@ export function buildQuery(filter: JobFilter): Statement {
     }
   }
 
-  if (filter.id) {
-    where.push(`id = ${param(i++)}`)
-    params.push(filter.id)
-  }
-
   if (filter.q) {
-    const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
+    const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
     where.push(`title ilike ${param(i++)}`)
-    params.push(q)
+    params.push(`%${q}%`)
   }
 
   if (where.length > 0) {

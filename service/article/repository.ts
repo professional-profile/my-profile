@@ -38,7 +38,7 @@ export class SqlArticleRepository extends SearchRepository<Article, ArticleFilte
 }
 
 export function buildQuery(filter: ArticleFilter): Statement {
-  const where = []
+  const where: string[] = []
   const params = []
   let i = 1
   let query: string
@@ -57,11 +57,6 @@ export function buildQuery(filter: ArticleFilter): Statement {
     params.push(filter.userId)
   } else {
     query = `select a.id, a.thumbnail, a.slug, a.title, a.description, a.published_at from articles a`
-  }
-
-  if (filter.id) {
-    where.push(`id = ${param(i++)}`)
-    params.push(filter.id)
   }
 
   if (filter.authorId) {
@@ -91,9 +86,9 @@ export function buildQuery(filter: ArticleFilter): Statement {
   }
 
   if (filter.q) {
-    const q = "%" + filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_") + "%"
+    const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
     where.push(`(title ilike ${param(i++)} or description ilike ${param(i++)})`)
-    params.push(q)
+    params.push(`%${q}%`, `%${q}%`)
   }
 
   if (where.length > 0) {

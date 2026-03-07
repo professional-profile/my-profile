@@ -138,23 +138,6 @@ insert into code_masters(master, code, name, sequence, status) values ('date_for
 insert into code_masters(master, code, name, sequence, status) values ('date_format','MM/dd/yyyy','MM/dd/yyyy',20,'A');
 insert into code_masters(master, code, name, sequence, status) values ('date_format','MM.dd.yyyy','MM.dd.yyyy',21,'A');
 
-/*
-alter table user_roles add foreign key (user_id) references users (user_id);
-alter table user_roles add foreign key (role_id) references roles (role_id);
-
-alter table modules add foreign key (parent) references modules (module_id);
-
-alter table role_modules add foreign key (role_id) references roles (role_id);
-alter table role_modules add foreign key (module_id) references modules (module_id);
-
-drop table modules;
-drop table users;
-drop table roles;
-drop table user_roles;
-drop table role_modules;
-drop table audit_logs;
-*/
-
 create table categories (
   id varchar(40) primary key,
   name varchar(255) not null,
