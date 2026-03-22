@@ -1,85 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="theme-color" content="#fff" />
-    <meta name="color-scheme" content="light" />
-    <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="apple-touch-icon" href="/logo192.png" />
-    <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
-    <link rel="stylesheet" href="/fonts/Roboto/font.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="manifest" href="/manifest.json" />
-    <title>CMS Backoffice</title>
-  </head>
-  <body id="sysBody" class="full-header top-menu">
-    {% include "partials/common.html" %}
-    <div id="root">
-      <div id="pageContainer" class="central-full">
-        <form id="signinForm" name="signinForm" class="form" novalidate autocomplete="off" onsubmit="return validateForm(this)" method="post">
-          <div class="view-body row">
-            <img class="logo" src="/images/logo.png" alt="logo" />
-            <h1>{{resource.signin}}</h1>
-            <div class="message alert-error">{{message}}<span onclick="clearMessage(event)"></span></div>
-            <label class="col s12 required {{errors.username.invalid}}">
-              {{resource.username}}
-              <input
-                type="text"
-                id="username"
-                name="username"
-                value="{{user.username}}"
-                maxlength="100"
-                required
-                placeholder="{{resource.placeholder_username}}"
-              />
-            </label>
-            <label class="col s12 required {{errors.password.invalid}}">
-              {{resource.password}}
-              <input
-                type="text"
-                id="password"
-                name="password"
-                value="{{user.password}}"
-                maxlength="100"
-                required
-                placeholder="{{resource.placeholder_password}}"
-              />
-            </label>
-            <label class="col s12 required {{errors.passcode.invalid}}" hidden>
-              {{resource.passcode}}
-              <input type="text" id="passcode" name="passcode" value="{{user.passcode}}" maxlength="100" placeholder="{{resource.placeholder_passcode}}" />
-            </label>
-            <label class="col s12 checkbox-container"> <input type="checkbox" id="remember" name="remember" />{{resource.signin_remember_me}} </label>
-            <button type="submit" id="btnSignin" name="btnSignin" onclick="signin(event)">{{resource.button_signin}}</button>
-            <a id="btnForgotPassword" href="/forgot-password">{{resource.button_forgot_password}}</a>
-            <a id="btnSignup" href="/signup">{{resource.button_signup}}</a>
-            <a id="btnHome" href="/">{{resource.button_home}}</a>
-          </div>
-        </form>
-      </div>
+
+<head>
+  <meta name="theme-color" content="#fff" />
+  <meta name="color-scheme" content="light" />
+  <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
+  <link rel="stylesheet" href="/fonts/Roboto/font.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>CMS Backoffice</title>
+</head>
+
+<body id="sysBody" class="full-header top-menu">
+  {% include "partials/common.html" %}
+  <div id="root">
+    <div id="pageContainer" class="central-full">
+      <form id="signinForm" name="signinForm" class="form" novalidate autocomplete="off"
+        onsubmit="return validateForm(this)" method="post">
+        <div class="view-body row">
+          <img class="logo" src="/images/logo.png" alt="logo" />
+          <h1>{{resource.signin}}</h1>
+          <div class="message alert-error">{{message}}<span onclick="clearMessage(event)"></span></div>
+          <label class="col s12 required {{errors.username.invalid}}">
+            {{resource.username}}
+            <input type="text" id="username" name="username" value="{{user.username}}" maxlength="100" required
+              placeholder="{{resource.placeholder_username}}" />
+          </label>
+          <label class="col s12 required {{errors.password.invalid}}">
+            {{resource.password}}
+            <input type="text" id="password" name="password" value="{{user.password}}" maxlength="100" required
+              placeholder="{{resource.placeholder_password}}" />
+          </label>
+          <label class="col s12 required {{errors.passcode.invalid}}" hidden>
+            {{resource.passcode}}
+            <input type="text" id="passcode" name="passcode" value="{{user.passcode}}" maxlength="100"
+              placeholder="{{resource.placeholder_passcode}}" />
+          </label>
+          <label class="col s12 checkbox-container"> <input type="checkbox" id="remember"
+              name="remember" />{{resource.signin_remember_me}} </label>
+          <button type="submit" id="signinBtn" name="signinBtn"
+            onclick="signin(event)">{{resource.button_signin}}</button>
+          <a id="forgotPasswordBtn" href="/forgot-password">{{resource.button_forgot_password}}</a>
+          <a id="signupBtn" href="/signup">{{resource.button_signup}}</a>
+          <a id="homeBtn" href="/">{{resource.button_home}}</a>
+        </div>
+      </form>
     </div>
-    <script>
-      const resource = {
-        error_required: "{{resource.error_required}}",
-        error_email: "{{resource.error_email}}",
+  </div>
+  <script>
+    const resource = {
+      error_required: "{{resource.error_required}}",
+      error_email: "{{resource.error_email}}",
 
-        error_400: "{{resource.error_400}}",
-        error_409: "{{resource.error_409}}",
-        error_network: "{{resource.error_network}}",
-        error_response_body: "{{resource.error_response_body}}",
-        error_submit_failed: "{{resource.error_submit_failed}}",
+      error_400: "{{resource.error_400}}",
+      error_409: "{{resource.error_409}}",
+      error_network: "{{resource.error_network}}",
+      error_response_body: "{{resource.error_response_body}}",
+      error_submit_failed: "{{resource.error_submit_failed}}",
 
-        fail_authentication: "{{resource.fail_authentication}}",
-        fail_expired_password: "{{resource.fail_expired_password}}",
-        fail_suspended_account: "{{resource.fail_suspended_account}}",
-        fail_locked_account: "{{resource.fail_locked_account}}",
-        fail_disabled_account: "{{resource.fail_disabled_account}}",
-      }
-      function getResource() {
-        return resource
-      }
-    </script>
-    <script src="/static/script.js"></script>
-  </body>
+      fail_authentication: "{{resource.fail_authentication}}",
+      fail_expired_password: "{{resource.fail_expired_password}}",
+      fail_suspended_account: "{{resource.fail_suspended_account}}",
+      fail_locked_account: "{{resource.fail_locked_account}}",
+      fail_disabled_account: "{{resource.fail_disabled_account}}",
+    }
+    function getResource() {
+      return resource
+    }
+  </script>
+  <script src="/static/script.js"></script>
+</body>
+
 </html>

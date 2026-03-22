@@ -3,24 +3,24 @@
     <img src="{{user.coverURL}}" alt="cover" />
     {% if account and account.id != user.id %}
     <div class="contact-group">
-      <button type="button" id="btnPhone" name="btnPhone" class="btn-phone"></button>
-      <button type="button" id="btnEmail" name="btnEmail" class="btn-email"></button>
+      <button type="button" id="phoneBtn" name="phoneBtn" class="btn-phone"></button>
+      <button type="button" id="emailBtn" name="emailBtn" class="btn-email"></button>
     </div>
     {% if user.followingAt %}
-    <button type="button" id="btnFollow" name="btnFollow" class="btn-follow"
+    <button type="button" id="followBtn" name="followBtn" class="btn-follow"
       data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
       data-followers="{{user.followerCount}}" onclick="unfollow(this, '{{user.id}}', true)">
       {{resource.button_unfollow}}
     </button>
     {% else %}
-    <button type="button" id="btnFollow" name="btnFollow" class="btn-follow"
+    <button type="button" id="followBtn" name="followBtn" class="btn-follow"
       data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
       data-followers="{{user.followerCount}}" onclick="follow(this, '{{user.id}}', true)">
       {{resource.button_follow}}
     </button>
     {% endif %} {% endif %}
   </div>
-  <button type="button" id="btnCamera" name="btnCamera" class="btn-camera"></button>
+  <button type="button" id="cameraBtn" name="cameraBtn" class="btn-camera"></button>
   <div class="avatar-wrapper">
     <img class="avatar" src="{{user.imageURL}}" alt="user avatar" />
     <img class="profile-status" src="/images/online.svg" alt="status" />

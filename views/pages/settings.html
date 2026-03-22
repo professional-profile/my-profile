@@ -1,68 +1,71 @@
 <form id="settingsForm" name="settingsForm" class="form">
-  <header><h2>My settings</h2></header>
+  <header>
+    <h2>My settings</h2>
+  </header>
   <div>
     <section class="row section">
       <h4>Member profile preferences</h4>
       <label class="col s12 m12 l6 switch-container">
-        <input id="searchEnginesLinksToMyProfile" type="checkbox" name="searchEnginesLinksToMyProfile" {{isChecked(settings.searchEnginesLinksToMyProfile)}} />
+        <input id="searchEnginesLinksToMyProfile" type="checkbox" name="searchEnginesLinksToMyProfile"
+          {{isChecked(settings.searchEnginesLinksToMyProfile)}} />
         Do you want search engines to link to yourprofile?
       </label>
       <label class="col s12 m12 l6 switch-container">
-        <input
-          id="followingListPublicOnMyProfile"
-          type="checkbox"
-          name="followingListPublicOnMyProfile"
-          {{isChecked(settings.followingListPublicOnMyProfile)}}
-        />
+        <input id="followingListPublicOnMyProfile" type="checkbox" name="followingListPublicOnMyProfile"
+          {{isChecked(settings.followingListPublicOnMyProfile)}} />
         Do you want search engines to link to your profile?
       </label>
     </section>
     <section class="row section">
       <h4>Around me preferences</h4>
       <label class="col s12 m12 l6 switch-container">
-        <input id="showMyProfileInSpacesAroundMe" type="checkbox" name="showMyProfileInSpacesAroundMe" {{isChecked(settings.showMyProfileInSpacesAroundMe)}} />
+        <input id="showMyProfileInSpacesAroundMe" type="checkbox" name="showMyProfileInSpacesAroundMe"
+          {{isChecked(settings.showMyProfileInSpacesAroundMe)}} />
         Show my profile in Coworkers Around Me.
       </label>
       <label class="switch-container">
-        <input
-          id="showAroundMeResultsInMemberFeed"
-          type="checkbox"
-          name="showAroundMeResultsInMemberFeed"
-          {{isChecked(settings.showAroundMeResultsInMemberFeed)}}
-        />
+        <input id="showAroundMeResultsInMemberFeed" type="checkbox" name="showAroundMeResultsInMemberFeed"
+          {{isChecked(settings.showAroundMeResultsInMemberFeed)}} />
         Show Around Me results in member feed.
       </label>
     </section>
     <section class="row section">
       <h4>Notification Preferences</h4>
-      <label class="col s12 switch-container"><input id="notification" type="checkbox" name="notification" />All Notifications</label>
+      <label class="col s12 switch-container"><input id="notification" type="checkbox" name="notification" />All
+        Notifications</label>
       <div class="col s12 checkbox-section">
         When you have a feed update
         <div class="checkbox-group">
           <label>
-            <input id="notifyFeedUpdates" type="checkbox" name="notifyFeedUpdates" {% if settings.notifyFeedUpdates %}checked{% endif %} />Notification
+            <input id="notifyFeedUpdates" type="checkbox" name="notifyFeedUpdates" {% if settings.notifyFeedUpdates
+              %}checked{% endif %} />Notification
           </label>
-          <label><input id="emailFeedUpdates" type="checkbox" name="emailFeedUpdates" {% if settings.emailFeedUpdates %}checked{% endif %} />Email </label>
+          <label><input id="emailFeedUpdates" type="checkbox" name="emailFeedUpdates" {% if settings.emailFeedUpdates
+              %}checked{% endif %} />Email </label>
         </div>
       </div>
       <div class="col s12 checkbox-section">
         When you have a post mention
         <div class="checkbox-group">
           <label>
-            <input id="notifyPostMentions" type="checkbox" name="notifyPostMentions" {% if settings.notifyPostMentions %}checked{% endif %} />Notification
+            <input id="notifyPostMentions" type="checkbox" name="notifyPostMentions" {% if settings.notifyPostMentions
+              %}checked{% endif %} />Notification
           </label>
-          <label> <input id="emailPostMentions" type="checkbox" name="emailPostMentions" {% if settings.emailPostMentions %}checked{% endif %} />Email </label>
+          <label> <input id="emailPostMentions" type="checkbox" name="emailPostMentions" {% if
+              settings.emailPostMentions %}checked{% endif %} />Email </label>
         </div>
       </div>
       <div class="col s12 checkbox-section">
         When you have a new comment of your post
         <div class="checkbox-group">
           <label>
-            <input id="notifyCommentsOfYourPosts" type="checkbox" name="notifyCommentsOfYourPosts" {{isChecked(settings.notifyCommentsOfYourPosts)}} />
+            <input id="notifyCommentsOfYourPosts" type="checkbox" name="notifyCommentsOfYourPosts"
+              {{isChecked(settings.notifyCommentsOfYourPosts)}} />
             Notification
           </label>
           <label>
-            <input id="emailCommentsOfYourPosts" type="checkbox" name="emailCommentsOfYourPosts" {{isChecked(settings.emailCommentsOfYourPosts)}} />
+            <input id="emailCommentsOfYourPosts" type="checkbox" name="emailCommentsOfYourPosts"
+              {{isChecked(settings.emailCommentsOfYourPosts)}} />
             Email
           </label>
         </div>
@@ -71,26 +74,31 @@
         When you have a new event invitations
         <div class="checkbox-group">
           <label>
-            <input id="notifyEventInvitations" type="checkbox" name="notifyEventInvitations" {% if settings.notifyEventInvitations %}checked{% endif %} />
+            <input id="notifyEventInvitations" type="checkbox" name="notifyEventInvitations" {% if
+              settings.notifyEventInvitations %}checked{% endif %} />
             Notification
           </label>
-          <label><input id="emailEventInvitations" type="checkbox" name="emailEventInvitations" {{isChecked(settings.emailEventInvitations)}} />Email</label>
+          <label><input id="emailEventInvitations" type="checkbox" name="emailEventInvitations"
+              {{isChecked(settings.emailEventInvitations)}} />Email</label>
         </div>
       </div>
       <div class="col s12 checkbox-section">
         When you have a new event around
         <div class="checkbox-group">
           <label>
-            <input id="notifyWhenNewEventsAround" type="checkbox" name="notifyWhenNewEventsAround" {{isChecked(settings.notifyWhenNewEventsAround)}} />
+            <input id="notifyWhenNewEventsAround" type="checkbox" name="notifyWhenNewEventsAround"
+              {{isChecked(settings.notifyWhenNewEventsAround)}} />
             Notification
           </label>
           <label>
-            <input id="emailWhenNewEventsAround" type="checkbox" name="emailWhenNewEventsAround" {{isChecked(settings.emailWhenNewEventsAround)}} />
+            <input id="emailWhenNewEventsAround" type="checkbox" name="emailWhenNewEventsAround"
+              {{isChecked(settings.emailWhenNewEventsAround)}} />
             Email
           </label>
         </div>
       </div>
     </section>
   </div>
-  <footer><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button></footer>
+  <footer><button type="submit" id="saveBtn" name="saveBtn" onclick="submitForm(event)">{{resource.save}}</button>
+  </footer>
 </form>

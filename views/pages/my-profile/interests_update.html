@@ -1,25 +1,20 @@
 <header>
   <i class="material-icons highlight">flash_on</i>{{resource.interests}}
-  <button type="button" id="btnInterest" name="btnInterest" class="btn-close" onclick="closePart(this, 'userInterests', 'interests', 'btn-edit')"></button>
+  <button type="button" id="interestBtn" name="interestBtn" class="btn-close"
+    onclick="closePart(this, 'userInterests', 'interests', 'btn-edit')"></button>
 </header>
 <section id="userInterests" class="chip-list" data-name="interests">
   {{generateTags(user.interests)}}
   <div class="chip-input-container">
-    <input
-      type="text"
-      id="txtInterest"
-      name="txtInterest"
-      data-skip="true"
-      list="interestList"
-      onchange="textChange(event, '/interests')"
-      onkeydown="chipOnKeydown(event)"
+    <input type="text" id="txtInterest" name="txtInterest" data-skip="true" list="interestList"
+      onchange="textChange(event, '/interests')" onkeydown="chipOnKeydown(event)"
       data-duplicate="{{resource.error_duplicated_interest}}"
-      placeholder="{{resource.placeholder_user_profile_interest}}"
-    />
-    <button type="button" id="btnAddInterest" name="btnAddInterest" class="btn-add" onclick="addChip(this)"></button>
+      placeholder="{{resource.placeholder_user_profile_interest}}" />
+    <button type="button" id="addInterestBtn" name="addInterestBtn" class="btn-add" onclick="addChip(this)"></button>
   </div>
 </section>
 <footer>
   <datalist id="interestList"></datalist>
-  <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userInterests', 'interests', 'btn-edit')">{{resource.save}}</button>
+  <button type="submit" id="saveBtn" name="saveBtn"
+    onclick="submitPartialForm(event, 'userInterests', 'interests', 'btn-edit')">{{resource.save}}</button>
 </footer>

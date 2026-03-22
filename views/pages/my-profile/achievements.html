@@ -1,12 +1,7 @@
 <header>
   <i class="material-icons highlight">beenhere</i>{{resource.achievements}}
-  <button
-    type="button"
-    id="btnAchievement"
-    name="btnAchievement"
-    class="btn-edit"
-    onclick="editPart(this, 'userAchievements', 'achievements_update', 'btn-edit')"
-  ></button>
+  <button type="button" id="achievementBtn" name="achievementBtn" class="btn-edit"
+    onclick="editPart(this, 'userAchievements', 'achievements_update', 'btn-edit')"></button>
 </header>
 {% for achievement in user.achievements %}
 <section class="item">

@@ -1,29 +1,23 @@
 <header>
   <i class="material-icons highlight">local_mall</i>{{resource.skills}}
-  <button type="button" id="btnSkill" name="btnSkill" class="btn-close" onclick="closePart(this, 'userSkills', 'skills', 'btn-edit')"></button>
+  <button type="button" id="skillBtn" name="skillBtn" class="btn-close"
+    onclick="closePart(this, 'userSkills', 'skills', 'btn-edit')"></button>
 </header>
 <section class="chip-list" data-name="skills" data-value="skill" data-star="hirable">
   {{generateStarChips(user.skills, 'skill', 'skill', 'hirable')}}
   <div class="chip-input-container">
-    <input
-      type="text"
-      id="txtSkill"
-      name="txtSkill"
-      data-skip="true"
-      list="skillList"
-      onchange="textChange(event, '/skills')"
-      onkeydown="chipOnKeydown(event)"
-      data-duplicate="{{resource.error_duplicated_skill}}"
-      placeholder="{{resource.placeholder_user_profile_skill}}"
-    />
+    <input type="text" id="txtSkill" name="txtSkill" data-skip="true" list="skillList"
+      onchange="textChange(event, '/skills')" onkeydown="chipOnKeydown(event)"
+      data-duplicate="{{resource.error_duplicated_skill}}" placeholder="{{resource.placeholder_user_profile_skill}}" />
     <input type="checkbox" id="hirable" name="hirable" data-skip="true" />
     <span>{{resource.user_profile_hirable_skill}}</span>
-    <button type="button" id="btnAddSkill" name="btnAddSkill" class="btn-add" onclick="addChip(this)"></button>
+    <button type="button" id="addSkillBtn" name="addSkillBtn" class="btn-add" onclick="addChip(this)"></button>
   </div>
 </section>
 <hr />
 <p class="description"><i class="star highlight"></i>{{resource.user_profile_hirable_skill}}</p>
 <footer>
   <datalist id="skillList"></datalist>
-  <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userSkills', 'skills', 'btn-edit')">{{resource.save}}</button>
+  <button type="submit" id="saveBtn" name="saveBtn"
+    onclick="submitPartialForm(event, 'userSkills', 'skills', 'btn-edit')">{{resource.save}}</button>
 </footer>

@@ -1,12 +1,7 @@
 <header>
   <i class="material-icons highlight">beenhere</i>{{resource.achievements}}
-  <button
-    type="button"
-    id="btnAchievement"
-    name="btnAchievement"
-    class="btn-close"
-    onclick="closePart(this, 'userAchievements', 'achievements', 'btn-edit')"
-  ></button>
+  <button type="button" id="achievementBtn" name="achievementBtn" class="btn-close"
+    onclick="closePart(this, 'userAchievements', 'achievements', 'btn-edit')"></button>
 </header>
 {% for achievement in user.achievements %}
 <section class="item" data-value="true">
@@ -18,31 +13,19 @@
 {% endfor %}
 <section class="item">
   <div class="form-group">
-    <input
-      type="text"
-      name="subject"
-      value=""
-      class="form-control"
-      maxlength="50"
-      required
-      placeholder="{{resource.placeholder_user_profile_achievement_subject}}"
-    />
-    <input
-      type="text"
-      name="description"
-      value=""
-      class="form-control"
-      maxlength="100"
-      required
-      placeholder="{{resource.placeholder_user_profile_achievement_description}}"
-    />
+    <input type="text" name="subject" value="" class="form-control" maxlength="50" required
+      placeholder="{{resource.placeholder_user_profile_achievement_subject}}" />
+    <input type="text" name="description" value="" class="form-control" maxlength="100" required
+      placeholder="{{resource.placeholder_user_profile_achievement_description}}" />
   </div>
-  <label class="checkbox-container"><input id="highlight" type="checkbox" name="highlight" />{{resource.user_profile_highlight_achievement}}</label>
+  <label class="checkbox-container"><input id="highlight" type="checkbox"
+      name="highlight" />{{resource.user_profile_highlight_achievement}}</label>
   <div class="btn-group">
-    <button type="button" id="btnAddAchievement" name="btnAddAchievement" class="btn-add" onclick="addAchievement(this)"></button>
+    <button type="button" id="addAchievementBtn" name="addAchievementBtn" class="btn-add"
+      onclick="addAchievement(this)"></button>
     {{resource.button_add_achievement}}
   </div>
 </section>
 <footer>
-  <button type="submit" id="btnSave" name="btnSave" onclick="saveAchievements(event)">{{resource.save}}</button>
+  <button type="submit" id="saveBtn" name="saveBtn" onclick="saveAchievements(event)">{{resource.save}}</button>
 </footer>

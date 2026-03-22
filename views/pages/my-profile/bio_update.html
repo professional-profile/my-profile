@@ -1,10 +1,12 @@
 <header>
   <i class="material-icons highlight">person</i>{{resource.about}}
-  <button type="button" id="btnBio" name="btnBio" class="btn-close" onclick="closePart(this, 'userBio', 'bio', 'btn-edit')"></button>
+  <button type="button" id="bioBtn" name="bioBtn" class="btn-close"
+    onclick="closePart(this, 'userBio', 'bio', 'btn-edit')"></button>
 </header>
-<textarea id="bio" name="bio" rows="8" maxlength="3000" placeholder="{{resource.placeholder_bio}}"/>{{user.bio}}</textarea>
+<textarea id="bio" name="bio" rows="8" maxlength="3000"
+  placeholder="{{resource.placeholder_bio}}" />{{user.bio}}</textarea>
 <footer>
-  <button type="submit" id="btnSave" name="btnSave" onclick="submitPartialForm(event, 'userBio', 'bio', 'btn-edit')">
+  <button type="submit" id="saveBtn" name="saveBtn" onclick="submitPartialForm(event, 'userBio', 'bio', 'btn-edit')">
     {{resource.save}}
   </button>
 </footer>
