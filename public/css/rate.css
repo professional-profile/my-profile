@@ -24,35 +24,71 @@
 .rating-title > a {
   margin-left: 0;
 }
+
 .rating-summary {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 32px;
-  padding: 24px;
+  grid-template-columns: 180px 1fr;
+  gap: 20px;
+  padding: 16px;
   border-bottom: 1px solid var(--border);
 }
 .article-body .rating-summary {
   max-width: 780px;
 }
+
 .score {
   text-align: center;
 }
-
 .score .value {
   font-size: 56px;
   font-weight: 700;
   line-height: 1;
 }
-
-.stars {
-  font-size: 20px;
-  color: var(--star);
-  margin: 6px 0;
-}
-
-.score span {
+.muted {
+  margin-top: 3px;
   font-size: 14px;
   color: var(--muted);
+}
+
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 20px;
+  line-height: 1;
+  margin: 10px 0;
+}
+.stars .star {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  overflow: hidden;
+  font-size: 20px;
+  line-height: 20px;
+  right: unset;
+}
+.stars .star::before {
+  content: "★";
+  position: absolute;
+  font-size: 20px;
+  left: 0;
+  top: 0;
+  color: #ddd;
+  width: 100%;
+}
+.stars .star.full-star::before {
+  color: var(--star);
+}
+.stars .star.partial-star::after {
+  content: "★";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--star);
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(0 calc(100% - var(--w, 0%)) 0 0);
 }
 
 .bars {
@@ -83,63 +119,9 @@
 }
 
 /* ===== Reviews ===== */
-.reviews {
-  padding: 24px;
-}
 
-.reviews h2 {
-  font-size: 20px;
-  margin: 0 0 16px;
-}
-
-.review {
-  border-top: 1px solid var(--border);
-  padding: 16px 0;
-}
-
-.review:first-child {
-  border-top: none;
-}
-
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.review-header strong {
-  font-size: 15px;
-}
-
-.review-header span {
-  font-size: 14px;
-  color: var(--star);
-}
-
-.review p {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.5;
-}
 
 /* ===== Footer ===== */
-.footer {
-  padding: 20px 24px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-.rate-btn {
-  display: inline-block;
-  padding: 12px 20px;
-  border-radius: 999px;
-  background: var(--blue);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  text-decoration: none;
-}
 
 /* ===== iPhone (<= 600px) ===== */
 @media (max-width: 600px) {
@@ -151,28 +133,11 @@
   .score .value {
     font-size: 48px;
   }
-
-  .icon {
-    width: 64px;
-    height: 64px;
-  }
-
-  .app-info h1 {
-    font-size: 20px;
-  }
 }
 
 /* ===== iPad landscape enhancement ===== */
 @media (min-width: 768px) {
-  .reviews {
-    padding: 32px 48px;
-  }
-
   .rating-summary {
-    padding: 32px 48px;
-  }
-
-  .header {
     padding: 32px 48px;
   }
 }
