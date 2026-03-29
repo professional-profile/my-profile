@@ -298,7 +298,7 @@ header.nav > .profile-followers {
   flex-direction: unset;
 }
 
-.profile .search-body {
+.profile .main-body {
   padding-top: unset;
   max-height: unset;
   height: unset;
