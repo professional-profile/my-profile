@@ -1,13 +1,38 @@
-<article class="article">
+<div>
   <header>
     <button type="button" id="backBtn" name="backBtn" class="btn-back" onclick="goBack()"></button>
     <h2>{{resource.ratings_and_reviews}}</h2>
   </header>
-  <div class="article-body">
+  <div class="main-body">
     {% include "partials/rating-summary.html" %}
-    <div class="article-content">{{article.content}}</div>
-    {% if isNotEmpty(article.tags) %}
-    <div class="chip-list">{{generateTags(article.tags, true)}}</div>
-    {% endif %}
+    <div class="rate-header">
+      <button class="btn-review" onclick="openReview('rateModal')">Write a review</button>
+    </div>
+    <div id="rateModal" class="modal-bg">
+      <div class="modal">
+        <form name="rateForm">
+          <h3 class="review-header">Write a Review</h3>
+          <div id="picker" class="star-picker">
+            <span data-v="1" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+              onclick="starOnClick(event)">★</span>
+            <span data-v="2" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+              onclick="starOnClick(event)">★</span>
+            <span data-v="3" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+              onclick="starOnClick(event)">★</span>
+            <span data-v="4" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+              onclick="starOnClick(event)">★</span>
+            <span data-v="5" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+              onclick="starOnClick(event)">★</span>
+          </div>
+
+          <textarea id="review" name="review" class="review" placeholder="Share your experience"></textarea>
+
+          <footer class="review-footer">
+            <button id="cancelBtn" class="btn-secondary" onclick="cancelReview('rateModal')">Cancel</button>
+            <button id="submitBtn" onclick="submitReview(event)">Submit</button>
+          </footer>
+        </form>
+      </div>
+    </div>
   </div>
-</article>
+</div>

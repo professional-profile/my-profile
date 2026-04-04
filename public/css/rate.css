@@ -8,10 +8,10 @@
   --star: #ffcc00;
 }
 
-* {
-  box-sizing: border-box;
+.rate-header {
+  display: flex;
+  justify-content: center;
 }
-
 /* ===== Rating Summary ===== */
 .rating-title {
   font-size: 20px;
@@ -21,6 +21,7 @@
   margin-block-end: 0;
   border-top: 1px solid var(--border);
 }
+
 .rating-title > a {
   margin-left: 0;
 }
@@ -32,10 +33,14 @@
   padding: 16px;
   border-bottom: 1px solid var(--border);
 }
+
 .article-body .rating-summary {
   max-width: 780px;
 }
-
+.main-body > .rating-summary {
+  margin-left: 16px;
+  margin-right: 16px;
+}
 .score {
   text-align: center;
 }
@@ -119,9 +124,66 @@
 }
 
 /* ===== Reviews ===== */
+.btn-review {
+  margin: 16px;
+  height: 36px;
+  padding: 6px 30px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 18px;
+}
+.btn-review:hover {
+  box-shadow: 0 1px 3px 1px #a9a9a9;
+}
+/* ===== Rate Modal ===== */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+}
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 506px;
+}
 
+.star-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.star-picker span {
+  font-size: 28px;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.15s;
+}
+.star-picker span.active {
+  color: #f5a623;
+}
 
-/* ===== Footer ===== */
+.review-header {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+.review {
+  width: 100%;
+  height: 160px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+.review-footer {
+  display: flex;
+  justify-content: center;
+}
 
 /* ===== iPhone (<= 600px) ===== */
 @media (max-width: 600px) {
@@ -133,6 +195,9 @@
   .score .value {
     font-size: 48px;
   }
+  .modal {
+    width: 80%;
+  }
 }
 
 /* ===== iPad landscape enhancement ===== */
@@ -140,4 +205,19 @@
   .rating-summary {
     padding: 32px 48px;
   }
+}
+
+.review-item {
+  border-top: 1px solid #eee;
+  padding: 12px 0;
+}
+.review-item-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.review-item-stars {
+  position: relative;
+  font-size: 14px;
 }

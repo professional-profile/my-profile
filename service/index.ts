@@ -156,6 +156,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/news", ctx.menu.build, ctx.article.search)
   app.get("/news/:id", ctx.menu.build, ctx.article.view)
   app.get("/news/:id/review", ctx.menu.build, ctx.article.review)
+  app.post("/news/:id/review", authorized, json(), ctx.article.rate)
   app.get("/saved-news", checkAuthen, ctx.menu.build, ctx.article.getSavedArticles)
   app.patch("/news/:id", authorized, ctx.article.save)
   app.delete("/news/:id", authorized, ctx.article.remove)

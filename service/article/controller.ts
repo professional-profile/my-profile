@@ -8,13 +8,14 @@ import {
   format,
   fromRequest,
   getSearch,
+  handleError,
   hasSearch,
   resources,
   SavedController
 } from "express-ext"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
-import { formatRate } from "../shared/rate"
+import { formatRate, Rate } from "../shared/rate"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
 
@@ -26,6 +27,7 @@ export class ArticleController extends SavedController {
     this.getSavedArticles = this.getSavedArticles.bind(this)
     this.view = this.view.bind(this)
     this.review = this.review.bind(this)
+    this.rate = this.rate.bind(this)
   }
   async search(req: Request, res: Response) {
     const lang = getLang(req)
@@ -136,6 +138,25 @@ export class ArticleController extends SavedController {
       render(req, res, "article-review", { resource, rate: formatRate(rate)})
     } catch (err) {
       renderError500(req, res, resource, err)
+    }
+  }
+  async rate(req: Request, res: Response) {
+    const rate = req.body as Rate    
+    const slug = req.params.id
+    console.log("JSON rate " + JSON.stringify(rate))
+    try {
+      const article = await this.service.load(slug)
+      if (!article) {
+        res.status(404).json(0).end()
+        return
+      }
+      rate.id = article.id
+      rate.author = res.locals.userId
+      console.log("JSON rate " + JSON.stringify(rate))
+      const result = await this.service.rate(rate)
+      res.status(200).json(result).end()
+    } catch (err) {
+      handleError(err, res)
     }
   }
 }
