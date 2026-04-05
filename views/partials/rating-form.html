@@ -1,0 +1,20 @@
+<form name="rateForm">
+  <h3 class="review-header">Write a Review</h3>
+  <div id="picker" class="star-picker">
+    <span data-v="1" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+      onclick="starOnClick(event)">★</span>
+    <span data-v="2" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+      onclick="starOnClick(event)">★</span>
+    <span data-v="3" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+      onclick="starOnClick(event)">★</span>
+    <span data-v="4" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+      onclick="starOnClick(event)">★</span>
+    <span data-v="5" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
+      onclick="starOnClick(event)">★</span>
+  </div>
+  <textarea id="review" name="review" class="review" placeholder="Share your experience"></textarea>
+  <footer class="review-footer">
+    <button id="cancelBtn" class="btn-secondary" onclick="cancelReview('rateModal')">Cancel</button>
+    <button id="submitBtn" onclick="submitReview(event)">Submit</button>
+  </footer>
+</form>

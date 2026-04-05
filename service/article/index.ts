@@ -1,8 +1,9 @@
+import { nanoid } from "nanoid"
 import { SavedRepository, SearchResult } from "onecore"
-import { buildToSave, SqlSavedRepository } from "pg-extension"
+import { SqlSavedRepository } from "pg-extension"
 import { DB } from "query-core"
-import { SqlRateRepository } from "rate-query"
 import { History, Rate, rateModel, RateRepository, RateSummary, RateSummaryRepository, zeroSummary } from "../shared/rate"
+import { SqlRateRepository } from "../shared/rate-query"
 import { Article, ArticleFilter, ArticleRepository, ArticleService } from "./article"
 import { ArticleController } from "./controller"
 import { SqlArticleRepository, SqlRateSummaryRepository } from "./repository"
@@ -64,7 +65,10 @@ export function useArticleController(db: DB): ArticleController {
   const repository = new SqlArticleRepository(db)
   const savedRepository = new SqlSavedRepository(db, "saved_articles", "user_id", "id", "saved_at")
   const rateSummaryRepository = new SqlRateSummaryRepository(db)
-  const rateRepository = new SqlRateRepository<Rate>(db, 'article_rates', rateModel, buildToSave, 5, 'article_info', 'rate', 'count', 'score', 'author', 'id')
+  const rateRepository = new SqlRateRepository<Rate>(db, generateId, 'article_rates', rateModel, 5, 'article_info', 'rate_id', 'rate', 'count', 'score', 'author', 'id')
   const service = new ArticleUseCase(repository, savedRepository, 200, rateSummaryRepository, rateRepository)
   return new ArticleController(service)
+}
+function generateId(): string {
+  return nanoid(10)
 }

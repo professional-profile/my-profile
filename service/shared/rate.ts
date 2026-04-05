@@ -1,6 +1,7 @@
 import { Attributes, Filter } from "onecore";
 
 export interface BaseRate {
+  rateId: string,
   author: string;
   authorURL?: string;
   name: string;
@@ -74,13 +75,17 @@ export const rateHistoryModel: Attributes = {
   },
 };
 export const rateModel: Attributes = {
-  id: {
+  rateId: {
+    column: "rate_id",
     key: true,
     required: true,
     operator: '='
   },
+  id: {
+    required: true,
+    operator: '='
+  },
   author: {
-    key: true,
     required: true,
     operator: '='
   },
