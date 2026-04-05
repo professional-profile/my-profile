@@ -38,7 +38,17 @@ function getDecimalSeparator(ele: HTMLInputElement): string {
       separator = form.getAttribute("data-decimal-separator")
     }
   }
-  return separator === "," ? "," : "."
+  return separator ? separator : "."
+}
+function getGroupSeparator(ele: HTMLInputElement): string {
+  let separator = ele.getAttribute("data-group-separator")
+  if (!separator) {
+    const form = ele.form
+    if (form) {
+      separator = form.getAttribute("data-group-separator")
+    }
+  }
+  return separator === "." ? "." : ","
 }
 
 const d = "data-value"
@@ -331,7 +341,7 @@ function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: st
             try {
               const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
               obj[field] = val
-            } catch (err) {}
+            } catch (err) { }
           }
         } else {
           const datatype = ele.getAttribute("data-type")
@@ -451,7 +461,7 @@ function decode<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
         }
         if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
           const decimalSeparator = getDecimalSeparator(ele)
-          v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
+          v = decimalSeparator === "," ? v.replace(r2, "") : v.replace(r1, "")
           val = isNaN(v) ? null : parseFloat(v)
         }
         setValue(obj, name, val) // obj[name] = val;
