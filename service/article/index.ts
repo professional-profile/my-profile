@@ -4,13 +4,14 @@ import { SqlSavedRepository } from "pg-extension"
 import { DB } from "query-core"
 import { History, Rate, rateModel, RateRepository, RateSummary, RateSummaryRepository, zeroSummary } from "../shared/rate"
 import { SqlRateRepository } from "../shared/rate-query"
+import { RateFilter, RatesRepository, Rate as SearchRate, SearchRateRepository } from "../shared/rates"
 import { Article, ArticleFilter, ArticleRepository, ArticleService } from "./article"
 import { ArticleController } from "./controller"
 import { SqlArticleRepository, SqlRateSummaryRepository } from "./repository"
 export * from "./controller"
 
 export class ArticleUseCase implements ArticleService {
-  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateSummaryRepository: RateSummaryRepository, protected rateRepository: RateRepository) {
+  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateSummaryRepository: RateSummaryRepository, protected rateRepository: RateRepository, protected ratesRepository: RatesRepository) {
   }
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)
@@ -59,14 +60,18 @@ export class ArticleUseCase implements ArticleService {
     const count = await this.rateRepository.update(rate, exist.rate);
     return count;
   }
+  searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>> {
+    return this.ratesRepository.search(filter, limit, page, fields)
+  }
 }
 
 export function useArticleController(db: DB): ArticleController {
   const repository = new SqlArticleRepository(db)
   const savedRepository = new SqlSavedRepository(db, "saved_articles", "user_id", "id", "saved_at")
   const rateSummaryRepository = new SqlRateSummaryRepository(db)
-  const rateRepository = new SqlRateRepository<Rate>(db, generateId, 'article_rates', rateModel, 5, 'article_info', 'rate_id', 'rate', 'count', 'score', 'author', 'id')
-  const service = new ArticleUseCase(repository, savedRepository, 200, rateSummaryRepository, rateRepository)
+  const rateRepository = new SqlRateRepository<Rate>(db, "article_rates", rateModel, 5, "article_info", generateId, "rateId", "rate", "count", "score", "author", "id")
+  const ratesRepository = new SearchRateRepository(db)
+  const service = new ArticleUseCase(repository, savedRepository, 200, rateSummaryRepository, rateRepository, ratesRepository)
   return new ArticleController(service)
 }
 function generateId(): string {

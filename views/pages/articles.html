@@ -5,8 +5,9 @@
   <div class="main-body">
     <form id="articlesForm" name="articlesForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
-      <section class="row search-group">{% include "partials/advance-search.html" %} {% include
-        "partials/pagination.html" %}
+      <section class="row search-group">
+        {% include "partials/advance-search.html" %}
+        {% include "partials/pagination.html" %}
       </section>
       <section class="row search-group inline advance-search" hidden>
         <label class="col s12 m6">

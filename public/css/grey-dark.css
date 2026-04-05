@@ -1,6 +1,3 @@
-.grey.dark ::-webkit-scrollbar-thumb {
-  background: #747978;
-}
 @media screen and (min-width: 769px) {
   .grey.dark .top-menu .menu.sidebar::-webkit-scrollbar-thumb {
     background: #747979;
@@ -33,7 +30,7 @@
 .grey.dark .editor,
 .grey.dark .chip,
 .grey.dark .data-list dd,
-.grey.dark .table > thead > tr,
+.grey.dark table > thead > tr,
 .grey.dark .btn-group,
 .grey.dark .btn-next,
 .grey.dark .btn-accept,
@@ -141,7 +138,6 @@
 
 .grey.dark .card > section > p.description,
 .grey.dark label,
-.grey.dark .table > tbody,
 .grey.dark .diff .row .col p > span,
 .grey.dark .data-list dt,
 .grey.dark .btn-detail,
@@ -271,12 +267,6 @@
   background: linear-gradient(transparent, rgb(0, 0, 0));
 }
 
-.grey.dark .toast-message {
-  background-color: #777;
-  border-color: #5f6d6f;
-  color: #000;
-}
-
 .grey.dark .alert-wrapper .alert {
   border: solid 1px #657181;
 }
@@ -314,13 +304,18 @@
 .grey.dark .page-body > .form > header,
 .grey.dark .page-body > article > header,
 .grey.dark .page-body > div > header,
+.grey.dark .content-container > div > header,
 .grey.dark .view-header {
   color: #657181;
   background-color: #000;
   background-image: none;
 }
-
-.grey.dark .toast-message,
+  
+.grey.dark .toast-message {
+  background-color: #777;
+  border-color: #5f6d6f;
+  color: #000;
+}
 .grey.dark .sidebar {
   background-color: #000;
   color: #5f6d6f;
@@ -393,6 +388,7 @@
   .grey.dark .page-body > .form > header,
   .grey.dark .page-body > article > header,
   .grey.dark .page-body > div > header,
+  .grey.dark .content-container > div > header,
   .grey.dark .view-header {
     color: #000;
     background-image: linear-gradient(90deg, #657181, #657181);
@@ -407,6 +403,7 @@
 
   .grey.dark .page-body > .form > header > h2,
   .grey.dark .page-body > div > header > h2,
+  .grey.dark .content-container > div > header > h2,
   .grey.dark .view-header > h2,
   .grey.dark header > .btn-group > button,
   .grey.dark header > .btn-group > *,

@@ -130,5 +130,7 @@ export const vi = {
   quantity: "Số lượng",
   location: "Vị trí",
 
-  ratings_and_reviews: "Đánh giá và nhận xét"
+  ratings_and_reviews: "Đánh giá và nhận xét",
+  write_a_review: "Đánh giá",
+  review_placeholder: "Viết nhận xét"
 }

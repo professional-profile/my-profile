@@ -10,7 +10,7 @@ function cancelReview(id: string) {
     modalDiv.style.display = "none"
   }
 }
-function submitReview(e: Event) {
+function submitReview(e: Event, containerId?: string) {
   e.preventDefault()
   const btn = e.target as HTMLButtonElement
   const form = btn.form
@@ -38,6 +38,20 @@ function submitReview(e: Event) {
               const modal = findParent(form, "modal-bg")
               if (modal) {
                 modal.style.display = "none"
+              }
+              if (containerId) {
+                const container = document.getElementById(containerId)
+                if (container) {
+                  const contentType = response.headers.get("Content-Type")
+                  if (contentType && contentType.includes("text/html")) {
+                    response
+                      .text()
+                      .then(function (data) {
+                        container.innerHTML = data
+                      })
+                      .catch((err) => handleError(err, resource.error_response_body))
+                  }
+                }
               }
             } else {
               handleJsonError(response, resource, form)

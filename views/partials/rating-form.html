@@ -1,5 +1,5 @@
 <form name="rateForm">
-  <h3 class="review-header">Write a Review</h3>
+  <h3 class="review-header">{{resource.write_a_review}}</h3>
   <div id="picker" class="star-picker">
     <span data-v="1" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
       onclick="starOnClick(event)">★</span>
@@ -12,9 +12,9 @@
     <span data-v="5" onmouseenter="starOnMouseEnter(event)" onmouseleave="starOnMouseLeave(event)"
       onclick="starOnClick(event)">★</span>
   </div>
-  <textarea id="review" name="review" class="review" placeholder="Share your experience"></textarea>
+  <textarea id="review" name="review" class="review" placeholder="{{resource.review_placeholder}}"></textarea>
   <footer class="review-footer">
-    <button id="cancelBtn" class="btn-secondary" onclick="cancelReview('rateModal')">Cancel</button>
-    <button id="submitBtn" onclick="submitReview(event)">Submit</button>
+    <button id="cancelBtn" class="btn-secondary" onclick="cancelReview('rateModal')">{{resource.cancel}}</button>
+    <button id="submitBtn" onclick="submitReview(event, 'submitReview')">{{resource.submit}}</button>
   </footer>
 </form>

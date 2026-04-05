@@ -1,3 +1,15 @@
+::-webkit-scrollbar-track {
+  background: #f9f9f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa;
+}
+* {
+  scrollbar-color: #c0c0c0 #f9f9f9; /* thumb track */
+}
 @media screen and (min-width: 769px) {
   .top-menu .menu.sidebar::-webkit-scrollbar-thumb {
     background: #747979;
@@ -159,7 +171,7 @@ header > .btn-back,
 .btn-review:hover,
 .btn-more:hover,
 footer > button:hover {
-  box-shadow: #a9a9a9;
+  box-shadow: 0 1px 3px 1px #a9a9a9;
 }
 
 .btn-delete {
@@ -297,6 +309,9 @@ select.valid {
   border-bottom: 3px solid #4db6ac;
 }
 
+.alert-wrapper .alert {
+  background-color: #fff;
+}
 .success-icon .alert-icon {
   color: #4db6ac;
 }
@@ -318,13 +333,18 @@ select.valid {
 .page-body > .form > header,
 .page-body > article > header,
 .page-body > div > header,
+.content-container > div > header,
 .view-header {
   color: #4db6ac;
   background-color: #fff;
   background-image: none;
 }
 
-.toast-message,
+.toast-message {
+  background-color: #008577;
+  color: #fff;
+  border-color: #00574b;
+}
 .sidebar {
   background-color: #008577;
   color: #fff;
@@ -391,6 +411,7 @@ h3.header {
   .page-body > .form > header,
   .page-body > article > header,
   .page-body > div > header,
+  .content-container > div > header,
   .view-header {
     color: #fff;
     background-image: linear-gradient(90deg, #008577, #00574b);
@@ -405,6 +426,7 @@ h3.header {
 
   .page-body > .form > header > h2,
   .page-body > div > header > h2,
+  .content-container > div > header > h2,
   .view-header > h2,
   header > .btn-group > button,
   header > .btn-group > button,
@@ -485,7 +507,7 @@ table > tbody > tr:nth-of-type(odd):hover,
 
 table > thead > tr > th,
 table > tbody > tr > td {
-  border-bottom-color: #ddd;
+  border-bottom-color: #dddddd;
 }
 
 table,
@@ -502,7 +524,7 @@ table > thead > tr > th,
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > thead > tr > th {
-  border-color: #ddd;
+  border-color: #dddddd;
 }
 
 table > tbody > tr:nth-of-type(odd),

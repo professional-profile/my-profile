@@ -8,10 +8,18 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008577', endColorstr='#00574b',GradientType=1 ); /* ie6-9 */
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #747978;
+.dark ::-webkit-scrollbar-track {
+  background: #252525;
 }
-
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f3f;;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #787878;
+}
+.dark * {
+  scrollbar-color: #3f3f3f #111111; /* thumb track */
+}
 @media screen and (min-width: 769px) {
   .dark .top-menu .menu.sidebar::-webkit-scrollbar-thumb {
     background: #747979;
@@ -27,12 +35,11 @@
   border-color: #111;
 }
 
-
 .dark hr {
   border-color: #141414;
 }
 .dark .solid hr {
-  border-color: #7f7f7f;
+  border-color: #909090;
 }
 .dark .solid > form > footer,
 .dark .solid > footer,
@@ -45,7 +52,7 @@
 .dark .editor,
 .dark .chip,
 .dark .data-list dd,
-.dark .table > thead > tr,
+.dark table > thead > tr,
 .dark .btn-group,
 .dark .btn-next,
 .dark .btn-accept,
@@ -57,16 +64,16 @@
 .dark .checkbox-group > label,
 .dark .radio-group > label,
 .dark .group label div {
-  color: #b2b2b2;
+  color: #c2c2c2;
 }
 
-.dark .row > label.search-input > *,
-.dark .search-input > * {
-  border-color: #b2b2b2 !important;
-}
 .dark label.search-input select,
 .dark label.search-input input {
-  color: #b2b2b2 !important;
+  color: #c2c2c2 !important;
+}
+.dark .row > label.search-input > *,
+.dark .search-input > * {
+  border-color: #4c4c4c !important;
 }
 
 .dark .list-item > *:last-child,
@@ -84,7 +91,7 @@
 
 .dark .view-body > section > article > p,
 .dark .section-body > p {
-  border-color: #7f7f7f;
+  border-color: #909090;
 }
 
 .dark .card > section,
@@ -119,7 +126,7 @@
 }
 
 .dark button:disabled {
-  color: #b2b2b2 !important;
+  color: #c2c2c2 !important;
   background-color: #4c4c4c !important;
 }
 
@@ -132,7 +139,7 @@
 .dark .form .row > label > input,
 .dark label > select:not([multiple]),
 .dark .form .row > label > select:not([multiple]) {
-  color: #b2b2b2;
+  color: #c2c2c2;
   border-color: #141414;
   -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
@@ -140,22 +147,19 @@
 
 .dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
 .dark input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:before {
-  border-color: #b2b2b2;
+  border-color: #c2c2c2;
   color: #4c4c4c;
   background: #000;
 }
 .dark input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before {
-  border-color: #b2b2b2;
+  border-color: #c2c2c2;
   background: #000;
 }
 
 .dark .card > section > p.description,
 .dark label,
-.dark .table > tbody,
 .dark .diff .row .col p > span,
 .dark .data-list dt,
-.dark .remark,
-.dark .article-notice,
 .dark .btn-detail,
 .dark .quick-nav,
 .dark header > .btn-back,
@@ -163,7 +167,7 @@
 .dark .btn-filter,
 .dark .btn-remove-text,
 .dark .btn-group {
-  color: #7f7f7f;
+  color: #909090;
 }
 
 .dark .modal-portal-content header > .btn-group > button,
@@ -224,7 +228,7 @@
 
 .dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):after,
 .dark input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:after {
-  border-color: #7f7f7f;
+  border-color: #909090;
   color: #000;
   background: #4db6ac;
 }
@@ -234,7 +238,7 @@
 }
 
 .dark input[type="radio"]:before {
-  border-color: #b2b2b2;
+  border-color: #c2c2c2;
   background-image: radial-gradient(circle, #4db6ac 40%, inherit 50%);
 }
 .dark input[type="radio"]:checked:before {
@@ -340,6 +344,9 @@
   border-bottom: 3px solid #324511; /* #9e8f0e */
 }
 
+.dark .alert-wrapper .alert {
+  background-color: #000;
+}
 .dark .success-icon .alert-icon {
   color: #4db6ac;
 }
@@ -361,13 +368,17 @@
 .dark .page-body > .form > header,
 .dark .page-body > article > header,
 .dark .page-body > div > header,
+.dark .content-container > div > header,
 .dark .view-header {
   color: #4db6ac;
   background-color: #000;
   background-image: none;
 }
 
-.dark .toast-message,
+.dark .toast-message {
+  background-color: #cacaca;
+  color: #000;
+}
 .dark .sidebar {
   background-color: #121212;
   color: #fff;
@@ -382,7 +393,7 @@
 .dark .sidebar ul.sub-list > li.active,
 .dark .sidebar > nav > ul > li.active,
 .dark .open.active {
-  background: #02c2af; /* #07843b */
+  background: #4b4f4f; /* #07843b */
 }
 .dark .sidebar .menu-item {
   color: #fff;
@@ -422,7 +433,6 @@
 .dark .view-footer > button,
 .dark footer > button {
   color: #000;
-  background-color: #4db6ac;
 }
 .dark .btn-secondary {
   color: #4db6ac;
@@ -437,6 +447,7 @@
   .dark .page-body > .form > header,
   .dark .page-body > article > header,
   .dark .page-body > div > header,
+  .dark .content-container > div > header,
   .dark .view-header {
     color: #000;
     background-image: linear-gradient(90deg, #008577, #00574b);
@@ -451,6 +462,7 @@
 
   .dark .page-body > .form > header > h2,
   .dark .page-body > div > header > h2,
+  .dark .content-container > div > header > h2,
   .dark .view-header > h2,
   .dark header > .btn-group > button,
   .dark header > .btn-group > *,
@@ -528,18 +540,18 @@
   background-color: #111;
 }
 
-.dark .table > thead > tr > th,
-.dark .table > tbody > tr > td {
-  border-bottom-color: #222;
+.dark table > thead > tr > th,
+.dark table > tbody > tr > td {
+  border-bottom-color: #313131;
 }
 
-.dark .table,
-.dark .table > tbody > tr > td,
-.dark .table > tbody > tr > th,
-.dark .table > tfoot > tr > td,
-.dark .table > tfoot > tr > th,
-.dark .table > thead > tr > td,
-.dark .table > thead > tr > th,
+.dark table,
+.dark table > tbody > tr > td,
+.dark table > tbody > tr > th,
+.dark table > tfoot > tr > td,
+.dark table > tfoot > tr > th,
+.dark table > thead > tr > td,
+.dark table > thead > tr > th,
 .dark .table-bordered,
 .dark .table-bordered > tbody > tr > td,
 .dark .table-bordered > tbody > tr > th,
@@ -547,7 +559,7 @@
 .dark .table-bordered > tfoot > tr > th,
 .dark .table-bordered > thead > tr > td,
 .dark .table-bordered > thead > tr > th {
-  border-color: #222222;
+  border-color: #313131;
 }
 
 .dark .table > tbody > tr:nth-of-type(odd),

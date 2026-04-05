@@ -13,9 +13,10 @@ import {
   resources,
   SavedController
 } from "express-ext"
+import { RateFilter } from "shared/rates"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
-import { formatRate, Rate } from "../shared/rate"
+import { calculatePercent, formatRate, Rate } from "../shared/rate"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
 
@@ -132,15 +133,44 @@ export class ArticleController extends SavedController {
   async review(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const id = await this.service.getIdBySlug(req.params.id)
+    const dateFormat = getDateFormat(lang)
     try {
+      const id = await this.service.getIdBySlug(req.params.id)
       const rate = await this.service.getRateSummary(id)
-      render(req, res, "article-review", { resource, rate: formatRate(rate)})
+      let filter: RateFilter = { id, limit: resources.defaultLimit}
+      if (hasSearch(req)) {
+        filter = fromRequest<RateFilter>(req)
+        format(filter, ["time"])
+      }
+      if (!filter.sort) {
+        filter.sort = "-time"
+      }
+      const { page, limit, sort } = filter
+      const result = await this.service.searchRates(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of result.list) {
+        item.time = formatDateTime(item.time, dateFormat)
+        calculatePercent(item)
+      }
+      const search = getSearch(req.url)
+      render(req, res, "article-review", {
+        resource,
+        rate: formatRate(rate),
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
+      })
     } catch (err) {
       renderError500(req, res, resource, err)
     }
   }
   async rate(req: Request, res: Response) {
+    const lang = getLang(req)
+    const resource = getResource(lang)
     const rate = req.body as Rate    
     const slug = req.params.id
     console.log("JSON rate " + JSON.stringify(rate))
@@ -153,10 +183,48 @@ export class ArticleController extends SavedController {
       rate.id = article.id
       rate.author = res.locals.userId
       console.log("JSON rate " + JSON.stringify(rate))
-      const result = await this.service.rate(rate)
-      res.status(200).json(result).end()
+      await this.service.rate(rate)
+      const rateSummary = await this.service.getRateSummary(article.id)
+      res.render("partials/rating-summary", { resource, rate: formatRate(rateSummary) })
     } catch (err) {
       handleError(err, res)
+    }
+  }
+  async searchRates(req: Request, res: Response) {
+    const lang = getLang(req)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
+    let filter: RateFilter = {
+      limit: resources.defaultLimit,
+      id: req.params.id
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<RateFilter>(req)
+      format(filter, ["time"])
+    }
+    if (!filter.sort) {
+      filter.sort = "-time"
+    }
+    const { page, limit, sort } = filter
+    try {
+      const result = await this.service.searchRates(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of result.list) {
+        item.time = formatDateTime(item.time, dateFormat)
+      }
+      const search = getSearch(req.url)
+      render(req, res, "rates", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
+      })
+    } catch (err) {
+      renderError500(req, res, resource, err)
     }
   }
 }

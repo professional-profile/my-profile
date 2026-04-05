@@ -1,16 +1,13 @@
 import { Attributes, buildMetadata, buildToInsert, buildToUpdate, DB, Statement, StringMap } from 'query-core';
 
-export interface BaseRate {
-  rateId: string
-}
-export interface RateRepository<R extends BaseRate> {
+export interface RateRepository<R> {
   create(rate: R, newInfo?: boolean): Promise<number>;
   update(rate: R, oldRate: number): Promise<number>;
   load(id: string, author: string): Promise<R | null>;
 }
 
-export class SqlRateRepository<R extends BaseRate> implements RateRepository<R> {
-  constructor(protected db: DB, protected generateId: () => string, protected table: string, protected attributes: Attributes, protected max: number, protected infoTable: string, protected rateIdField?: string, rateField?: string, count?: string, score?: string, authorCol?: string, id?: string, idField?: string, idCol?: string, rateCol?: string) {
+export class SqlRateRepository<R> implements RateRepository<R> {
+  constructor(protected db: DB, protected table: string, protected attributes: Attributes, protected max: number, protected infoTable: string, protected generateId: () => string, protected rateIdField: string, rateField?: string, count?: string, score?: string, authorCol?: string, id?: string, idField?: string, idCol?: string, rateCol?: string) {
     const m = buildMetadata(attributes);
     this.map = m.map;
     this.id = (id && id.length > 0 ? id : 'id');
@@ -62,9 +59,9 @@ export class SqlRateRepository<R extends BaseRate> implements RateRepository<R> 
     });
   }
   create(rate: R, newInfo?: boolean): Promise<number> {
-    rate.rateId = this.generateId()
+    (rate as any)[this.rateIdField] = this.generateId()
     const stmt = buildToInsert(rate, this.table, this.attributes, this.db.param);
-    if (stmt) {
+    if (stmt.query) {
       const obj: any = rate;
       const rateNum: number = obj[this.rateField];
       const id: string = obj[this.idField];
@@ -99,7 +96,7 @@ export class SqlRateRepository<R extends BaseRate> implements RateRepository<R> 
   }
   update(rate: R, oldRate: number): Promise<number> {
     const stmt = buildToUpdate(rate, this.table, this.attributes, this.db.param);
-    if (stmt) {
+    if (stmt.query) {
       const obj: any = rate;
       const rateNum: number = obj[this.rateField];
       const id: string = obj[this.idField];

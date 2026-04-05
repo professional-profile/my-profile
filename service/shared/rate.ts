@@ -1,7 +1,6 @@
 import { Attributes, Filter } from "onecore";
 
 export interface BaseRate {
-  rateId: string,
   author: string;
   authorURL?: string;
   name: string;
@@ -193,4 +192,10 @@ export function formatRate(r: RateSummary): RateFormat  {
     f["star" + i] = x > 100 ? `class="star full-star"` : (x < 0 ? `class="star"` : `class="star partial-star" style="--w: ${x.toFixed(0)}%;"`)
   }
   return f
+}
+interface SRate {
+  rate: number
+}
+export function calculatePercent(r: SRate): void {
+  (r as any)["percent"] = `style="--percent:${(r.rate * 20).toFixed(0)}%"`
 }

@@ -15,7 +15,9 @@
     <h4 class="rating-title">
       <a href="/news/{{article.slug}}/review" onclick="navigate(event)">{{resource.ratings_and_reviews}}</a>
     </h4>
-    {% include "partials/rating-summary.html" %}
+    <div id="rateSummaryContainer" class="rating-summary-container">
+      {% include "partials/rating-summary.html" %}
+    </div>
     <div class="article-content">{{article.content}}</div>
     {% if isNotEmpty(article.tags) %}
     <div class="chip-list">{{generateTags(article.tags, true)}}</div>

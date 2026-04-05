@@ -11,7 +11,7 @@ function cancelReview(id) {
     modalDiv.style.display = "none"
   }
 }
-function submitReview(e) {
+function submitReview(e, containerId) {
   e.preventDefault()
   var btn = e.target
   var form = btn.form
@@ -39,6 +39,22 @@ function submitReview(e) {
               var modal = findParent(form, "modal-bg")
               if (modal) {
                 modal.style.display = "none"
+              }
+              if (containerId) {
+                var container_1 = document.getElementById(containerId)
+                if (container_1) {
+                  var contentType = response.headers.get("Content-Type")
+                  if (contentType && contentType.includes("text/html")) {
+                    response
+                      .text()
+                      .then(function (data) {
+                        container_1.innerHTML = data
+                      })
+                      .catch(function (err) {
+                        return handleError(err, resource_1.error_response_body)
+                      })
+                  }
+                }
               }
             } else {
               handleJsonError(response, resource_1, form)

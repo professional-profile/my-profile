@@ -1,6 +1,6 @@
-import { Attributes, Filter, Statement } from "onecore";
+import { Attributes, DB, Filter, SearchResult, Statement } from "onecore";
 import { param } from "pg-extension";
-import { buildSort } from "query-core";
+import { buildSort, SearchRepository } from "query-core";
 
 export const rateModel: Attributes = {
   id: {
@@ -70,13 +70,26 @@ export function buildQuery(filter: RateFilter): Statement {
   return { query, params }
 }
 
-export interface RatesRepository {
-  
+export interface Rate {
+  author: string;
+  authorURL?: string;
+  name: string;
+  displayName: string;
+  anonymous: boolean;
+  rate: number;
+  id: string;
+  time: Date;
+  review: string;
+  usefulCount: number;
+  replyCount: number;
+  histories?: History[];
 }
-/*
-export class SqlRatesRepository extends SearchRepository<Job, JobFilter> implements JobRepository {
+export interface RatesRepository {
+  search(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Rate>>
+}
+
+export class SearchRateRepository extends SearchRepository<Rate, RateFilter> implements RatesRepository {
   constructor(db: DB) {
-    super(db, "jobs", jobModel, buildQuery)
+    super(db, "article_rates", rateModel, buildQuery)
   }
 }
-*/

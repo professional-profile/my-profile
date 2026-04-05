@@ -97,8 +97,9 @@
     </label>
   </div>
   <footer class="view-footer">
-    <button type="submit" id="saveBtn" name="saveBtn" onclick="submitForm(event)" {% if readonly %} disabled {% endif
-      %}>{{resource.save}}</button>
+    <button type="submit" id="saveBtn" name="saveBtn" onclick="submitForm(event)" {% if readonly %} disabled {% endif%}>
+      {{resource.save}}
+    </button>
   </footer>
   <script id="my-article" src="/static/my-article.js"></script>
   <script data-init-script="true">
