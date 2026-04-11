@@ -36,11 +36,10 @@
   border-bottom: 1px solid var(--border);
 }
 
-.main-body > .rating-summary-container {
-  margin-left: 16px;
-  margin-right: 16px;
+.article-body .rating-summary {
+  max-width: 780px;
 }
-.main-body > .rating-summary {
+.main-body > .rating-summary-container {
   margin-left: 16px;
   margin-right: 16px;
 }
@@ -81,18 +80,13 @@
   font-size: 20px;
   left: 0;
   top: 0;
-  color: #ddd;
   width: 100%;
-}
-.stars .star.full-star::before {
-  color: var(--star);
 }
 .stars .star.partial-star::after {
   content: "★";
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--star);
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
@@ -111,7 +105,7 @@
   gap: 10px;
   align-items: center;
   font-size: 13px;
-  color: var(--star);
+  color: #ffcc00;
 }
 
 .track {
@@ -123,7 +117,7 @@
 
 .fill {
   height: 100%;
-  background: var(--star);
+  background: #ffcc00;
 }
 
 /* ===== Reviews ===== */
@@ -168,7 +162,7 @@
   transition: color 0.15s;
 }
 .star-picker span.active {
-  color: #f5a623;
+  color: #ffcc00;
 }
 
 .review-header {
@@ -251,5 +245,5 @@
   white-space: nowrap;
   overflow: hidden;
   width: var(--percent);
-  color: #f5a623;
+  color: #ffcc00;
 }

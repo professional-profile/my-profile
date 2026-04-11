@@ -6,6 +6,7 @@
 
 .grey.dark body,
 .grey.dark .page-container,
+.grey.dark .alert-wrapper .alert,
 .grey.dark .dropdown-menu-profile {
   background-color: #000;
 }
@@ -267,10 +268,6 @@
   background: linear-gradient(transparent, rgb(0, 0, 0));
 }
 
-.grey.dark .alert-wrapper .alert {
-  border: solid 1px #657181;
-}
-
 .grey.dark .chips.focus {
   border-bottom: 1px solid #657181;
   -webkit-box-shadow: 0 1px 0 0 #657181;
@@ -283,6 +280,9 @@
   border-bottom: 3px solid #324511; /* #9e8f0e */
 }
 
+.grey.dark .alert-wrapper .alert {
+  border: solid 1px #657181;
+}
 .grey.dark .success-icon .alert-icon {
   color: #657181;
 }

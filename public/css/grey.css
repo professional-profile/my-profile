@@ -6,6 +6,7 @@
 
 .grey body,
 .grey .page-container,
+.grey .alert-wrapper .alert,
 .grey .dropdown-menu-profile {
   background-color: #fff;
 }
@@ -263,10 +264,6 @@
   background: linear-gradient(transparent, rgb(0, 0, 0));
 }
 
-.grey .alert-wrapper .alert {
-  border: solid 1px #657181;
-}
-
 .grey .chips.focus {
   border-bottom: 1px solid #657181;
   -webkit-box-shadow: 0 1px 0 0 #657181;
@@ -279,6 +276,9 @@
   border-bottom: 3px solid #324511; /* #9e8f0e */
 }
 
+.grey .alert-wrapper .alert {
+  border: solid 1px #657181;
+}
 .grey .success-icon .alert-icon {
   color: #657181;
 }

@@ -189,7 +189,7 @@ export function formatRate(r: RateSummary): RateFormat  {
   }
   for (let i = 1; i <= 5; i++) {
     const x = (rate - i + 1)*100
-    f["star" + i] = x > 100 ? `class="star full-star"` : (x < 0 ? `class="star"` : `class="star partial-star" style="--w: ${x.toFixed(0)}%;"`)
+    f["star" + i] = x > 100 ? `class="star"` : (x < 0 ? `class="star empty-star"` : `class="star partial-star" style="--w: ${x.toFixed(0)}%;"`)
   }
   return f
 }

@@ -16,8 +16,23 @@
   }
 }
 
+.star-picker span.active,
+.review-item-stars::after,
+.star,
+.bar,
+.fill {
+  color: #ffcc00;
+}
+
+.partial-star::before,
+.empty-star,
+.review-item-stars::before {
+  color: #ddd;
+}
+
 body,
 .page-container,
+.alert-wrapper .alert,
 .dropdown-menu-profile {
   background-color: #fff;
 }
@@ -309,9 +324,6 @@ select.valid {
   border-bottom: 3px solid #4db6ac;
 }
 
-.alert-wrapper .alert {
-  background-color: #fff;
-}
 .success-icon .alert-icon {
   color: #4db6ac;
 }

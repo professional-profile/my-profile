@@ -28,6 +28,7 @@
 
 .dark body,
 .dark .page-container,
+.dark .alert-wrapper .alert,
 .dark .dropdown-menu-profile {
   background-color: #000;
 }
@@ -344,9 +345,6 @@
   border-bottom: 3px solid #324511; /* #9e8f0e */
 }
 
-.dark .alert-wrapper .alert {
-  background-color: #000;
-}
 .dark .success-icon .alert-icon {
   color: #4db6ac;
 }
