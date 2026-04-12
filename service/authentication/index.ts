@@ -69,12 +69,15 @@ export class SigninController {
           if (result.status === 1 && result.user) {
             console.log("User = " + JSON.stringify(result.user))
             const account = result.user
-            const token = sign({ id: account.id, username: user.username, language: account.language, dateFormat: account.dateFormat }, this.secret, {
+            if (!account.displayName) {
+              account.displayName = (account.username ? account.username : (account.email ? account.email :account.id))
+            }
+            const token = sign({ id: account.id, username: user.username, displayName: account.displayName, language: account.language, dateFormat: account.dateFormat }, this.secret, {
               expiresIn: this.expiresIn,
             })
 
             const remember = sign(
-              { id: account.id, username: user.username, language: account.language, dateFormat: account.dateFormat },
+              { id: account.id, username: user.username, displayName: account.displayName, language: account.language, dateFormat: account.dateFormat },
               this.rememberSecret,
               { expiresIn: this.rememberExpiresIn },
             )

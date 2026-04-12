@@ -7,26 +7,20 @@
     <div id="rateSummaryContainer" class="rating-summary-container">
       {% include "partials/rating-summary.html" %}
     </div>
+    {% if account %}
     <div class="rate-header">
       <button class="btn-review" onclick="openReview('rateModal')">{{resource.write_a_review}}</button>
     </div>
-    <section class="row search-group">{% include "partials/pagination.html"%}</section>
-    <ul class="row list">
-      {% for item in list %}
-      <li class="col s12 m6 l4 xl3 review-item">
-        <header>
-          <strong>{{item.displayName}}</strong>
-          <div class="review-item-stars" {{item.percent}}></div>
-        </header>
-        <p class="center-align-items">{{item.time}}</p>
-        <p>{{item.review}}</p>
-      </li>
-      {% endfor %}
-    </ul>
+    {% endif %}
+    <div id="reviewBody">
+      {% include "pages/reviews.html"%}
+    </div>
+    {% if account %}
     <div id="rateModal" class="modal-bg">
       <div class="modal">
         {% include "partials/rating-form.html" %}
       </div>
     </div>
+    {% endif %}
   </div>
 </div>

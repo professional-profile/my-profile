@@ -34,9 +34,6 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   if (obj) {
     obj.menu = res.locals.menu
     obj.account = res.locals.account
-    if (obj.account && !obj.account.displayName) {
-      obj.account.displayName = obj.account.username
-    }
     obj.isChecked = isChecked
     obj.isNotEmpty = isNotEmpty
     obj.datetimeToString = datetimeToString

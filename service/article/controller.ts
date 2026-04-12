@@ -10,6 +10,8 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isPartial,
+  isSubPartial,
   resources,
   SavedController
 } from "express-ext"
@@ -137,7 +139,9 @@ export class ArticleController extends SavedController {
     const dateFormat = getDateFormat(lang)
     try {
       const id = await this.service.getIdBySlug(req.params.id)
-      const rate = await this.service.getRateSummary(id)
+      const partial = isPartial(req)
+      const subPartial = isSubPartial(req)
+      const view = partial && subPartial ? "reviews" : "article-review"
       let filter: RateFilter = { id, limit: resources.defaultLimit}
       if (hasSearch(req)) {
         filter = fromRequest<RateFilter>(req)
@@ -155,9 +159,8 @@ export class ArticleController extends SavedController {
         calculatePercent(item)
       }
       const search = getSearch(req.url)
-      render(req, res, "article-review", {
+      const ctx: any = {
         resource,
-        rate: formatRate(rate),
         limits: resources.limits,
         filter,
         list,
@@ -165,7 +168,12 @@ export class ArticleController extends SavedController {
         pageSearch: buildPageSearch(search),
         sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
-      })
+      }
+      if (!(partial && subPartial)) {
+        const rate = await this.service.getRateSummary(id)
+        ctx.rate = formatRate(rate)
+      }
+      render(req, res, view, ctx)
     } catch (err) {
       renderError500(req, res, resource, err)
     }

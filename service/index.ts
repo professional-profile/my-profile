@@ -55,6 +55,9 @@ export class TokenVerifier {
                 removeJWTFields(decoded2)
                 const newToken = sign(decoded2, this.secret, { expiresIn: this.expiresIn })
                 res.cookie(this.token, newToken, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
+                if (!decoded2.displayName) {
+                  decoded2.displayName = decoded2.username
+                }
                 res.locals[this.account] = decoded2
                 res.locals.userId = decoded2.id
                 if (decoded2.username) {
@@ -65,6 +68,9 @@ export class TokenVerifier {
             })
           }
         } else {
+          if (!decoded.displayName) {
+            decoded.displayName = decoded.username
+          }
           res.locals[this.account] = decoded
           res.locals.userId = decoded.id
           if (decoded.username) {
