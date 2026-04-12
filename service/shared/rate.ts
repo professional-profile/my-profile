@@ -1,4 +1,4 @@
-import { Attributes, Filter } from "onecore";
+import { Attributes, Filter, Transaction } from "onecore";
 
 export interface BaseRate {
   author: string;
@@ -54,13 +54,13 @@ export interface RateSummary {
 }
 
 export interface RateRepository {
-  create(rate: Rate, newInfo?: boolean): Promise<number>;
-  update(rate: Rate, oldRate: number): Promise<number>;
-  load(id: string, author: string): Promise<Rate | null>;
+  create(rate: Rate, newInfo?: boolean, tx?: Transaction): Promise<number>;
+  update(rate: Rate, oldRate: number, tx?: Transaction): Promise<number>;
+  load(id: string, author: string, tx?: Transaction): Promise<Rate | null>;
 }
 export interface RateSummaryRepository {
-  exist(id: string): Promise<boolean>;
-  load(id: string): Promise<RateSummary | null>
+  exist(id: string, tx?: Transaction): Promise<boolean>;
+  load(id: string, tx?: Transaction): Promise<RateSummary | null>
 }
 
 export const rateHistoryModel: Attributes = {
@@ -183,11 +183,11 @@ export function formatRate(r: RateSummary): RateFormat  {
   const f: any = {
     rate: srate,
     count: rCount,
-    rate1: `style="width: ${(r.rate1 * 100)/count}%"`,
-    rate2: `style="width: ${(r.rate2 * 100)/count}%"`,
-    rate3: `style="width: ${(r.rate3 * 100)/count}%"`,
-    rate4: `style="width: ${(r.rate4 * 100)/count}%"`,
-    rate5: `style="width: ${(r.rate5 * 100)/count}%"`,
+    rate1: `style="width: ${((r.rate1 * 100)/count).toFixed(0)}%"`,
+    rate2: `style="width: ${((r.rate2 * 100)/count).toFixed(0)}%"`,
+    rate3: `style="width: ${((r.rate3 * 100)/count).toFixed(0)}%"`,
+    rate4: `style="width: ${((r.rate4 * 100)/count).toFixed(0)}%"`,
+    rate5: `style="width: ${((r.rate5 * 100)/count).toFixed(0)}%"`,
   }
   for (let i = 1; i <= 5; i++) {
     const x = (rate - i + 1)*100

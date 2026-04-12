@@ -185,6 +185,7 @@ export class ArticleController extends SavedController {
       console.log("JSON rate " + JSON.stringify(rate))
       await this.service.rate(rate)
       const rateSummary = await this.service.getRateSummary(article.id)
+      console.log("rate summary " + JSON.stringify(rateSummary))
       res.render("partials/rating-summary", { resource, rate: formatRate(rateSummary) })
     } catch (err) {
       handleError(err, res)

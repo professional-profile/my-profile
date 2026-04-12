@@ -41,7 +41,7 @@
           {{generateStarChips(user.skills, 'skill', 'skill', 'hirable', true)}}
         </section>
         <hr />
-        <p class="description"><i class="star highlight"></i>{{resource.user_profile_hirable_skill}}</p>
+        <p class="description"><i class="star"></i>{{resource.user_profile_hirable_skill}}</p>
       </div>
       <div class="card">
         <header><i class="material-icons highlight">chat</i>Social</header>
@@ -93,7 +93,7 @@
         <header><i class="material-icons highlight">beenhere</i>{{resource.achievements}}</header>
         {% for achievement in user.achievements %}
         <section class="item">
-          <h4>{{achievement.subject}}{% if achievement.highlight %}<i class="star highlight float-right"></i>{% endif
+          <h4>{{achievement.subject}}{% if achievement.highlight %}<i class="star float-right"></i>{% endif
             %}</h4>
           <p class="description">{{achievement.description}}</p>
           <hr />

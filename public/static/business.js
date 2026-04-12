@@ -205,7 +205,7 @@ function addAchievement(target) {
   }
 }
 function renderAchievement(subject, description, highlight) {
-  var star = highlight ? '<i class="star highlight"></i>' : ""
+  var star = highlight ? '<i class="star"></i>' : ""
   return (
     "<h3>" +
     escapeHTML(subject) +

@@ -11,7 +11,7 @@ import { SqlArticleRepository, SqlRateSummaryRepository } from "./repository"
 export * from "./controller"
 
 export class ArticleUseCase implements ArticleService {
-  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateSummaryRepository: RateSummaryRepository, protected rateRepository: RateRepository, protected ratesRepository: RatesRepository) {
+  constructor(protected db: DB, protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateSummaryRepository: RateSummaryRepository, protected rateRepository: RateRepository, protected ratesRepository: RatesRepository) {
   }
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)
@@ -38,35 +38,41 @@ export class ArticleUseCase implements ArticleService {
     return this.savedRepository.remove(userId, id)
   }
   async rate(rate: Rate): Promise<number> {
-    rate.time = new Date();
     console.log("JSON rate " + JSON.stringify(rate))
-    const info = await this.rateSummaryRepository.exist(rate.id);
-    if (!info) {
-      const res = await this.rateRepository.create(rate, true);
-      return res;
+    const tx = await this.db.beginTransaction()
+    try {
+      const info = await this.rateSummaryRepository.exist(rate.id, tx);
+      if (!info) {
+        const res = await this.rateRepository.create(rate, true, tx);
+        return res;
+      }
+      const exist = await this.rateRepository.load(rate.id, rate.author, tx);
+      if (!exist) {
+        console.log("enter create")
+        const res = await this.rateRepository.create(rate, false, tx);
+        return res;
+      }
+      console.log("Existing rate " + JSON.stringify(exist)) 
+      const history: History = { review: exist.review, rate: exist.rate, time: exist.time };
+      if (exist.histories && exist.histories.length > 0) {
+        const histories = exist.histories;
+        histories.push(history);
+        exist.histories = histories;
+      } else {
+        exist.histories = [history];
+      }
+      const oldRate = exist.rate
+      exist.rate = rate.rate
+      exist.review = rate.review
+      exist.time = new Date()
+      console.log("enter update " + JSON.stringify(exist))
+      const count = await this.rateRepository.update(exist, oldRate, tx);
+      tx.commit()
+      return count;
+    } catch (err) {
+      tx.rollback()
+      throw err
     }
-    const exist = await this.rateRepository.load(rate.id, rate.author);
-    if (!exist) {
-      console.log("enter create")
-      const res = await this.rateRepository.create(rate);
-      return res;
-    }
-    console.log("Existing rate " + JSON.stringify(exist)) 
-    const history: History = { review: exist.review, rate: exist.rate, time: exist.time };
-    if (exist.histories && exist.histories.length > 0) {
-      const histories = exist.histories;
-      histories.push(history);
-      exist.histories = histories;
-    } else {
-      exist.histories = [history];
-    }
-    const oldRate = exist.rate
-    exist.rate = rate.rate
-    exist.review = rate.review
-    exist.time = new Date()
-    console.log("enter update " + JSON.stringify(exist))
-    const count = await this.rateRepository.update(exist, oldRate);
-    return count;
   }
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>> {
     return this.ratesRepository.search(filter, limit, page, fields)
@@ -79,7 +85,7 @@ export function useArticleController(db: DB): ArticleController {
   const rateSummaryRepository = new SqlRateSummaryRepository(db)
   const rateRepository = new SqlRateRepository<Rate>(db, "article_rates", rateModel, 5, "article_info", buildToInsert, buildToUpdate, generateId, "rateId", "rate", "count", "score", "author", "id")
   const ratesRepository = new SearchRateRepository(db)
-  const service = new ArticleUseCase(repository, savedRepository, 200, rateSummaryRepository, rateRepository, ratesRepository)
+  const service = new ArticleUseCase(db, repository, savedRepository, 200, rateSummaryRepository, rateRepository, ratesRepository)
   return new ArticleController(service)
 }
 function generateId(): string {

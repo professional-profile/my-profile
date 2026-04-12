@@ -201,7 +201,7 @@ function addAchievement(target: HTMLButtonElement) {
   }
 }
 function renderAchievement(subject: string, description: string, highlight?: boolean): string {
-  const star = highlight ? '<i class="star highlight"></i>' : ""
+  const star = highlight ? '<i class="star"></i>' : ""
   return `<h3>${escapeHTML(subject)}${star}</h3>
 <p class="description">${escapeHTML(description)}</p>
 <button type="button" class="btn-remove" onclick="removeParent(this)"></button>`

@@ -5,7 +5,7 @@
 </header>
 {% for achievement in user.achievements %}
 <section class="item" data-value="true">
-  <h4>{{achievement.subject}}{% if achievement.highlight %}<i class="star highlight"></i>{% endif %}</h4>
+  <h4>{{achievement.subject}}{% if achievement.highlight %}<i class="star"></i>{% endif %}</h4>
   <p class="description">{{achievement.description}}</p>
   <button type="button" class="btn-remove" onclick="removeParent(this)"></button>
   <hr />

@@ -22,7 +22,7 @@ create table saved_articles (
 
 create table article_info (
   id varchar(40) primary key,
-  rate numeric default 0,
+  rate real default 0,
   rate1 integer default 0,
   rate2 integer default 0,
   rate3 integer default 0,

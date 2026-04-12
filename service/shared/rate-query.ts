@@ -1,16 +1,73 @@
-import { Attributes, DB, Statement, StringMap } from 'query-core';
+export type DataType =
+  | "ObjectId"
+  | "date"
+  | "datetime"
+  | "time"
+  | "boolean"
+  | "number"
+  | "integer"
+  | "string"
+  | "text"
+  | "object"
+  | "array"
+  | "binary"
+  | "primitives"
+  | "booleans"
+  | "numbers"
+  | "integers"
+  | "strings"
+  | "dates"
+  | "datetimes"
+  | "times"
+export type Operator = "=" | "like" | "!=" | "<>" | ">" | ">=" | "<" | "<="
 
-export interface RateRepository<R> {
-  create(rate: R, newInfo?: boolean): Promise<number>;
-  update(rate: R, oldRate: number): Promise<number>;
-  load(id: string, author: string): Promise<R | null>;
+export interface Attribute {
+  name?: string
+  column?: string
+  type?: DataType
+  operator?: Operator
+  default?: string | number | Date | boolean
+  key?: boolean
+  q?: boolean
+  noinsert?: boolean
+  noupdate?: boolean
+  nopatch?: boolean
+  version?: boolean
+  ignored?: boolean
+  true?: string | number
+  false?: string | number
+  createdAt?: boolean
+  updatedAt?: boolean
+}
+export interface Attributes {
+  [key: string]: Attribute
+}
+
+export interface Executor {
+  driver: string
+  param(i: number): string
+  execute(sql: string, args?: any[], ctx?: any): Promise<number>
+  executeBatch(statements: Statement[], firstSuccess?: boolean, ctx?: any): Promise<number>
+  query<T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[], ctx?: any): Promise<T[]>
+}
+export interface Transaction extends Executor {
+  commit(): Promise<void>
+  rollback(): Promise<void>
+}
+export interface DB extends Executor {
+  beginTransaction(): Promise<Transaction>
+}
+export interface StringMap {
+  [key: string]: string
+}
+export interface Statement {
+  query: string
+  params?: any[]
 }
 
 export function buildMap(attrs: Attributes): StringMap {
   const mp: StringMap = {}
   const ks = Object.keys(attrs)
-  // const fields: string[] = []
-  // let isMap = false
   for (const k of ks) {
     const attr = attrs[k]
     attr.name = k
@@ -18,12 +75,11 @@ export function buildMap(attrs: Attributes): StringMap {
     const s = field.toLowerCase()
     if (s !== k) {
       mp[s] = k
-      // isMap = true
     }
   }
   return mp
 }
-export class SqlRateRepository<R> implements RateRepository<R> {
+export class SqlRateRepository<R> {
   constructor(protected db: DB, protected table: string, protected attributes: Attributes, protected max: number, protected infoTable: string,
     protected buildToInsert: (obj: R, table: string, attrs: Attributes, buildParam: (i: number) => string) => Statement,
     protected buildToUpdate: (obj: R, table: string, attrs: Attributes, buildParam: (i: number) => string) => Statement,
@@ -72,12 +128,13 @@ export class SqlRateRepository<R> implements RateRepository<R> {
   rateField: string;
   idCol: string;
   authorCol: string;
-  load(id: string, author: string, ctx?: any): Promise<R | null> {
-    return this.db.query<R>(`select * from ${this.table} where ${this.idCol} = ${this.db.param(1)} and ${this.authorCol} = ${this.db.param(2)}`, [id, author], this.map, undefined, ctx).then(rates => {
+  load(id: string, author: string, tx?: Transaction): Promise<R | null> {
+    const db = tx ? tx : this.db
+    return db.query<R>(`select * from ${this.table} where ${this.idCol} = ${this.db.param(1)} and ${this.authorCol} = ${this.db.param(2)}`, [id, author], this.map).then(rates => {
       return rates && rates.length > 0 ? rates[0] : null;
     });
   }
-  create(rate: R, newInfo?: boolean): Promise<number> {
+  create(rate: R, newInfo?: boolean, tx?: Transaction): Promise<number> {
     (rate as any)[this.rateIdField] = this.generateId()
     const stmt = this.buildToInsert(rate, this.table, this.attributes, this.db.param);
     if (stmt.query) {
@@ -85,14 +142,15 @@ export class SqlRateRepository<R> implements RateRepository<R> {
       const rateNum: number = obj[this.rateField];
       const id: string = obj[this.idField];
       console.log(stmt.query)
+      const db = tx ? tx : this.db
       if (newInfo) {
         const query = this.insertInfo(rateNum);
         const s2: Statement = { query, params: [id] };
-        return this.db.executeBatch([s2, stmt], true);
+        return db.executeBatch([s2, stmt], true);
       } else {
         const query = this.updateNewInfo(rateNum);
         const s2: Statement = { query, params: [id] };
-        return this.db.executeBatch([s2, stmt], true);
+        return db.executeBatch([s2, stmt], true);
       }
     } else {
       return Promise.resolve(-1);
@@ -114,7 +172,7 @@ export class SqlRateRepository<R> implements RateRepository<R> {
       values (${this.db.param(1)}, ${r}, 1, ${r}, ${ps.join(',')})`;
     return query;
   }
-  update(rate: R, oldRate: number): Promise<number> {
+  update(rate: R, oldRate: number, tx?: Transaction): Promise<number> {
     console.log("Attrs " + JSON.stringify(this.attributes))
     const stmt = this.buildToUpdate(rate, this.table, this.attributes, this.db.param);
     console.log("update xsx " + stmt.query + " " + JSON.stringify(stmt.params))
@@ -124,7 +182,8 @@ export class SqlRateRepository<R> implements RateRepository<R> {
       const id: string = obj[this.idField];
       const query = this.updateOldInfo(rateNum, oldRate);
       const s2: Statement = { query, params: [id] };
-      return this.db.executeBatch([s2, stmt], true);
+      const db = tx ? tx : this.db
+      return db.executeBatch([s2, stmt], true);
     } else {
       return Promise.resolve(-1);
     }
@@ -142,7 +201,7 @@ export class SqlRateRepository<R> implements RateRepository<R> {
     }
     const delta = newRate - oldRate;
     const query = `
-      update ${this.infoTable} set ${this.rate} = (${this.score} + ${delta})/${this.count}, ${this.score} = ${this.score} + ${delta}, ${this.rate}${newRate} = ${this.rate}${newRate} + 1, ${this.rate}${oldRate} = ${this.rate}${oldRate} - 1
+      update ${this.infoTable} set ${this.rate} = (${this.score} + (${delta}))/${this.count}, ${this.score} = ${this.score} + (${delta}), ${this.rate}${newRate} = ${this.rate}${newRate} + 1, ${this.rate}${oldRate} = ${this.rate}${oldRate} - 1
       where ${this.id} = ${this.db.param(1)}`;
     console.log("update old " + query)
     return query;
