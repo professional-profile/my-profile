@@ -18,7 +18,7 @@ function qOnChange(e: Event) {
   }
 }
 function toggleSearch(e: Event) {
-  const btn = e.target as HTMLInputElement
+  const btn = e.target as HTMLButtonElement
   const form = btn.form
   if (form) {
     const advanceSearch = form.querySelector(".advance-search") as HTMLElement
@@ -28,7 +28,13 @@ function toggleSearch(e: Event) {
     }
   }
 }
-
+function toggleSort(e: Event) {
+  const btn = e.target as HTMLButtonElement
+  const parent = btn.parentElement
+  if (parent) {
+    toggleClass(parent, "on")
+  }
+}
 const o = "object"
 function trimNull(obj: any): any {
   if (!obj || typeof obj !== o) {

@@ -37,6 +37,9 @@ export class ArticleUseCase implements ArticleService {
   remove(userId: string, id: string): Promise<number> {
     return this.savedRepository.remove(userId, id)
   }
+  getRate(id: string, author: string): Promise<SearchRate | null> {
+    return this.ratesRepository.getRate(id, author)
+  }
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>> {
     return this.ratesRepository.search(filter, limit, page, fields)
   }

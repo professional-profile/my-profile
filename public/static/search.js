@@ -29,6 +29,13 @@ function toggleSearch(e) {
     }
   }
 }
+function toggleSort(e) {
+  var btn = e.target
+  var parent = btn.parentElement
+  if (parent) {
+    toggleClass(parent, "on")
+  }
+}
 var o = "object"
 function trimNull(obj) {
   if (!obj || typeof obj !== o) {

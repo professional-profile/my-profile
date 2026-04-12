@@ -87,10 +87,17 @@ export function buildQuery(filter: RateFilter): Statement {
 
 export interface RatesRepository {
   search(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Rate>>
+  getRate(id: string, author: string): Promise<Rate | null>
 }
 
 export class SearchRateRepository extends SearchRepository<Rate, RateFilter> implements RatesRepository {
   constructor(db: DB) {
     super(db, "article_rates", rateModel, buildQuery)
+    this.getRate = this.getRate.bind(this)
+  }
+  async getRate(id: string, author: string): Promise<Rate | null> {
+    const sql = `select * from article_rates ar where id = ${this.db.param(1)} and author = ${this.db.param(2)}`
+    const rates = await this.db.query<Rate>(sql, [id, author])
+    return rates && rates.length > 0 ? rates[0] : null
   }
 }

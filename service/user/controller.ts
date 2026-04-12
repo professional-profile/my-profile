@@ -31,10 +31,7 @@ export class UserController extends FollowController {
   async search(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    let filter: UserFilter = {
-      q: "",
-      limit: resources.defaultLimit,
-    }
+    let filter: UserFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
@@ -90,14 +87,12 @@ export class UserController extends FollowController {
   async getFollowers(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    let filter: UserFilter = {
-      q: "",
-      limit: resources.defaultLimit,
-    }
+    const userId: string = res.locals.userId
+    let filter: UserFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
-    filter.userId = res.locals.userId
+    filter.userId = userId
     const id = await this.service.getIdBySlug(req.params.id)
     filter.followedUserId = id
     const { page, limit, sort } = filter
@@ -127,7 +122,6 @@ export class UserController extends FollowController {
       const view = partial && subPartial ? "user/followers" : "user-followers"
       if (!partial) {
         const id = req.params.id
-        const userId: string = res.locals.userId
         const user = await this.service.load(id, userId)
         if (!user) {
           return renderError404(req, res, resource)
@@ -142,14 +136,12 @@ export class UserController extends FollowController {
   async getFollowing(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    let filter: UserFilter = {
-      q: "",
-      limit: resources.defaultLimit,
-    }
+    const userId = res.locals.userId
+    let filter: UserFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
-    filter.userId = res.locals.userId
+    filter.userId = userId
     const id = await this.service.getIdBySlug(req.params.id)
     filter.followingUserId = id
     const { page, limit, sort } = filter
@@ -179,7 +171,6 @@ export class UserController extends FollowController {
       const view = partial && subPartial ? "user/following" : "user-following"
       if (!partial) {
         const id = req.params.id
-        const userId: string = res.locals.userId
         const user = await this.service.load(id, userId)
         if (!user) {
           return renderError404(req, res, resource)

@@ -58,6 +58,7 @@ export class TokenVerifier {
                 if (!decoded2.displayName) {
                   decoded2.displayName = decoded2.username
                 }
+                console.log("account 2 " + JSON.stringify(decoded2))
                 res.locals[this.account] = decoded2
                 res.locals.userId = decoded2.id
                 if (decoded2.username) {
@@ -71,6 +72,7 @@ export class TokenVerifier {
           if (!decoded.displayName) {
             decoded.displayName = decoded.username
           }
+          console.log("account " + JSON.stringify(decoded))
           res.locals[this.account] = decoded
           res.locals.userId = decoded.id
           if (decoded.username) {

@@ -155,3 +155,13 @@ interface SRate {
 export function calculatePercent(r: SRate): void {
   (r as any)["percent"] = `style="--percent:${(r.rate * 20).toFixed(0)}%"`
 }
+export function buildStarPickers(rate: number, pickers: any) {
+  for (let i = 1; i <= 5; i++) {
+    if (rate <= i) {
+      pickers["starPicker" + i] = "active"
+    } else {
+      return pickers
+    }
+  }
+  return pickers
+}

@@ -5,6 +5,7 @@ import {
   buildPageSearch,
   buildSortSearch,
   escapeArray,
+  escapeHTML,
   format,
   fromRequest,
   getSearch,
@@ -12,9 +13,11 @@ import {
   hasSearch,
   isPartial,
   isSubPartial,
+  removeSort,
   resources,
   SavedController
 } from "express-ext"
+import { Item } from "onecore"
 import { RateService, SubmittedRate } from "rate-query"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
@@ -39,7 +42,6 @@ export class ArticleController extends SavedController {
     const dateFormat = getDateFormat(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
-      q: "",
       publishedAt: {},
     }
     if (hasSearch(req)) {
@@ -59,6 +61,12 @@ export class ArticleController extends SavedController {
         item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
       }
       const search = getSearch(req.url)
+      const sortSearch = removeSort(search)
+      console.log("search " + search)
+      console.log("sort search " + sortSearch)
+      const prefix = sortSearch.length > 0 ? "?" + sortSearch + "&" : "?"
+      const s1: Item = {value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
+      const s2: Item = {value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
       render(req, res, "articles", {
         resource,
         limits: resources.limits,
@@ -66,7 +74,8 @@ export class ArticleController extends SavedController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sorts: [s1, s2],
+        //sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })
     } catch (err) {
@@ -79,7 +88,6 @@ export class ArticleController extends SavedController {
     const dateFormat = getDateFormat(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
-      q: "",
       publishedAt: {},
     }
     if (hasSearch(req)) {
@@ -137,11 +145,12 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
+    const userId: string = res.locals.userId
+    const partial = isPartial(req)
+    const subPartial = isSubPartial(req)
+    const view = partial && subPartial ? "shared/reviews" : "article-review"
     try {
       const id = await this.service.getIdBySlug(req.params.id)
-      const partial = isPartial(req)
-      const subPartial = isSubPartial(req)
-      const view = partial && subPartial ? "reviews" : "article-review"
       let filter: RateFilter = { id, limit: resources.defaultLimit}
       if (hasSearch(req)) {
         filter = fromRequest<RateFilter>(req)
@@ -159,6 +168,14 @@ export class ArticleController extends SavedController {
         calculatePercent(item)
       }
       const search = getSearch(req.url)
+      const sortSearch = removeSort(search)
+      console.log("search " + search)
+      console.log("sort search " + sortSearch)
+      const prefix = sortSearch.length > 0 ? "?" + sortSearch + "&" : "?"
+      const s1: Item = {value: `${prefix}${resources.sort}=-time`, text: resource.sort_time_desc}
+      const s2: Item = {value: `${prefix}${resources.sort}=time`, text: resource.sort_time_asc}
+      const s3: Item = {value: `${prefix}${resources.sort}=-rate`, text: resource.sort_time_desc}
+      const s4: Item = {value: `${prefix}${resources.sort}=rate`, text: resource.sort_time_asc}
       const ctx: any = {
         resource,
         limits: resources.limits,
@@ -166,12 +183,16 @@ export class ArticleController extends SavedController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sorts: [s1, s2, s3, s4],
         message: buildMessage(resource, list, limit, page, result.total),
       }
-      if (!(partial && subPartial)) {
-        const rate = await this.service.getRateSummary(id)
-        ctx.rate = formatRate(rate)
+      if (!partial || !subPartial) {
+        const summary = await this.service.getRateSummary(id)
+        ctx.rate = formatRate(summary)
+        if (userId) {
+          const userRate = await this.service.getRate(id, userId)
+          ctx.review = userRate ? {rate: userRate.rate, review: escapeHTML(userRate.review)} : {}
+        }
       }
       render(req, res, view, ctx)
     } catch (err) {
@@ -196,43 +217,6 @@ export class ArticleController extends SavedController {
       res.render("partials/rating-summary", { resource, rate: formatRate(rateSummary) })
     } catch (err) {
       handleError(err, res)
-    }
-  }
-  async searchRates(req: Request, res: Response) {
-    const lang = getLang(req)
-    const resource = getResource(lang)
-    const dateFormat = getDateFormat(lang)
-    let filter: RateFilter = {
-      limit: resources.defaultLimit,
-      id: req.params.id
-    }
-    if (hasSearch(req)) {
-      filter = fromRequest<RateFilter>(req)
-      format(filter, ["time"])
-    }
-    if (!filter.sort) {
-      filter.sort = "-time"
-    }
-    const { page, limit, sort } = filter
-    try {
-      const result = await this.service.searchRates(filter, limit, page)
-      const list = escapeArray(result.list)
-      for (const item of result.list) {
-        item.time = formatDateTime(item.time, dateFormat)
-      }
-      const search = getSearch(req.url)
-      render(req, res, "rates", {
-        resource,
-        limits: resources.limits,
-        filter,
-        list,
-        pages: buildPages(limit, result.total),
-        pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
-        message: buildMessage(resource, list, limit, page, result.total),
-      })
-    } catch (err) {
-      renderError500(req, res, resource, err)
     }
   }
 }

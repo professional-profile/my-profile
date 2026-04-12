@@ -7,6 +7,14 @@
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">
         {% include "partials/advance-search.html" %}
+        <div class="col s12 m6 sort">
+          <button id="sortBtn" type="button" class="btn-sort" onclick="toggleSort(event)">Sort</button>
+          <div id="sortDropdown" class="sort-dropdown">
+            {% for item in sorts %}
+            <a href="{{item.value}}">{{item.text}}</a>
+            {% endfor %}
+          </div>
+        </div>
         {% include "partials/pagination.html" %}
       </section>
       <section class="row search-group inline advance-search" hidden>

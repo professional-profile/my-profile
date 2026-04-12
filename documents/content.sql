@@ -185,7 +185,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
   <header>
     <h1>FPT Software</h1>
   </header>
-  <div class="view-body">
+  <div class="main-body">
     <p class="p">
       FPT Software Company Limited, also known simply as Fsoft is a global IT services provider headquartered in Hanoi, Vietnam, being the
       core subsidiary of the FPT Corporation. It is considered one of the biggest software services companies in Vietnam, with US$1.87
@@ -531,7 +531,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
   <header>
     <h1>Công ty phần mềm FPT</h1>
   </header>
-  <div class="view-body">
+  <div class="main-body">
     <p class="p">
       Công ty trách nhiệm hữu hạn phần mềm FPT, còn được gọi đơn giản là Fsoft, là nhà cung cấp dịch vụ công nghệ thông tin toàn cầu có trụ
       sở chính tại Hà Nội, Việt Nam, là công ty con lớn của Tập đoàn FPT. Đây là một trong những công ty dịch vụ phần mềm lớn nhất tại Việt

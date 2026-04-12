@@ -33,9 +33,9 @@ export class MyProfileController {
     this.submit = this.submit.bind(this)
   }
   async viewSettings(req: Request, res: Response) {
-    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
+    const userId: string = res.locals.userId
     try {
       const settings = await this.service.getMySettings(userId)
       if (!settings) {
@@ -58,9 +58,9 @@ export class MyProfileController {
     }
   }
   async getPartial(req: Request, res: Response, name: string) {
-    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
+    const userId: string = res.locals.userId
     try {
       const user = await this.service.getMyProfile(userId)
       if (!user) {
@@ -103,9 +103,9 @@ export class MyProfileController {
     this.getPartial(req, res, "achievements_update")
   }
   async view(req: Request, res: Response) {
-    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
+    const userId: string = res.locals.userId
     try {
       const user = await this.service.getMyProfile(userId)
       if (!user) {

@@ -34,7 +34,6 @@ export class MyArticlesController {
     const dateFormat = getDateFormat(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
-      q: "",
       status: [],
       publishedAt: {},
     }
@@ -69,11 +68,11 @@ export class MyArticlesController {
     }
   }
   async view(req: Request, res: Response) {
-    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const id = req.params.id
+    const userId: string = res.locals.userId
     try {
       const article = await this.service.load(id)
       if (!article || article.authorId !== userId) {
@@ -86,9 +85,9 @@ export class MyArticlesController {
     }
   }
   async submit(req: Request, res: Response) {
-    const userId: string = res.locals.userId
     const lang = getLang(req)
     const resource = getResource(lang)
+    const userId: string = res.locals.userId
     const article = req.body as Article
     const errors = validate<Article>(article, articleModel, resource)
     if (errors.length > 0) {
