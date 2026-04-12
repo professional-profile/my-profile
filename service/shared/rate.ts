@@ -82,10 +82,12 @@ export const rateModel: Attributes = {
   },
   id: {
     required: true,
-    operator: '='
+    noupdate: true,
+    operator: '=',
   },
   author: {
     required: true,
+    noupdate: true,
     operator: '='
   },
   rate: {

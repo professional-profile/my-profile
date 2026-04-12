@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid"
 import { SavedRepository, SearchResult } from "onecore"
 import { SqlSavedRepository } from "pg-extension"
-import { DB } from "query-core"
+import { buildToInsert, buildToUpdate, DB } from "query-core"
 import { History, Rate, rateModel, RateRepository, RateSummary, RateSummaryRepository, zeroSummary } from "../shared/rate"
 import { SqlRateRepository } from "../shared/rate-query"
 import { RateFilter, RatesRepository, Rate as SearchRate, SearchRateRepository } from "../shared/rates"
@@ -39,6 +39,7 @@ export class ArticleUseCase implements ArticleService {
   }
   async rate(rate: Rate): Promise<number> {
     rate.time = new Date();
+    console.log("JSON rate " + JSON.stringify(rate))
     const info = await this.rateSummaryRepository.exist(rate.id);
     if (!info) {
       const res = await this.rateRepository.create(rate, true);
@@ -46,18 +47,25 @@ export class ArticleUseCase implements ArticleService {
     }
     const exist = await this.rateRepository.load(rate.id, rate.author);
     if (!exist) {
+      console.log("enter create")
       const res = await this.rateRepository.create(rate);
       return res;
     }
+    console.log("Existing rate " + JSON.stringify(exist)) 
     const history: History = { review: exist.review, rate: exist.rate, time: exist.time };
     if (exist.histories && exist.histories.length > 0) {
       const histories = exist.histories;
       histories.push(history);
-      rate.histories = histories;
+      exist.histories = histories;
     } else {
-      rate.histories = [history];
+      exist.histories = [history];
     }
-    const count = await this.rateRepository.update(rate, exist.rate);
+    const oldRate = exist.rate
+    exist.rate = rate.rate
+    exist.review = rate.review
+    exist.time = new Date()
+    console.log("enter update " + JSON.stringify(exist))
+    const count = await this.rateRepository.update(exist, oldRate);
     return count;
   }
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>> {
@@ -69,7 +77,7 @@ export function useArticleController(db: DB): ArticleController {
   const repository = new SqlArticleRepository(db)
   const savedRepository = new SqlSavedRepository(db, "saved_articles", "user_id", "id", "saved_at")
   const rateSummaryRepository = new SqlRateSummaryRepository(db)
-  const rateRepository = new SqlRateRepository<Rate>(db, "article_rates", rateModel, 5, "article_info", generateId, "rateId", "rate", "count", "score", "author", "id")
+  const rateRepository = new SqlRateRepository<Rate>(db, "article_rates", rateModel, 5, "article_info", buildToInsert, buildToUpdate, generateId, "rateId", "rate", "count", "score", "author", "id")
   const ratesRepository = new SearchRateRepository(db)
   const service = new ArticleUseCase(repository, savedRepository, 200, rateSummaryRepository, rateRepository, ratesRepository)
   return new ArticleController(service)

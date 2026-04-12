@@ -1,4 +1,4 @@
-import { Attributes, buildMetadata, buildToInsert, buildToUpdate, DB, Statement, StringMap } from 'query-core';
+import { Attributes, DB, Statement, StringMap } from 'query-core';
 
 export interface RateRepository<R> {
   create(rate: R, newInfo?: boolean): Promise<number>;
@@ -6,10 +6,29 @@ export interface RateRepository<R> {
   load(id: string, author: string): Promise<R | null>;
 }
 
+export function buildMap(attrs: Attributes): StringMap {
+  const mp: StringMap = {}
+  const ks = Object.keys(attrs)
+  // const fields: string[] = []
+  // let isMap = false
+  for (const k of ks) {
+    const attr = attrs[k]
+    attr.name = k
+    const field = attr.column ? attr.column : k
+    const s = field.toLowerCase()
+    if (s !== k) {
+      mp[s] = k
+      // isMap = true
+    }
+  }
+  return mp
+}
 export class SqlRateRepository<R> implements RateRepository<R> {
-  constructor(protected db: DB, protected table: string, protected attributes: Attributes, protected max: number, protected infoTable: string, protected generateId: () => string, protected rateIdField: string, rateField?: string, count?: string, score?: string, authorCol?: string, id?: string, idField?: string, idCol?: string, rateCol?: string) {
-    const m = buildMetadata(attributes);
-    this.map = m.map;
+  constructor(protected db: DB, protected table: string, protected attributes: Attributes, protected max: number, protected infoTable: string,
+    protected buildToInsert: (obj: R, table: string, attrs: Attributes, buildParam: (i: number) => string) => Statement,
+    protected buildToUpdate: (obj: R, table: string, attrs: Attributes, buildParam: (i: number) => string) => Statement,
+    protected generateId: () => string, protected rateIdField: string, rateField?: string, count?: string, score?: string, authorCol?: string, id?: string, idField?: string, idCol?: string, rateCol?: string) {
+    this.map = buildMap(attributes);
     this.id = (id && id.length > 0 ? id : 'id');
     this.rate = (rateCol && rateCol.length > 0 ? rateCol : 'rate');
     this.count = (count && count.length > 0 ? count : 'count');
@@ -60,11 +79,12 @@ export class SqlRateRepository<R> implements RateRepository<R> {
   }
   create(rate: R, newInfo?: boolean): Promise<number> {
     (rate as any)[this.rateIdField] = this.generateId()
-    const stmt = buildToInsert(rate, this.table, this.attributes, this.db.param);
+    const stmt = this.buildToInsert(rate, this.table, this.attributes, this.db.param);
     if (stmt.query) {
       const obj: any = rate;
       const rateNum: number = obj[this.rateField];
       const id: string = obj[this.idField];
+      console.log(stmt.query)
       if (newInfo) {
         const query = this.insertInfo(rateNum);
         const s2: Statement = { query, params: [id] };
@@ -95,7 +115,9 @@ export class SqlRateRepository<R> implements RateRepository<R> {
     return query;
   }
   update(rate: R, oldRate: number): Promise<number> {
-    const stmt = buildToUpdate(rate, this.table, this.attributes, this.db.param);
+    console.log("Attrs " + JSON.stringify(this.attributes))
+    const stmt = this.buildToUpdate(rate, this.table, this.attributes, this.db.param);
+    console.log("update xsx " + stmt.query + " " + JSON.stringify(stmt.params))
     if (stmt.query) {
       const obj: any = rate;
       const rateNum: number = obj[this.rateField];
@@ -111,6 +133,7 @@ export class SqlRateRepository<R> implements RateRepository<R> {
     const query = `
       update ${this.infoTable} set ${this.rate} = (${this.score} + ${r})/(${this.count} + 1), ${this.count} = ${this.count} + 1, ${this.score} = ${this.score} + ${r}, ${this.rate}${r} = ${this.rate}${r} + 1
       where ${this.id} = ${this.db.param(1)}`;
+    console.log("update new " + query)
     return query;
   }
   protected updateOldInfo(newRate: number, oldRate: number): string {
@@ -121,6 +144,7 @@ export class SqlRateRepository<R> implements RateRepository<R> {
     const query = `
       update ${this.infoTable} set ${this.rate} = (${this.score} + ${delta})/${this.count}, ${this.score} = ${this.score} + ${delta}, ${this.rate}${newRate} = ${this.rate}${newRate} + 1, ${this.rate}${oldRate} = ${this.rate}${oldRate} - 1
       where ${this.id} = ${this.db.param(1)}`;
+    console.log("update old " + query)
     return query;
   }
 }
