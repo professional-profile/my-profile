@@ -22,7 +22,7 @@ export const config = {
     size: "size",
   },
   db: {
-    connectionString: "postgres://postgres:abcd1234@localhost/my-profile2",
+    connectionString: "postgres://postgres:abcd1234@localhost/my-profile",
   },
   rememberToken: {
     secret: "secretremember",

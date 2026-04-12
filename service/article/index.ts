@@ -11,7 +11,7 @@ import { SqlArticleRepository, SqlRateSummaryRepository } from "./repository"
 export * from "./controller"
 
 export class ArticleUseCase implements ArticleService {
-  constructor(protected db: DB, protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateSummaryRepository: RateSummaryRepository, protected ratesRepository: RatesRepository) {
+  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateSummaryRepository: RateSummaryRepository, protected ratesRepository: RatesRepository) {
   }
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.repository.search(filter, limit, page, fields)
@@ -49,7 +49,7 @@ export function useArticleController(db: DB): ArticleController {
   const ratesRepository = new SearchRateRepository(db)
   const rateRepository = new SqlRateRepository<Rate>(db, "article_rates", rateModel, 5, "article_info", buildToInsert, buildToUpdate, generateId, "rateId", "rate", "count", "score", "author", "id")
   const rateService = new Rater(db, rateRepository, rateSummaryRepository)
-  const service = new ArticleUseCase(db, repository, savedRepository, 200, rateSummaryRepository, ratesRepository)
+  const service = new ArticleUseCase(repository, savedRepository, 200, rateSummaryRepository, ratesRepository)
   return new ArticleController(service, rateService)
 }
 function generateId(): string {

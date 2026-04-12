@@ -61,8 +61,8 @@ create table article_rate_reactions (
   reaction smallint
 );
 
-insert into public.article_info (id,rate,rate1,rate2,rate3,rate4,rate5,count,score) values
-  ('s9zKgiZEr7',4.214286,2,0,1,1,10,14,59)
+insert into article_info (id,rate,rate1,rate2,rate3,rate4,rate5,count,score) values
+  ('s9zKgiZEr7',4.214286,2,0,1,1,10,14,59),
   ('2sX9m9LZm9',4.0,0,0,0,1,0,1,4),
   ('zasWaUFDBT',5.0,0,0,0,0,1,1,5),
   ('4Q4LN3vm2U',5.0,0,0,0,0,1,1,5),
