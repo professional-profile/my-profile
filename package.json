@@ -30,7 +30,7 @@
     "pg": "^8.20.0",
     "pg-extension": "^0.3.6",
     "query-core": "^0.6.6",
-    "rate-query": "^0.5.0",
+    "rate-query": "^0.5.2",
     "signup-service": "^0.1.0",
     "types-validation": "^0.0.2",
     "ui-formatter": "^0.1.0",

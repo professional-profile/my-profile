@@ -61,12 +61,37 @@ create table article_rate_reactions (
   reaction smallint
 );
 
--- insert into article_comment_thread_reaction values ('7qUfAFE_z', 'axzYT4jyEa', 'axzYT4jyEa', '2023-04-03 14:22:45.504+07', 1);
-/*
-insert into article_info values ('s9zKgiZEr7', 3.2, 0, 0, 4, 1, 0, 5, 16);
-insert into article_rates values ('s9zKgiZEr7', 'ayyQ9RqeMa', 3, '2023-03-27 16:37:42.861', 'A great awards of FPT in 2024', 1, 2, '{"{\"rate\": 4, \"time\": \"2023-03-27T02:27:57.032Z\", \"review\": \"hi\"}","{\"rate\": 5, \"time\": \"2023-03-27T02:32:15.778Z\", \"review\": \"yolo\"}"}', null);
-insert into article_rate_reactions values ('s9zKgiZEr7', 'ayyQ9RqeMa', 'axzYT4jyEa', '2023-04-03 09:21:09.311', 1);
+insert into public.article_info (id,rate,rate1,rate2,rate3,rate4,rate5,count,score) values
+  ('s9zKgiZEr7',4.214286,2,0,1,1,10,14,59)
+  ('2sX9m9LZm9',4.0,0,0,0,1,0,1,4),
+  ('zasWaUFDBT',5.0,0,0,0,0,1,1,5),
+  ('4Q4LN3vm2U',5.0,0,0,0,0,1,1,5),
+  ('t4bqlIi5SB',5.0,0,0,0,0,1,1,5),
+  ('wsXtnt1ZvP',4.0,0,0,0,1,0,1,4);
+insert into article_rates (rate_id,id,author,rate,"time",review,useful_count,reply_count,histories,anonymous) values
+  ('PitF_BfCTd','s9zKgiZEr7','acAoryR2VH',5,'2026-04-12 16:31:00.093+07','Good article',0,0,'{"{\"rate\": 4, \"time\": \"2026-04-06T06:53:34.184Z\", \"review\": \"Good article\"}","{\"rate\": 5, \"time\": \"2026-04-12T03:55:07.134Z\", \"review\": \"Good\"}","{\"rate\": 4, \"time\": \"2026-04-12T04:03:05.913Z\", \"review\": \"Good a\"}","{\"rate\": 5, \"time\": \"2026-04-12T04:05:25.512Z\", \"review\": \"GGGGG\"}","{\"rate\": 4, \"time\": \"2026-04-12T07:38:55.526Z\", \"review\": \"Good a\"}","{\"rate\": 5, \"time\": \"2026-04-12T07:39:26.209Z\", \"review\": \"Good a\"}","{\"rate\": 4, \"time\": \"2026-04-12T07:41:19.576Z\", \"review\": \"Good a\"}","{\"rate\": 5, \"time\": \"2026-04-12T07:47:19.488Z\", \"review\": \"Good a\"}","{\"rate\": 4, \"time\": \"2026-04-12T07:48:45.262Z\", \"review\": \"Good a\"}","{\"rate\": 5, \"time\": \"2026-04-12T07:49:04.024Z\", \"review\": \"Good a\"}","{\"rate\": 4, \"time\": \"2026-04-12T07:49:48.749Z\", \"review\": \"Good a\"}","{\"rate\": 5, \"time\": \"2026-04-12T07:51:54.693Z\", \"review\": \"Good a\"}","{\"rate\": 4, \"time\": \"2026-04-12T07:52:07.495Z\", \"review\": \"Good a\"}","{\"rate\": 5, \"time\": \"2026-04-12T07:52:41.762Z\", \"review\": \"Good a\"}","{\"rate\": 4, \"time\": \"2026-04-12T07:52:56.920Z\", \"review\": \"Good a\"}","{\"rate\": 5, \"time\": \"2026-04-12T09:29:59.737Z\", \"review\": \"Good a\"}","{\"rate\": 4, \"time\": \"2026-04-12T09:30:38.660Z\", \"review\": \"Good a\"}"}',null),
+  ('er0GfxQi9s','s9zKgiZEr7','ayyQ9RqeMa',3,'2026-04-06 13:57:10.111+07','Good',0,0,null,null),
+  ('vi9E9ceyyx','s9zKgiZEr7','beb4MaVRxA',5,'2026-04-05 19:50:19.837+07','Excellent article',0,0,null,null),
+  ('m45q1m3JzC','s9zKgiZEr7','cb3OH0WVk2',1,'2026-04-12 14:52:56.92+07','So bad',0,0,null,null),
+  ('3zHezVUiCm','s9zKgiZEr7','e4ORC8jh3A',1,'2026-04-12 15:25:15.17+07','Bad article',0,0,null,null),
+  ('m0-B86d6t7','s9zKgiZEr7','flMmQvyizP',5,'2026-04-12 16:52:26.827+07','Good article',0,0,'{"{\"rate\": 4, \"time\": \"2026-04-12T09:50:42.594Z\", \"review\": \"Good article\"}"}',null),
+  ('X7ByRTBzzx','s9zKgiZEr7','gGvzI2jjcQ',4,'2026-04-12 17:40:03.638+07','Good article',0,0,null,null),
+  ('vROPUhtIMF','s9zKgiZEr7','haUR50VAXm',5,'2026-04-12 17:40:55.27+07','Great',0,0,null,null),
+  ('Tj28B7nby9','s9zKgiZEr7','ite6Sck7YB',5,'2026-04-12 17:41:40.486+07','Great',0,0,null,null),
+  ('RmeVvueH0F','s9zKgiZEr7','jjMKvK10ph',5,'2026-04-12 17:42:24.839+07','Great',0,0,null,null),
+  ('jADGe7fPDp','s9zKgiZEr7','k2k6FHbAeL',5,'2026-04-12 17:43:07.664+07','Great',0,0,null,null),
+  ('B9O9LxbbAY','s9zKgiZEr7','kAFM0olWNP',5,'2026-04-12 17:53:39.503+07','Great',0,0,null,null),
+  ('UugRds1_oS','s9zKgiZEr7','kn3xFh6HEK',5,'2026-04-12 17:54:12.999+07','Great',0,0,null,null),
+  ('go5o0mkCcy','s9zKgiZEr7','mHwD1NEKoU',5,'2026-04-12 17:54:50.461+07','Great',0,0,null,null),
+  ('DywkIP7CjU','2sX9m9LZm9','flMmQvyizP',4,'2026-04-12 16:50:04.536+07','Good article',0,0,null,null),
+  ('i-NcLTVTD0','zasWaUFDBT','flMmQvyizP',5,'2026-04-12 16:53:38.304+07','Excellent',0,0,null,null),
+  ('ZtN_ojw7JU','4Q4LN3vm2U','flMmQvyizP',5,'2026-04-12 16:57:37.071+07','Great',0,0,null,null),
+  ('ntnawq9Kse','t4bqlIi5SB','flMmQvyizP',5,'2026-04-12 16:59:15.693+07','Great',0,0,null,null),
+  ('Srd31lqH1J','wsXtnt1ZvP','flMmQvyizP',4,'2026-04-12 17:00:58.707+07','Good article',0,0,null,null);
 
+/*
+insert into article_rate_reactions values ('s9zKgiZEr7', 'ayyQ9RqeMa', 'axzYT4jyEa', '2023-04-03 09:21:09.311', 1);
+insert into article_comment_thread_reaction values ('7qUfAFE_z', 'axzYT4jyEa', 'axzYT4jyEa', '2023-04-03 14:22:45.504+07', 1);
 insert into article_rate_comments values ('LPRa64I3p', 's9zKgiZEr7', 'ayyQ9RqeMa', 'beb4MaVRxA', 'Their growth rate is impressive', '2023-03-27 09:58:46.409', null, null, true);
 insert into article_rate_comments values ('jf1hIVDHf', 's9zKgiZEr7', 'ayyQ9RqeMa', 'cb3OH0WVk2', 'The company is also attracting foreign talent', '2023-03-27 11:01:08.198', null, null, false);
 */

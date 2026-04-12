@@ -13,16 +13,17 @@ import {
   resources,
   SavedController
 } from "express-ext"
+import { RateService, SubmittedRate } from "rate-query"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
-import { calculatePercent, formatRate, SubmittedRate } from "../shared/rate"
+import { calculatePercent, formatRate } from "../shared/rate"
 import { RateFilter } from "../shared/rates"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
 
 const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController extends SavedController {
-  constructor(protected service: ArticleService) {
+  constructor(protected service: ArticleService, protected rateService: RateService) {
     super(service, "id", "userId")
     this.search = this.search.bind(this)
     this.getSavedArticles = this.getSavedArticles.bind(this)
@@ -145,6 +146,7 @@ export class ArticleController extends SavedController {
       if (!filter.sort) {
         filter.sort = "-time"
       }
+      filter.id = id
       const { page, limit, sort } = filter
       const result = await this.service.searchRates(filter, limit, page)
       const list = escapeArray(result.list)
@@ -171,21 +173,18 @@ export class ArticleController extends SavedController {
   async rate(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const rate = req.body as SubmittedRate    
+    const rate = req.body as SubmittedRate   
     const slug = req.params.id
-    console.log("JSON rate " + JSON.stringify(rate))
     try {
-      const article = await this.service.load(slug)
-      if (!article) {
+      const id = await this.service.getIdBySlug(slug)
+      if (id === slug) {
         res.status(404).json(0).end()
         return
       }
-      rate.id = article.id
+      rate.id = id
       rate.author = res.locals.userId
-      console.log("JSON rate " + JSON.stringify(rate))
-      await this.service.rate(rate)
-      const rateSummary = await this.service.getRateSummary(article.id)
-      console.log("rate summary " + JSON.stringify(rateSummary))
+      await this.rateService.rate(rate)
+      const rateSummary = await this.service.getRateSummary(id)
       res.render("partials/rating-summary", { resource, rate: formatRate(rateSummary) })
     } catch (err) {
       handleError(err, res)

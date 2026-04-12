@@ -1,43 +1,17 @@
 import { Attributes, Transaction } from "onecore";
 
-export interface SubmittedRate {
-  id: string;
-  author: string;
-  rate: number;
-  review: string;
-}
-export interface Rate {
-  id: string;
-  author: string;
-  rate: number;
-  time: Date;
-  review: string;
-  histories?: History[];
-}
-
-export interface History {
-  rate: number;
-  time: Date;
-  review: string;
-}
-
 export interface RateSummary {
-  id: string;
-  rate: number;
-  rate1: number;
-  rate2: number;
-  rate3: number;
-  rate4: number;
-  rate5: number;
+  id: string
+  rate: number
+  rate1: number
+  rate2: number
+  rate3: number
+  rate4: number
+  rate5: number
 }
 
-export interface RateRepository {
-  create(rate: Rate, newInfo?: boolean, tx?: Transaction): Promise<number>;
-  update(rate: Rate, oldRate: number, tx?: Transaction): Promise<number>;
-  load(id: string, author: string, tx?: Transaction): Promise<Rate | null>;
-}
 export interface RateSummaryRepository {
-  exist(id: string, tx?: Transaction): Promise<boolean>;
+  exist(id: string, tx?: Transaction): Promise<boolean>
   load(id: string, tx?: Transaction): Promise<RateSummary | null>
 }
 
@@ -82,11 +56,13 @@ export const rateModel: Attributes = {
   usefulCount: {
     column: "useful_count",
     type: 'integer',
+    default: 0,
     min: 0
   },
   replyCount: {
     column: "reply_count",
     type: 'integer',
+    default: 0,
     min: 0
   },
   histories: {
@@ -138,18 +114,18 @@ export const zeroSummary: RateSummary = {
   rate5: 0
 }
 export interface RateFormat {
-  rate: string;
-  count: number;
-  rate1: string;
-  rate2: string;
-  rate3: string;
-  rate4: string;
-  rate5: string;
-  star1?: string;
-  star2?: string;
-  star3?: string;
-  star4?: string;
-  star5?: string;
+  rate: string
+  count: number
+  rate1: string
+  rate2: string
+  rate3: string
+  rate4: string
+  rate5: string
+  star1?: string
+  star2?: string
+  star3?: string
+  star4?: string
+  star5?: string
 }
 
 export function formatRate(r: RateSummary): RateFormat  {
