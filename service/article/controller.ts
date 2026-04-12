@@ -13,10 +13,10 @@ import {
   resources,
   SavedController
 } from "express-ext"
-import { RateFilter } from "shared/rates"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
-import { calculatePercent, formatRate, Rate } from "../shared/rate"
+import { calculatePercent, formatRate, SubmittedRate } from "../shared/rate"
+import { RateFilter } from "../shared/rates"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
 
@@ -171,7 +171,7 @@ export class ArticleController extends SavedController {
   async rate(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const rate = req.body as Rate    
+    const rate = req.body as SubmittedRate    
     const slug = req.params.id
     console.log("JSON rate " + JSON.stringify(rate))
     try {

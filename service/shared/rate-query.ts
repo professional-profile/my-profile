@@ -25,7 +25,6 @@ export interface Attribute {
   name?: string
   column?: string
   type?: DataType
-  operator?: Operator
   default?: string | number | Date | boolean
   key?: boolean
   q?: boolean
@@ -141,7 +140,6 @@ export class SqlRateRepository<R> {
       const obj: any = rate;
       const rateNum: number = obj[this.rateField];
       const id: string = obj[this.idField];
-      console.log(stmt.query)
       const db = tx ? tx : this.db
       if (newInfo) {
         const query = this.insertInfo(rateNum);
@@ -173,9 +171,7 @@ export class SqlRateRepository<R> {
     return query;
   }
   update(rate: R, oldRate: number, tx?: Transaction): Promise<number> {
-    console.log("Attrs " + JSON.stringify(this.attributes))
     const stmt = this.buildToUpdate(rate, this.table, this.attributes, this.db.param);
-    console.log("update xsx " + stmt.query + " " + JSON.stringify(stmt.params))
     if (stmt.query) {
       const obj: any = rate;
       const rateNum: number = obj[this.rateField];
@@ -192,7 +188,6 @@ export class SqlRateRepository<R> {
     const query = `
       update ${this.infoTable} set ${this.rate} = (${this.score} + ${r})/(${this.count} + 1), ${this.count} = ${this.count} + 1, ${this.score} = ${this.score} + ${r}, ${this.rate}${r} = ${this.rate}${r} + 1
       where ${this.id} = ${this.db.param(1)}`;
-    console.log("update new " + query)
     return query;
   }
   protected updateOldInfo(newRate: number, oldRate: number): string {
@@ -203,7 +198,6 @@ export class SqlRateRepository<R> {
     const query = `
       update ${this.infoTable} set ${this.rate} = (${this.score} + (${delta}))/${this.count}, ${this.score} = ${this.score} + (${delta}), ${this.rate}${newRate} = ${this.rate}${newRate} + 1, ${this.rate}${oldRate} = ${this.rate}${oldRate} - 1
       where ${this.id} = ${this.db.param(1)}`;
-    console.log("update old " + query)
     return query;
   }
 }

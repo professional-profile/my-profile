@@ -1,5 +1,5 @@
 import { Attributes, Filter, SearchResult, TimeRange } from "onecore"
-import { Rate, RateSummary } from "../shared/rate"
+import { RateSummary, SubmittedRate } from "../shared/rate"
 import { RateFilter, Rate as SearchRate } from "../shared/rates"
 
 export interface Article {
@@ -42,7 +42,7 @@ export interface ArticleService {
   getRateSummary(id: string): Promise<RateSummary>
   save(userId: string, id: string): Promise<number>
   remove(userId: string, id: string): Promise<number>
-  rate(rate: Rate): Promise<number>
+  rate(rate: SubmittedRate): Promise<number>
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>>
 }
 

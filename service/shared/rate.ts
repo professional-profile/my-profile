@@ -1,44 +1,22 @@
-import { Attributes, Filter, Transaction } from "onecore";
+import { Attributes, Transaction } from "onecore";
 
-export interface BaseRate {
-  author: string;
-  authorURL?: string;
-  name: string;
-  displayName: string;
-  anonymous: boolean;
-  rate: number;
-}
-export interface Rate extends BaseRate {
+export interface SubmittedRate {
   id: string;
+  author: string;
+  rate: number;
+  review: string;
+}
+export interface Rate {
+  id: string;
+  author: string;
+  rate: number;
   time: Date;
   review: string;
-  usefulCount: number;
-  replyCount: number;
   histories?: History[];
 }
 
 export interface History {
   rate: number;
-  time: Date;
-  review: string;
-}
-export interface RateFilter extends Filter {
-  id?: string;
-  author?: string;
-  rate: number;
-  time?: Date;
-  review?: string;
-  usefulCount?: number;
-  replyCount?: number;
-}
-export interface RateInfo {
-  id: string;
-  rate: number;
-  count: number;
-  score: number;
-}
-export interface ShortRates {
-  rates: number[];
   time: Date;
   review: string;
 }
@@ -191,7 +169,7 @@ export function formatRate(r: RateSummary): RateFormat  {
   }
   for (let i = 1; i <= 5; i++) {
     const x = (rate - i + 1)*100
-    f["star" + i] = x > 100 ? `class="star"` : (x < 0 ? `class="star empty-star"` : `class="star partial-star" style="--w: ${x.toFixed(0)}%;"`)
+    f["star" + i] = x > 100 ? `class="star"` : (x <= 0 ? `class="star empty-star"` : `class="star partial-star" style="--w: ${x.toFixed(0)}%;"`)
   }
   return f
 }
