@@ -6,8 +6,8 @@ import { nanoid } from "nanoid"
 import { MailConfig, MailData, StringMap } from "onecore"
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from "password-service"
 import { CodeRepository, StringService } from "pg-extension"
-import { createChecker, DB } from "query-core"
 import { initStatus, Signup, SignupSender, SignupService, SignupTemplateConfig, useRepository, Validator } from "signup-service"
+import { createChecker, DB } from "sql-core"
 import { check } from "types-validation"
 import { createValidator } from "xvalidators"
 import { ArticleController, useArticleController } from "./article"
@@ -26,6 +26,7 @@ resources.check = check
 
 export interface Config {
   cookie?: boolean
+  token: Token
   rememberToken: Token
   auth: SqlAuthTemplateConfig
   map: StringMap
@@ -81,8 +82,8 @@ export function useContext(db: DB, cfg: Config): ApplicationContext {
   const signin = new SigninController(
     authenticator,
     "token",
-    cfg.auth.token.secret,
-    cfg.auth.token.expires,
+    cfg.token.secret,
+    cfg.token.expires,
     "remember",
     cfg.rememberToken.secret,
     cfg.rememberToken.expires,

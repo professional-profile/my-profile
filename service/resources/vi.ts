@@ -134,13 +134,13 @@ export const vi = {
   write_a_review: "Đánh giá",
   review_placeholder: "Viết nhận xét",
 
-  sort_time_asc: "Cũ nhất",
   sort_time_desc: "Mới nhất",
-  sort_rate_asc: "Đánh giá thấp nhất",
+  sort_time_asc: "Cũ nhất",
   sort_rate_desc: "Đánh giá cao nhất",
-
-  sort_desc_time_asc: "Sắp xếp theo Cũ nhất",
+  sort_rate_asc: "Đánh giá thấp nhất",
+  
   sort_desc_time_desc: "Sắp xếp theo Mới nhất",
-  sort_desc_rate_asc: "Sắp xếp theo Đánh giá thấp nhất",
+  sort_desc_time_asc: "Sắp xếp theo Cũ nhất",
   sort_desc_rate_desc: "Sắp xếp theo Đánh giá cao nhất",
+  sort_desc_rate_asc: "Sắp xếp theo Đánh giá thấp nhất",
 }

@@ -1,8 +1,8 @@
 import { nanoid } from "nanoid"
 import { SavedRepository, SearchResult } from "onecore"
 import { SqlSavedRepository } from "pg-extension"
-import { buildToInsert, buildToUpdate, DB } from "query-core"
-import { Rate, Rater, SqlRateRepository } from "rate-query"
+import { Rate, Rater, SqlRateRepository } from "rate-sql"
+import { buildToInsert, buildToUpdate, DB } from "sql-core"
 import { rateModel, RateSummary, RateSummaryRepository, zeroSummary } from "../shared/rate"
 import { RateFilter, RatesRepository, Rate as SearchRate, SearchRateRepository } from "../shared/rates"
 import { Article, ArticleFilter, ArticleRepository, ArticleService } from "./article"
@@ -36,9 +36,6 @@ export class ArticleUseCase implements ArticleService {
   }
   remove(userId: string, id: string): Promise<number> {
     return this.savedRepository.remove(userId, id)
-  }
-  getRate(id: string, author: string): Promise<SearchRate | null> {
-    return this.ratesRepository.getRate(id, author)
   }
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>> {
     return this.ratesRepository.search(filter, limit, page, fields)

@@ -42,7 +42,6 @@ export interface ArticleService {
   getRateSummary(id: string): Promise<RateSummary>
   save(userId: string, id: string): Promise<number>
   remove(userId: string, id: string): Promise<number>
-  getRate(id: string, author: string): Promise<SearchRate | null>
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>>
 }
 

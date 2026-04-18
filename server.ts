@@ -19,7 +19,7 @@ const cfg = merge(config, process.env, env, process.env.ENV)
 
 // buildJavascript()
 // buildCSS()
-expressResources.defaultLimit = 24
+expressResources.defaultLimit = 12
 
 const app = express()
 // Define public folder :
@@ -39,7 +39,7 @@ app.set("view engine", "html")
 const logger = createLogger(cfg.log)
 resources.log = logger.error
 
-const verifier = new TokenVerifier("account", "token", cfg.auth.token.secret, cfg.auth.token.expires, "remember", cfg.rememberToken.secret)
+const verifier = new TokenVerifier("account", "token", cfg.token.secret, cfg.token.expires, "remember", cfg.rememberToken.secret)
 app.use(cookieParser(), verifier.verify)
 
 // const middleware = new MiddlewareLogger(logger.info, cfg.middleware)

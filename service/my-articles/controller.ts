@@ -17,7 +17,7 @@ import {
 } from "express-ext"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "xvalidators"
-import { getDateFormat, getLang, getResource } from "../resources"
+import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleService } from "./article"
 
@@ -32,6 +32,8 @@ export class MyArticlesController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
+    console.log("lang:" + lang)
+    const langSearch = getLangSearch(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
       status: [],
@@ -60,6 +62,7 @@ export class MyArticlesController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
+        langSearch,
         sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })

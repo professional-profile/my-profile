@@ -272,12 +272,23 @@ i.sort-down:after {
   font-style: normal;
 }
 
+.limit,
 .sort {
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
   margin: 4px 0;
+}
+.btn-limit {
+  height: 36px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  background-color: inherit;
+}
+.btn-limit::after {
+  content: " > ";
 }
 .btn-sort {
   min-width: 160px;
@@ -291,7 +302,7 @@ i.sort-down:after {
   color: inherit;
   border: 1px solid #999999;
 }
-.sort-dropdown {
+.dropdown {
   position: absolute;
   top: 36px;
   padding-top: 8px;
@@ -304,10 +315,10 @@ i.sort-down:after {
   border: 1px solid #ddd;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
-.sort.on > .sort-dropdown {
+.on > .dropdown {
   display: flex;
 }
-.sort-dropdown a {
-  padding: 8px 16px;;
+.dropdown a {
+  padding: 8px 16px;
   text-align: left;
 }

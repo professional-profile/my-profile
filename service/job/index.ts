@@ -1,5 +1,5 @@
 import { SearchResult } from "onecore"
-import { DB } from "query-core"
+import { DB } from "sql-core"
 import { JobController } from "./controller"
 import { Job, JobFilter, JobRepository, JobService } from "./job"
 import { SqlJobRepository } from "./repository"

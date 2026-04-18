@@ -225,12 +225,18 @@ function search(e: Event, partId?: string) {
   if (!partId) {
     partId = form.getAttribute("data-part") as string
   }
+  const searchUrl = window.location.search.length > 0 ? window.location.search.substring(1) : ""
+  const lang = getField(searchUrl, resources.lang)
+
   const initFilter = decode<Filter>(form)
   const filter = trimNull(initFilter)
   filter.page = 1
   let search = buildSearchUrl(filter)
   if (partId && partId.length > 0) {
     search = search + `&${resources.subPartial}=true`
+  }
+  if (lang && lang.length > 0) {
+    search = search + `&${lang}`
   }
   const url = getCurrentURL() + search
   let newUrl = getCurrentURL()

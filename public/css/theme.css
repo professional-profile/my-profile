@@ -2,7 +2,7 @@
   background: #f9f9f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c0c0c0;;
+  background: #c0c0c0;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #aaaaaa;
@@ -39,6 +39,7 @@
 body,
 .page-container,
 .alert-wrapper .alert,
+.dropdown,
 .dropdown-menu-profile {
   background-color: #fff;
 }
@@ -68,6 +69,8 @@ table > thead > tr,
 .btn-next,
 .btn-accept,
 .btn-cancel,
+.btn-limit,
+.dropdown a,
 label.switch-container,
 label.checkbox-container,
 label.checkbox-group,

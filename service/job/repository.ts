@@ -1,6 +1,6 @@
 import { DB } from "onecore"
 import { param } from "pg-extension"
-import { buildSort, SearchRepository, Statement } from "query-core"
+import { buildSort, SearchRepository, Statement } from "sql-core"
 import { Job, JobFilter, jobModel, JobRepository } from "./job"
 
 export class SqlJobRepository extends SearchRepository<Job, JobFilter> implements JobRepository {

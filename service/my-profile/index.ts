@@ -1,5 +1,5 @@
 import { SaveStrings } from "onecore"
-import { CRUDRepository, DB } from "query-core"
+import { CRUDRepository, DB } from "sql-core"
 import { MyProfileController } from "./controller"
 import { MyProfileService, User, userModel, UserRepository, UserSettings } from "./user"
 export * from "./controller"

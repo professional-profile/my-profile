@@ -12,7 +12,7 @@
   background: #252525;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #3f3f3f;;
+  background: #3f3f3f;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #787878;
@@ -29,6 +29,7 @@
 .dark body,
 .dark .page-container,
 .dark .alert-wrapper .alert,
+.dark .dropdown,
 .dark .dropdown-menu-profile {
   background-color: #000;
 }
@@ -78,6 +79,8 @@
 .dark .btn-next,
 .dark .btn-accept,
 .dark .btn-cancel,
+.dark .btn-limit,
+.dark .dropdown a,
 .dark label.switch-container,
 .dark label.checkbox-container,
 .dark label.checkbox-group,

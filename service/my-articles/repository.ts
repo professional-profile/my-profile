@@ -1,6 +1,6 @@
 import { DB } from "onecore"
 import { param } from "pg-extension"
-import { buildSort, Repository, Statement } from "query-core"
+import { buildSort, Repository, Statement } from "sql-core"
 import { Article, ArticleFilter, articleModel, ArticleRepository } from "./article"
 
 export class SqlArticleRepository extends Repository<Article, string, ArticleFilter> implements ArticleRepository {

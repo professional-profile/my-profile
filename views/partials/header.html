@@ -2,7 +2,8 @@
   <form>
     <div class="search-group">
       <section>
-        <button type="button" class="toggle-menu" onclick="toggleMenu(event)" data-menu="{{resource.menu}}" data-sidebar="{{resource.sidebar}}"></button>
+        <button type="button" class="toggle-menu" onclick="toggleMenu(event)" data-menu="{{resource.menu}}"
+          data-sidebar="{{resource.sidebar}}"></button>
         <button type="button" class="toggle-search" onclick="toggleUniversalSearch(event)"></button>
         <button type="button" class="close-search" onclick="toggleUniversalSearch(event)"></button>
       </section>
@@ -10,17 +11,8 @@
         <img class="logo" src="/images/logo.png" alt="Logo of The Company" />
       </div>
       <label class="search-input">
-        <input
-          type="text"
-          id="q"
-          name="q"
-          maxlength="400"
-          onchange="qOnChange(event)"
-          placeholder="{{resource.search}}"
-          autocomplete="off"
-          value=""
-          style="padding-left: 12px"
-        />
+        <input type="text" id="q" name="q" maxlength="400" onchange="qOnChange(event)" placeholder="{{resource.search}}"
+          autocomplete="off" value="" style="padding-left: 12px" />
         <button type="button" hidden class="btn-remove-text" onclick="clearText(event)"></button>
         <button type="button" class="btn-search"></button>
       </label>
@@ -28,7 +20,8 @@
         <div class="dropdown-menu-profile">
           <i class="material-icons">person</i>
           <ul id="dropdown-basic" class="dropdown-content-profile">
-            <li class="menu" onclick="changeMenu(event)" data-menu="{{resource.menu}}" data-sidebar="{{resource.sidebar}}">
+            <li class="menu" onclick="changeMenu(event)" data-menu="{{resource.menu}}"
+              data-sidebar="{{resource.sidebar}}">
               <i class="material-icons">credit_card</i><span>{{resource.menu}}</span>
             </li>
             <hr style="margin: 0px" />
@@ -38,12 +31,22 @@
             {% if account %}
             <hr style="margin: 0px" />
             {% if account.username %}
-            <li><i class="material-icons">autorenew</i><a href="/change-password" onclick="navigate(event, true)">{{resource.change_password}}</a></li>
-            <li><i class="material-icons">settings</i><a href="/settings" onclick="navigate(event, true)">{{resource.settings}}</a></li>
+            <li><i class="material-icons">autorenew</i>
+              <a href="/change-password" onclick="navigate(event)">{{resource.change_password}}</a>
+            </li>
+            <li><i class="material-icons">settings</i>
+              <a href="/settings" onclick="navigate(event)">{{resource.settings}}</a>
+            </li>
             {% endif %}
-            <li><i class="material-icons">account_circle</i><a href="/my-profile" onclick="navigate(event, true)">{{account.displayName}}</a></li>
-            <li><i class="material-icons">edit</i><a href="/my-articles" onclick="navigate(event, true)">{{resource.my_articles}}</a></li>
-            <li><i class="material-icons">bookmark</i><a href="/saved-news" onclick="navigate(event, true)">{{resource.saved_articles}}</a></li>
+            <li><i class="material-icons">account_circle</i>
+              <a href="/my-profile" onclick="navigate(event)">{{account.displayName}}</a>
+            </li>
+            <li><i class="material-icons">edit</i>
+              <a href="/my-articles" onclick="navigate(event)">{{resource.my_articles}}</a>
+            </li>
+            <li><i class="material-icons">bookmark</i>
+              <a href="/saved-news" onclick="navigate(event)">{{resource.saved_articles}}</a>
+            </li>
             {% endif %}
             <hr style="margin: 0px" />
             <li><i class="material-icons">exit_to_app</i><button>Sign out</button></li>

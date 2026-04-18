@@ -52,6 +52,12 @@ export function getLang(req: Request): string {
   }
   return lang
 }
+export function getLangSearch(lang?: string) {
+  if (!lang || lang === "en") {
+    return ""
+  }
+  return `?lang=${lang}`
+}
 export function getResource(lang?: string | Request): StringMap {
   if (lang) {
     if (typeof lang === "string") {

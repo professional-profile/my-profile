@@ -1,4 +1,4 @@
-import { DB } from "query-core"
+import { DB } from "sql-core"
 import { Content, ContentRepository, ContentService } from "./content"
 import { ContentController } from "./controller"
 export * from "./controller"

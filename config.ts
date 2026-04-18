@@ -28,11 +28,11 @@ export const config = {
     secret: "secretremember",
     expires: 30 * 24 * 60 * 60 * 1000,
   },
+  token: {
+    secret: "secretbackoffice",
+    expires: 60 * 60 * 1000,
+  },
   auth: {
-    token: {
-      secret: "secretbackoffice",
-      expires: 60 * 60 * 1000,
-    },
     status: {
       success: 1,
       password_expired: 3,

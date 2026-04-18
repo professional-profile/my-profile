@@ -17,14 +17,19 @@ import {
   resources,
   SavedController
 } from "express-ext"
-import { Item } from "onecore"
-import { RateService, SubmittedRate } from "rate-query"
+import { RateService, SubmittedRate } from "rate-sql"
 import { formatDateTime } from "ui-formatter"
-import { getDateFormat, getLang, getResource } from "../resources"
+import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { calculatePercent, formatRate } from "../shared/rate"
 import { RateFilter } from "../shared/rates"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
+
+export interface Item {
+  id?: string
+  value: string;
+  text?: string;
+}
 
 const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController extends SavedController {
@@ -40,6 +45,8 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
+    console.log("lang:" + lang)
+    const langSearch = getLangSearch(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
       publishedAt: {},
@@ -64,9 +71,11 @@ export class ArticleController extends SavedController {
       const sortSearch = removeSort(search)
       console.log("search " + search)
       console.log("sort search " + sortSearch)
-      const prefix = sortSearch.length > 0 ? "?" + sortSearch + "&" : "?"
-      const s1: Item = {value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
-      const s2: Item = {value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
+      // const prefix = sortSearch.length > 0 ? "?" + sortSearch + "&" : "?"
+      const prefix = sortSearch ? `?${sortSearch}&` : "?"
+      const s1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
+      const s2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
+      const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
       render(req, res, "articles", {
         resource,
         limits: resources.limits,
@@ -74,8 +83,9 @@ export class ArticleController extends SavedController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
+        langSearch,
         sorts: [s1, s2],
-        //sort: buildSortSearch(search, fields, sort),
+        sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       })
     } catch (err) {
@@ -171,11 +181,22 @@ export class ArticleController extends SavedController {
       const sortSearch = removeSort(search)
       console.log("search " + search)
       console.log("sort search " + sortSearch)
-      const prefix = sortSearch.length > 0 ? "?" + sortSearch + "&" : "?"
-      const s1: Item = {value: `${prefix}${resources.sort}=-time`, text: resource.sort_time_desc}
-      const s2: Item = {value: `${prefix}${resources.sort}=time`, text: resource.sort_time_asc}
-      const s3: Item = {value: `${prefix}${resources.sort}=-rate`, text: resource.sort_time_desc}
-      const s4: Item = {value: `${prefix}${resources.sort}=rate`, text: resource.sort_time_asc}
+      const prefix = sortSearch ? `?${sortSearch}&${resources.subPartial}=true&` : `?${resources.subPartial}=true&`
+      const s1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-time`, text: resource.sort_time_desc}
+      const s2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=time`, text: resource.sort_time_asc}
+      const s3: Item = {id: "rateDescSort", value: `${prefix}${resources.sort}=-rate`, text: resource.sort_rate_desc}
+      const s4: Item = {id: "rateAscSort", value: `${prefix}${resources.sort}=rate`, text: resource.sort_rate_asc}
+      let sortText = resource.sort_desc_time_desc
+      switch(filter.sort) {
+        case "time":
+          sortText = resource.sort_desc_time_asc
+          break
+        case "-rate":
+          sortText = resource.sort_desc_rate_desc
+          break
+        case "rate":
+          sortText = resource.sort_desc_rate_asc
+      }
       const ctx: any = {
         resource,
         limits: resources.limits,
@@ -184,13 +205,14 @@ export class ArticleController extends SavedController {
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
         sorts: [s1, s2, s3, s4],
+        sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       }
       if (!partial || !subPartial) {
         const summary = await this.service.getRateSummary(id)
         ctx.rate = formatRate(summary)
         if (userId) {
-          const userRate = await this.service.getRate(id, userId)
+          const userRate = await this.rateService.getRate(id, userId)
           ctx.review = userRate ? {rate: userRate.rate, review: escapeHTML(userRate.review)} : {}
         }
       }

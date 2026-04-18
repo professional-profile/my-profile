@@ -13,7 +13,7 @@
     {% for item in list %}
     <li class="col s12 m6 l4 xl3 img-item">
       <img src="{{item.imageURL}}" alt="user avatar" class="round-border" />
-      <a href="/profiles/{{item.username}}" onclick="navigate(event)">{{item.displayName}}</a>
+      <a href="/profiles/{{item.username}}{{langSearch}}" onclick="navigate(event)">{{item.displayName}}</a>
       <button class="btn-detail"></button>
       <p class="center-align-items">
         {{item.occupation}} {% if account and account.id != item.id %} {% if item.followingAt %}

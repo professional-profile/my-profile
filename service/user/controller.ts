@@ -15,7 +15,7 @@ import {
   isSubPartial,
   resources
 } from "express-ext"
-import { getLang, getResource } from "../resources"
+import { getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { UserFilter, UserService } from "./user"
 
@@ -31,6 +31,8 @@ export class UserController extends FollowController {
   async search(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
+    console.log("lang:" + lang)
+    const langSearch = getLangSearch(lang)
     let filter: UserFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
@@ -56,6 +58,7 @@ export class UserController extends FollowController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
+        langSearch,
         sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })
@@ -66,6 +69,8 @@ export class UserController extends FollowController {
   async view(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
+    console.log("lang:" + lang)
+    const langSearch = getLangSearch(lang)
     const id = req.params.id
     const userId: string = res.locals.userId
     try {
@@ -76,10 +81,7 @@ export class UserController extends FollowController {
       const partial = isPartial(req)
       const subPartial = isSubPartial(req)
       const view = partial && subPartial ? "user/main" : "user"
-      render(req, res, view, {
-        resource,
-        user: escape(user),
-      })
+      render(req, res, view, { resource, langSearch, user: escape(user) })
     } catch (err) {
       renderError500(req, res, resource, err)
     }

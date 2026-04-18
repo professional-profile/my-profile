@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid"
 import { SearchUseCase } from "onecore"
-import { DB } from "query-core"
+import { DB } from "sql-core"
 import { slugify } from "../common/slug"
 import { Article, ArticleFilter, ArticleRepository, ArticleService, Draft } from "./article"
 import { MyArticlesController } from "./controller"
