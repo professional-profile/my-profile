@@ -6,8 +6,8 @@
     <form id="jobsForm" name="jobsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">
-        {% include "partials/advance-search.html" %}
-        <div class="col s12 m6 xl3 sort">
+        <label class="col s12 m6 l4 xl6 search-input">{% include "partials/advance-search.html" %}</label>
+        <div class="col s12 m6 l4 xl3 sort">
           <button id="sortBtn" type="button" class="btn-sort" onclick="toggleSort(event)">{{sortText}}</button>
           <div id="sortDropdown" class="dropdown">
             {% for item in sorts %}
