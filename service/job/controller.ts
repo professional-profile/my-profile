@@ -26,7 +26,6 @@ export class JobController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    console.log("lang:" + lang)
     const langSearch = getLangSearch(lang)
     let filter: JobFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
@@ -69,7 +68,6 @@ export class JobController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    console.log("lang:" + lang)
     const id = req.params.id
     try {
       const job = await this.service.load(id)

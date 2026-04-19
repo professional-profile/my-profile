@@ -64,7 +64,6 @@ function unsaveArticle(target: HTMLElement, id: string, remove?: boolean) {
 function setUseful(target: HTMLElement, id: string) {
   let url = getCurrentURL()
   url = `${removeLast(removeLast(url))}/${id}/useful`
-  console.log("useful url " + url)
   if (target.nodeName !== "I") {
     target = target.parentElement as HTMLElement
   }
@@ -97,7 +96,6 @@ function setUseful(target: HTMLElement, id: string) {
 function removeUseful(target: HTMLElement, id: string) {
   let url = getCurrentURL()
   url = `${removeLast(removeLast(url))}/${id}/useful`
-  console.log("useful url " + url)
   if (target.nodeName !== "I") {
     target = target.parentElement as HTMLElement
   }

@@ -42,7 +42,6 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    console.log("lang:" + lang)
     const langSearch = getLangSearch(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
@@ -66,8 +65,6 @@ export class ArticleController extends SavedController {
       }
       const search = getSearch(req.url)
       const sortSearch = removeSort(search)
-      console.log("search " + search)
-      console.log("sort search " + sortSearch)
       const prefix = sortSearch ? `?${sortSearch}&` : "?"
       const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
       const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
@@ -116,8 +113,6 @@ export class ArticleController extends SavedController {
       }
       const search = getSearch(req.url)
       const sortSearch = removeSort(search)
-      console.log("search " + search)
-      console.log("sort search " + sortSearch)
       const prefix = sortSearch ? `?${sortSearch}&` : "?"
       const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
       const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
@@ -142,6 +137,7 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
+    const langSearch = getLangSearch(lang)
     const slug = req.params.id
     const userId: string = res.locals.userId
     try {
@@ -152,7 +148,7 @@ export class ArticleController extends SavedController {
       const id = await this.service.getIdBySlug(slug)
       const rate = await this.service.getRateSummary(id)
       article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-      render(req, res, "article", { resource, article, rate: formatRate(rate) })
+      render(req, res, "article", { resource, article, langSearch, rate: formatRate(rate) })
     } catch (err) {
       renderError500(req, res, resource, err)
     }
@@ -199,10 +195,8 @@ export class ArticleController extends SavedController {
       }
 
       const sortSearch = removeSort(search)
-      console.log("search " + search)
-      console.log("sort search " + sortSearch)
       const prefix = sortSearch ? `?${sortSearch}&` : `?`
-      const sort0: Item = {id: "sort_useful_desc", value: `${prefix}${resources.sort}=-usefulCount`, text: resource.sort_desc_useful_desc}
+      const sort0: Item = {id: "sort_useful_desc", value: `${prefix}${resources.sort}=-usefulCount`, text: resource.sort_useful_desc}
       const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-time`, text: resource.sort_time_desc}
       const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=time`, text: resource.sort_time_asc}
       const sort3: Item = {id: "rateDescSort", value: `${prefix}${resources.sort}=-rate`, text: resource.sort_rate_desc}

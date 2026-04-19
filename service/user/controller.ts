@@ -31,7 +31,6 @@ export class UserController extends FollowController {
   async search(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    console.log("lang:" + lang)
     const langSearch = getLangSearch(lang)
     let filter: UserFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
@@ -69,7 +68,6 @@ export class UserController extends FollowController {
   async view(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    console.log("lang:" + lang)
     const langSearch = getLangSearch(lang)
     const id = req.params.id
     const userId: string = res.locals.userId

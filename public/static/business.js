@@ -68,7 +68,6 @@ function unsaveArticle(target, id, remove) {
 function setUseful(target, id) {
   var url = getCurrentURL()
   url = removeLast(removeLast(url)) + "/" + id + "/useful"
-  console.log("useful url " + url)
   if (target.nodeName !== "I") {
     target = target.parentElement
   }
@@ -104,7 +103,6 @@ function setUseful(target, id) {
 function removeUseful(target, id) {
   var url = getCurrentURL()
   url = removeLast(removeLast(url)) + "/" + id + "/useful"
-  console.log("useful url " + url)
   if (target.nodeName !== "I") {
     target = target.parentElement
   }

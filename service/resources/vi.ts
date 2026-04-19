@@ -145,5 +145,6 @@ export const vi = {
   sort_desc_time_asc: "Sắp xếp theo Cũ nhất",
   sort_desc_rate_desc: "Sắp xếp theo Đánh giá cao nhất",
   sort_desc_rate_asc: "Sắp xếp theo Đánh giá thấp nhất",
-  all: "Tất cả"
+  all: "Tất cả",
+  useful_review_description: "Đánh giá này có ích"
 }
