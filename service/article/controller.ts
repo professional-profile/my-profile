@@ -3,7 +3,6 @@ import {
   buildMessage,
   buildPages,
   buildPageSearch,
-  buildSortSearch,
   escapeArray,
   escapeHTML,
   format,
@@ -13,6 +12,7 @@ import {
   hasSearch,
   isPartial,
   isSubPartial,
+  removeField,
   removeSort,
   resources,
   SavedController
@@ -69,8 +69,8 @@ export class ArticleController extends SavedController {
       console.log("search " + search)
       console.log("sort search " + sortSearch)
       const prefix = sortSearch ? `?${sortSearch}&` : "?"
-      const s1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
-      const s2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
+      const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
+      const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
       const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
       render(req, res, "articles", {
         resource,
@@ -80,7 +80,7 @@ export class ArticleController extends SavedController {
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
         langSearch,
-        sorts: [s1, s2],
+        sorts: [sort1, sort2],
         sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       })
@@ -92,6 +92,7 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
+    const langSearch = getLangSearch(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
       publishedAt: {},
@@ -114,6 +115,13 @@ export class ArticleController extends SavedController {
         item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
       }
       const search = getSearch(req.url)
+      const sortSearch = removeSort(search)
+      console.log("search " + search)
+      console.log("sort search " + sortSearch)
+      const prefix = sortSearch ? `?${sortSearch}&` : "?"
+      const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
+      const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
+      const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
       render(req, res, "articles", {
         resource,
         limits: resources.limits,
@@ -121,7 +129,9 @@ export class ArticleController extends SavedController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        langSearch,
+        sorts: [sort1, sort2],
+        sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       })
     } catch (err) {
@@ -163,7 +173,7 @@ export class ArticleController extends SavedController {
         format(filter, ["time"])
       }
       if (!filter.sort) {
-        filter.sort = "-time"
+        filter.sort = "-usefulCount"
       }
       filter.id = id
       filter.userId = res.locals.userId
@@ -175,16 +185,36 @@ export class ArticleController extends SavedController {
         calculatePercent(item)
       }
       const search = getSearch(req.url)
+
+      let rateSearch = removeField(search, "rate")
+      rateSearch = removeField(rateSearch, resources.partial)
+      rateSearch = removeField(rateSearch, resources.subPartial)
+      const srate = req.query.rate
+      const rateText = typeof srate === 'string' ? `${srate} ☆` : resource.all
+      let ratePrefix = rateSearch ? `?${rateSearch}` : `?`
+      const rates: Item[] = [{id: "rateAll", value: `${ratePrefix}`, text: resource.all}]
+      ratePrefix = rateSearch ? `?${rateSearch}&` : `?`
+      for (let i = 1; i <= 5; i++) {
+        rates.push({id: `rate${i}`, value: `${ratePrefix}rate=${i}`, text: `${i} ☆`})
+      }
+
       const sortSearch = removeSort(search)
       console.log("search " + search)
       console.log("sort search " + sortSearch)
-      const prefix = sortSearch ? `?${sortSearch}&${resources.subPartial}=true&` : `?${resources.subPartial}=true&`
-      const s1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-time`, text: resource.sort_time_desc}
-      const s2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=time`, text: resource.sort_time_asc}
-      const s3: Item = {id: "rateDescSort", value: `${prefix}${resources.sort}=-rate`, text: resource.sort_rate_desc}
-      const s4: Item = {id: "rateAscSort", value: `${prefix}${resources.sort}=rate`, text: resource.sort_rate_asc}
+      const prefix = sortSearch ? `?${sortSearch}&` : `?`
+      const sort0: Item = {id: "sort_useful_desc", value: `${prefix}${resources.sort}=-usefulCount`, text: resource.sort_desc_useful_desc}
+      const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-time`, text: resource.sort_time_desc}
+      const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=time`, text: resource.sort_time_asc}
+      const sort3: Item = {id: "rateDescSort", value: `${prefix}${resources.sort}=-rate`, text: resource.sort_rate_desc}
+      const sort4: Item = {id: "rateAscSort", value: `${prefix}${resources.sort}=rate`, text: resource.sort_rate_asc}
       let sortText = resource.sort_desc_time_desc
       switch(filter.sort) {
+        case "-usefulCount":
+          sortText = resource.sort_desc_useful_desc
+          break
+        case "-time":
+          sortText = resource.sort_desc_time_desc
+          break
         case "time":
           sortText = resource.sort_desc_time_asc
           break
@@ -194,6 +224,9 @@ export class ArticleController extends SavedController {
         case "rate":
           sortText = resource.sort_desc_rate_asc
       }
+      if (filter.sort && filter.sort != "time" && filter.sort != "-time") {
+        filter.sort = filter.sort + ",-time"
+      }
       const ctx: any = {
         resource,
         limits: resources.limits,
@@ -201,8 +234,10 @@ export class ArticleController extends SavedController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sorts: [s1, s2, s3, s4],
+        sorts: [sort0, sort1, sort2, sort3, sort4],
         sortText,
+        rates,
+        rateText,
         message: buildMessage(resource, list, limit, page, result.total),
       }
       if (!partial || !subPartial) {

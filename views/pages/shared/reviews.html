@@ -1,12 +1,20 @@
 <form id="reviewsForm" name="reviewsForm" class="form" novalidate data-part="reviewBody">
   <span class="hidden-message">{{message}}</span>
   <section class="row search-group">
-    <div class="col s12 m6">
+    <div class="col s12 m6 flex-direction-row">
       <div class="sort">
         <button id="sortBtn" type="button" class="btn-sort" onclick="toggleSort(event)">{{sortText}}</button>
         <div id="sortDropdown" class="dropdown">
           {% for item in sorts %}
-          <a id="{{item.id}}" href="{{item.value}}" onclick="navigate(event)">{{item.text}}</a>
+          <a id="{{item.id}}" href="{{item.value}}" onclick="navigate(event, 'reviewBody')">{{item.text}}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="rate">
+        <button id="rateBtn" type="button" class="btn-rate" onclick="toggleSort(event)">{{rateText}}</button>
+        <div id="rateDropdown" class="dropdown">
+          {% for item in rates %}
+          <a id="{{item.id}}" href="{{item.value}}" onclick="navigate(event, 'reviewBody')">{{item.text}}</a>
           {% endfor %}
         </div>
       </div>

@@ -12,9 +12,11 @@ import {
   handleError,
   hasSearch,
   isSuccessful,
+  removeSort,
   resources,
   respondError
 } from "express-ext"
+import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
@@ -55,6 +57,11 @@ export class MyArticlesController {
         item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
       }
       const search = getSearch(req.url)
+      const sortSearch = removeSort(search)
+      const prefix = sortSearch ? `?${sortSearch}&` : "?"
+      const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
+      const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
+      const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
       render(req, res, "my-articles", {
         resource,
         limits: resources.limits,
@@ -63,6 +70,8 @@ export class MyArticlesController {
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
         langSearch,
+        sorts: [sort1, sort2],
+        sortText,
         sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })

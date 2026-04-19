@@ -134,13 +134,16 @@ export const en = {
   write_a_review: "Write a review",
   review_placeholder: "Share your experience",
 
+  sort_useful_desc: "Most Useful",
   sort_time_desc: "Most Recent",
   sort_time_asc: "Oldest",
   sort_rate_desc: "Highest Rating",
   sort_rate_asc: "Lowest Rating",
 
+  sort_desc_useful_desc: "Sort by Most Useful",
   sort_desc_time_desc: "Sort by Most Recent",
   sort_desc_time_asc: "Sort by Oldest",
   sort_desc_rate_desc: "Sort by Highest Rating",
   sort_desc_rate_asc: "Sort by Lowest Rating",
+  all: "All"
 }
