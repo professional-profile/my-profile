@@ -25,7 +25,7 @@
     "multer": "^2.1.1",
     "nanoid": "^3.3.4",
     "nunjucks": "^3.2.4",
-    "onecore": "^0.5.9",
+    "onecore": "^0.5.10",
     "password-service": "^0.1.0",
     "pg": "^8.20.0",
     "pg-extension": "^0.3.6",

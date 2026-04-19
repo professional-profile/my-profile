@@ -17,6 +17,7 @@ import {
   resources,
   SavedController
 } from "express-ext"
+import { Item } from "onecore"
 import { RateService, SubmittedRate } from "rate-sql"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
@@ -24,12 +25,6 @@ import { calculatePercent, formatRate } from "../shared/rate"
 import { RateFilter } from "../shared/rates"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, ArticleService, Published } from "./article"
-
-export interface Item {
-  id?: string
-  value: string;
-  text?: string;
-}
 
 const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController extends SavedController {

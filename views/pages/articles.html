@@ -9,7 +9,7 @@
         {% include "partials/advance-search.html" %}
         <div class="col s12 m6 xl3 sort">
           <button id="sortBtn" type="button" class="btn-sort" onclick="toggleSort(event)">{{sortText}}</button>
-          <div id="sortDropdown" class="sort-dropdown">
+          <div id="sortDropdown" class="dropdown">
             {% for item in sorts %}
             <a id="{{item.id}}" href="{{item.value}}" onclick="navigate(event)">{{item.text}}</a>
             {% endfor %}

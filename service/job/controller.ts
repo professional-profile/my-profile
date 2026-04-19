@@ -11,16 +11,12 @@ import {
   removeSort,
   resources
 } from "express-ext"
+import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { JobFilter, JobService } from "./job"
 
-export interface Item {
-  id?: string
-  value: string;
-  text?: string;
-}
 export class JobController {
   constructor(private service: JobService) {
     this.search = this.search.bind(this)
