@@ -168,6 +168,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/saved-news", checkAuthen, ctx.menu.build, ctx.article.getSavedArticles)
   app.patch("/news/:id", authorized, ctx.article.save)
   app.delete("/news/:id", authorized, ctx.article.remove)
+  app.patch("/news/:rateId/useful", authorized, ctx.article.setUseful)
+  app.delete("/news/:rateId/useful", authorized, ctx.article.removeUseful)
 
   app.get("/jobs", ctx.menu.build, ctx.job.search)
   app.get("/jobs/:id", ctx.menu.build, ctx.job.view)

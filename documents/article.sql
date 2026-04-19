@@ -55,10 +55,11 @@ create table article_rate_comments (
   anonymous boolean
 );
 create table article_rate_reactions (
-  rate_id varchar(40) primary key,
-  user_id varchar(40) not null,
+  rate_id varchar(40),
+  user_id varchar(40),
   time timestamptz,
-  reaction smallint
+  reaction smallint,
+  primary key(rate_id, user_id)
 );
 
 insert into article_info (id,rate,rate1,rate2,rate3,rate4,rate5,count,score) values

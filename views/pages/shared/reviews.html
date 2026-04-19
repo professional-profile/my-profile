@@ -24,6 +24,18 @@
     </header>
     <p class="center-align-items">{{item.time}}</p>
     <p>{{item.review}}</p>
+    <footer>
+      <span class="center-align-items">It is helpful
+        {% if item.reaction == 1 %}
+        <i class="material-icons highlight" onclick="removeUseful(this, '{{item.rateId}}')">thumb_up</i>
+        {% else %}
+        <i class="material-icons" onclick="setUseful(this, '{{item.rateId}}')">thumb_up</i>
+        {% endif %}
+      </span>
+      <span class="center-align-items" {% if item.usefulCount==0 %} hidden {% endif %}>
+        <span class="useful">{{item.usefulCount}}</span>
+        <i class="material-icons">thumb_up</i></span>
+    </footer>
   </li>
   {% endfor %}
 </ul>

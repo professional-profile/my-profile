@@ -35,6 +35,8 @@ export class ArticleController extends SavedController {
     this.view = this.view.bind(this)
     this.review = this.review.bind(this)
     this.rate = this.rate.bind(this)
+    this.setUseful = this.setUseful.bind(this)
+    this.removeUseful = this.removeUseful.bind(this)
   }
   async search(req: Request, res: Response) {
     const lang = getLang(req)
@@ -55,7 +57,7 @@ export class ArticleController extends SavedController {
     }
     filter.status = Published
     filter.userId = res.locals.userId
-    const { page, limit, sort } = filter
+    const { page, limit } = filter
     try {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)
@@ -66,7 +68,6 @@ export class ArticleController extends SavedController {
       const sortSearch = removeSort(search)
       console.log("search " + search)
       console.log("sort search " + sortSearch)
-      // const prefix = sortSearch.length > 0 ? "?" + sortSearch + "&" : "?"
       const prefix = sortSearch ? `?${sortSearch}&` : "?"
       const s1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
       const s2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
@@ -165,7 +166,8 @@ export class ArticleController extends SavedController {
         filter.sort = "-time"
       }
       filter.id = id
-      const { page, limit, sort } = filter
+      filter.userId = res.locals.userId
+      const { page, limit } = filter
       const result = await this.service.searchRates(filter, limit, page)
       const list = escapeArray(result.list)
       for (const item of result.list) {
@@ -232,6 +234,28 @@ export class ArticleController extends SavedController {
       await this.rateService.rate(rate)
       const rateSummary = await this.service.getRateSummary(id)
       res.render("partials/rating-summary", { resource, rate: formatRate(rateSummary) })
+    } catch (err) {
+      handleError(err, res)
+    }
+  }
+  async setUseful(req: Request, res: Response) {
+    const rateId = req.params.rateId
+    const userId: string = res.locals.userId
+    try {
+      const result = await this.service.setUseful(rateId, userId)
+      const status = result > 0 ? 200 : 409
+      res.status(status).json(result).end()
+    } catch (err) {
+      handleError(err, res)
+    }
+  }
+  async removeUseful(req: Request, res: Response) {
+    const rateId = req.params.rateId
+    const userId: string = res.locals.userId
+    try {
+      const result = await this.service.removeUseful(rateId, userId)
+      const status = result > 0 ? 200 : 410
+      res.status(status).json(result).end()
     } catch (err) {
       handleError(err, res)
     }

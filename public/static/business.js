@@ -1,3 +1,4 @@
+"use strict"
 function saveArticle(target, id, remove) {
   var url = getCurrentURL()
   url = (remove ? removeLast(url) : url) + "/" + id
@@ -57,6 +58,77 @@ function unsaveArticle(target, id, remove) {
           window.location.href = buildLoginUrl()
         } else if (response.status === 410) {
           toast(resource.article_unsave_success)
+        }
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
+}
+function setUseful(target, id) {
+  var url = getCurrentURL()
+  url = removeLast(removeLast(url)) + "/" + id + "/useful"
+  console.log("useful url " + url)
+  if (target.nodeName !== "I") {
+    target = target.parentElement
+  }
+  var resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "PATCH",
+    headers: getHttpHeaders(),
+  })
+    .then(function (response) {
+      var _a, _b
+      hideLoading()
+      if (response.ok) {
+        target.classList.add("highlight")
+        target.onclick = null
+        target.setAttribute("onclick", "removeUseful(this, '" + escapeHTML(id) + "')")
+        var parent_1 = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
+        if (parent_1) {
+          var span = parent_1.querySelector(".useful")
+          if (span) {
+            var likes = parseInt(span.innerHTML || "0", 10)
+            likes = likes + 1
+            span.innerHTML = likes.toString()
+            ;(_b = span.parentElement) === null || _b === void 0 ? void 0 : _b.removeAttribute("hidden")
+          }
+        }
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
+}
+function removeUseful(target, id) {
+  var url = getCurrentURL()
+  url = removeLast(removeLast(url)) + "/" + id + "/useful"
+  console.log("useful url " + url)
+  if (target.nodeName !== "I") {
+    target = target.parentElement
+  }
+  var resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "DELETE",
+    headers: getHttpHeaders(),
+  })
+    .then(function (response) {
+      var _a
+      hideLoading()
+      if (response.ok) {
+        target.classList.remove("highlight")
+        target.onclick = null
+        target.setAttribute("onclick", "setUseful(this, '" + escapeHTML(id) + "')")
+        var parent_2 = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
+        if (parent_2) {
+          var span = parent_2.querySelector(".useful")
+          if (span) {
+            var likes = parseInt(span.innerHTML || "0", 10)
+            likes = likes - 1
+            span.innerHTML = likes.toString()
+          }
         }
       }
     })
@@ -152,7 +224,6 @@ function unfollow(target, id, remove) {
       return handleError(err, resource.error_network)
     })
 }
-
 function saveAchievements(e) {
   var _a, _b
   e.preventDefault()
@@ -214,4 +285,31 @@ function renderAchievement(subject, description, highlight) {
     escapeHTML(description) +
     '</p>\n<button type="button" class="btn-remove" onclick="removeParent(this)"></button>'
   )
+}
+function toggleView(target, viewId, editorId, toolbarId) {
+  var form = target.form
+  if (form) {
+    var contentView = form.querySelector("#" + viewId)
+    var editor = form.querySelector("#" + editorId)
+    var toolbar_1 = form.querySelector("#" + toolbarId)
+    if (contentView && editor && toolbar_1) {
+      if (contentView.style.display !== "none") {
+        if (contentView.form) {
+          contentView.form.quill.clipboard.dangerouslyPasteHTML(contentView.value)
+        }
+        contentView.style.display = "none"
+        editor.style.display = "block"
+        toolbar_1.style.display = "block"
+      } else {
+        if (contentView.form) {
+          var html = contentView.form.quill.root.innerHTML
+          html = html.replace(/ class=\"ql-indent-\\d+\"/g, "")
+          contentView.value = html
+        }
+        contentView.style.display = "block"
+        editor.style.display = "none"
+        toolbar_1.style.display = "none"
+      }
+    }
+  }
 }

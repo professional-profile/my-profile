@@ -104,6 +104,25 @@ export const rateSummaryModel: Attributes = {
   }
 };
 
+export const rateReactionModel: Attributes = {
+  rateId: {
+    column: "rate_id",
+    key: true,
+    required: true
+  },
+  userId: {
+    column: "user_id",
+    key: true,
+    required: true
+  },
+  time: {
+    type: 'datetime',
+  },
+  reaction: {
+    type: 'integer',
+  }
+};
+
 export const zeroSummary: RateSummary = {
   id: "",
   rate: 0, 

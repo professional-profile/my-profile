@@ -61,6 +61,72 @@ function unsaveArticle(target: HTMLElement, id: string, remove?: boolean) {
     .catch((err) => handleError(err, resource.error_network))
 }
 
+function setUseful(target: HTMLElement, id: string) {
+  let url = getCurrentURL()
+  url = `${removeLast(removeLast(url))}/${id}/useful`
+  console.log("useful url " + url)
+  if (target.nodeName !== "I") {
+    target = target.parentElement as HTMLElement
+  }
+  const resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "PATCH",
+    headers: getHttpHeaders(),
+  })
+    .then((response) => {
+      hideLoading()
+      if (response.ok) {
+        target.classList.add("highlight")
+        target.onclick = null
+        target.setAttribute("onclick", `removeUseful(this, '${escapeHTML(id)}')`)
+        const parent = target.parentElement?.parentElement
+        if (parent) {
+          const span = parent.querySelector(".useful")
+          if (span) {
+            let likes = parseInt(span.innerHTML || "0", 10)
+            likes = likes + 1
+            span.innerHTML = likes.toString()
+            span.parentElement?.removeAttribute("hidden")
+          }
+        }
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
+}
+function removeUseful(target: HTMLElement, id: string) {
+  let url = getCurrentURL()
+  url = `${removeLast(removeLast(url))}/${id}/useful`
+  console.log("useful url " + url)
+  if (target.nodeName !== "I") {
+    target = target.parentElement as HTMLElement
+  }
+  const resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "DELETE",
+    headers: getHttpHeaders(),
+  })
+    .then((response) => {
+      hideLoading()
+      if (response.ok) {
+        target.classList.remove("highlight")
+        target.onclick = null
+        target.setAttribute("onclick", `setUseful(this, '${escapeHTML(id)}')`)
+        const parent = target.parentElement?.parentElement
+        if (parent) {
+          const span = parent.querySelector(".useful")
+          if (span) {
+            let likes = parseInt(span.innerHTML || "0", 10)
+            likes = likes - 1
+            span.innerHTML = likes.toString()
+          }
+        }
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
+}
+
 function follow(target: HTMLElement, id: string, remove?: boolean) {
   let url = getCurrentURL()
   url = (remove ? removeLast(url) : url) + "/" + id
