@@ -15,10 +15,10 @@ import {
   removeSort,
   resources,
   respondError
-} from "express-ext"
+} from "express-web-utilities"
 import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
-import { validate } from "xvalidators"
+import { validate } from "validation-core"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleService } from "./article"

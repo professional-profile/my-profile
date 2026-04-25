@@ -179,7 +179,7 @@
 }
 .grey.dark section.footer > button#btnReject,
 .grey.dark footer > button#btnReject {
-  background-color: #ff6b5f;
+  background-color: #d74738;
 }
 .grey.dark footer > .btn-cancel::before {
   color: #000;
@@ -190,12 +190,12 @@
 .grey.dark label > input:not([type="checkbox"]):not([type="radio"]).invalid,
 .grey.dark label.invalid > input:not([type="checkbox"]):not([type="radio"]):focus,
 .grey.dark label.invalid > select:focus {
-  border-color: #ff6b5f;
-  box-shadow: 0 1px 0 0 #ff6b5f;
+  border-color: #d74738;
+  box-shadow: 0 1px 0 0 #d74738;
 }
 .grey.dark label.invalid > textarea {
-  border-color: #ff6b5f;
-  outline-color: #ff6b5f;
+  border-color: #d74738;
+  outline-color: #d74738;
 }
 
 .grey.dark .btn-deselect,
@@ -208,12 +208,12 @@
 .grey.dark .span-error,
 .grey.dark .alert-error,
 .grey.dark .danger-icon .alert-icon {
-  color: #ff6b5f;
+  color: #d74738;
 }
 
 .grey.dark .span-error {
   color: #000;
-  background-color: #ff6b5f;
+  background-color: #d74738;
 }
 
 .grey.dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):after,

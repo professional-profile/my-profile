@@ -10,7 +10,7 @@ import {
   hasSearch,
   removeSort,
   resources
-} from "express-ext"
+} from "express-web-utilities"
 import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"

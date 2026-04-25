@@ -4,9 +4,9 @@ import {
   handleError,
   isSuccessful,
   respondError
-} from "express-ext"
+} from "express-web-utilities"
 import { SaveStrings } from "onecore"
-import { validate } from "xvalidators"
+import { validate } from "validation-core"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { MyProfileService, User, userModel, UserSettings } from "./user"

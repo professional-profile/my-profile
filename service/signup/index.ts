@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { handleError } from "express-ext"
+import { handleError } from "express-web-utilities"
 import { Attributes, ErrorMessage } from "onecore"
 import { SignupService, Status, User } from "signup-service"
-import { validate } from "xvalidators"
+import { validate } from "validation-core"
 import { getResource } from "../resources"
 
 export const userModel: Attributes = {
