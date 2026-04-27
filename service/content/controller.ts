@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { getView } from "express-web-utilities"
+import { getView } from "express-core-web"
 import { getResource } from "../resources"
 import { renderError404, renderError500 } from "../template"
 import { ContentService } from "./content"

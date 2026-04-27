@@ -1,6 +1,6 @@
 import { Authenticator } from "authen-service"
 import { Request, Response } from "express"
-import { handleError, query } from "express-web-utilities"
+import { handleError, query } from "express-core-web"
 import { sign } from "jsonwebtoken"
 import { Attributes, StringMap } from "onecore"
 import { validate } from "validation-core"

@@ -15,7 +15,7 @@ import {
   removeSort,
   resources,
   respondError
-} from "express-web-utilities"
+} from "express-core-web"
 import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "validation-core"

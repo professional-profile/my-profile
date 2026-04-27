@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { handleError } from "express-web-utilities"
+import { handleError } from "express-core-web"
 import { Attributes, ErrorMessage } from "onecore"
 import { SignupService, Status, User } from "signup-service"
 import { validate } from "validation-core"

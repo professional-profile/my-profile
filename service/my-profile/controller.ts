@@ -4,7 +4,7 @@ import {
   handleError,
   isSuccessful,
   respondError
-} from "express-web-utilities"
+} from "express-core-web"
 import { SaveStrings } from "onecore"
 import { validate } from "validation-core"
 import { getLang, getResource } from "../resources"

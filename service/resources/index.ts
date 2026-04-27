@@ -1,5 +1,5 @@
 import { Request } from "express"
-import { query } from "express-web-utilities"
+import { query } from "express-core-web"
 import { en as articleEN } from "./article/en"
 import { vi as articleVI } from "./article/vi"
 import { en as authenticationEN } from "./authentication/en"

@@ -1,7 +1,7 @@
 import { Authenticator, initializeStatus, SqlAuthTemplateConfig, Token, useUserRepository } from "authen-service"
 import { compare, hash } from "bcryptjs"
 import { MenuBuilder, MenuItemLoader } from "content-menu"
-import { HealthController, ItemController, resources } from "express-web-utilities"
+import { HealthController, ItemController, resources } from "express-core-web"
 import { nanoid } from "nanoid"
 import { MailConfig, MailData, StringMap } from "onecore"
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from "password-service"

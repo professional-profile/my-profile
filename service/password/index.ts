@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { formatText, handleError } from "express-web-utilities"
+import { formatText, handleError } from "express-core-web"
 import { PasswordChange, PasswordReset, PasswordService } from "password-service"
 import { isEmpty } from "validation-core"
 import { getResource } from "../resources"

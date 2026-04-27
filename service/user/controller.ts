@@ -14,7 +14,7 @@ import {
   isPartial,
   isSubPartial,
   resources
-} from "express-web-utilities"
+} from "express-core-web"
 import { getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { UserFilter, UserService } from "./user"
