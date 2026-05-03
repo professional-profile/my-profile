@@ -1,46 +1,29 @@
-<header class="profile-header border-bottom-highlight">
-  <div class="cover-image">
-    <img src="{{user.coverURL}}" alt="cover" />
-    {% if account and account.id != user.id %}
-    <div class="contact-group">
-      <button type="button" id="phoneBtn" name="phoneBtn" class="btn-phone"></button>
-      <button type="button" id="emailBtn" name="emailBtn" class="btn-email"></button>
-    </div>
-    {% if user.followingAt %}
-    <button type="button" id="followBtn" name="followBtn" class="btn-follow"
-      data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
-      data-followers="{{user.followerCount}}" onclick="unfollow(this, '{{user.id}}', true)">
-      {{resource.button_unfollow}}
-    </button>
-    {% else %}
-    <button type="button" id="followBtn" name="followBtn" class="btn-follow"
-      data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
-      data-followers="{{user.followerCount}}" onclick="follow(this, '{{user.id}}', true)">
-      {{resource.button_follow}}
-    </button>
-    {% endif %} {% endif %}
-  </div>
+<div class="cover" style="background-image: url('{{user.coverURL}}')">
   <button type="button" id="cameraBtn" name="cameraBtn" class="btn-camera"></button>
-  <div class="avatar-wrapper">
-    <img class="avatar" src="{{user.imageURL}}" alt="user avatar" />
-    <img class="profile-status" src="/images/online.svg" alt="status" />
-  </div>
-  <div class="profile-title">
-    <h2>
-      <a id="aUser" href="/my-profile" onclick="navigate(event, 'myProfileBody')">{{user.displayName}}</a>
-      {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
-    </h2>
-    <p>{{user.headline}}</p>
-  </div>
-  <div class="profile-followers">
-    {% if user.followerCount %}
-    <a id="followerCount" href="/my-profile/follwers" onclick="navigate(event, 'myProfileBody')">
-      <i class="material-icons highlight">group</i>{{user.followerCount}} followers
-    </a>
-    {% endif %} {% if user.followingCount %}
-    <a id="followingCount" href="/my-profile/follwing" onclick="navigate(event, 'myProfileBody')">
-      <i class="material-icons highlight">group_add</i>{{user.followingCount}} followings
-    </a>
-    {% endif %}
+</div>
+<div id="headerTrigger" class="header-trigger"></div>
+<header id="myprofileHeader" class="profile-header">
+  <div class="profile-header-inner">
+    <div class="avatar-wrapper">
+      <div class="avatar" style="background-image: url('{{user.imageURL}}')">
+      </div>
+      <img class="profile-status" src="/images/online.svg" alt="status" />
+      <button type="button" id="cameraBtn" name="cameraBtn" class="btn-camera"></button>
+    </div>
+    <div class="profile-info">
+      <h1>
+        <a id="aUser" href="/my-profile" onclick="navigate(event, 'myProfileBody')">{{user.displayName}}</a>
+        {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
+      </h1>
+      <p>{{user.headline}}</p>
+      <div class="profile-followers">
+        <a id="followerCount" href="/my-profile/followers" onclick="navigate(event, 'myProfileBody')">
+          <i class="material-icons highlight">group</i>{{user.followerCount}} followers
+        </a>
+        <a id="followingCount" href="/my-profile/following" onclick="navigate(event, 'myProfileBody')">
+          <i class="material-icons highlight">group_add</i>{{user.followingCount}} followings
+        </a>
+      </div>
+    </div>
   </div>
 </header>
