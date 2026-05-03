@@ -69,10 +69,10 @@ export class UserController extends FollowController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const langSearch = getLangSearch(lang)
-    const id = req.params.id
+    const slug = req.params.slug
     const userId: string = res.locals.userId
     try {
-      const user = await this.service.load(id, userId)
+      const user = await this.service.load(slug, userId)
       if (!user) {
         return renderError404(req, res, resource)
       }
@@ -93,7 +93,7 @@ export class UserController extends FollowController {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
     filter.userId = userId
-    const id = await this.service.getIdBySlug(req.params.id)
+    const id = await this.service.getIdBySlug(req.params.slug)
     filter.followedUserId = id
     const { page, limit, sort } = filter
     try {
@@ -121,8 +121,8 @@ export class UserController extends FollowController {
       const subPartial = isSubPartial(req)
       const view = partial && subPartial ? "user/followers" : "user-followers"
       if (!partial) {
-        const id = req.params.id
-        const user = await this.service.load(id, userId)
+        const slug = req.params.slug
+        const user = await this.service.load(slug, userId)
         if (!user) {
           return renderError404(req, res, resource)
         }
@@ -142,7 +142,7 @@ export class UserController extends FollowController {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
     filter.userId = userId
-    const id = await this.service.getIdBySlug(req.params.id)
+    const id = await this.service.getIdBySlug(req.params.slug)
     filter.followingUserId = id
     const { page, limit, sort } = filter
     try {
@@ -170,8 +170,8 @@ export class UserController extends FollowController {
       const subPartial = isSubPartial(req)
       const view = partial && subPartial ? "user/following" : "user-following"
       if (!partial) {
-        const id = req.params.id
-        const user = await this.service.load(id, userId)
+        const slug = req.params.slug
+        const user = await this.service.load(slug, userId)
         if (!user) {
           return renderError404(req, res, resource)
         }

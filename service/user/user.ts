@@ -77,12 +77,12 @@ export interface UserFilter extends Filter {
 
 export interface UserRepository {
   search(filter: UserFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<User>>
-  load(id: string, userId?: string): Promise<User | null>
+  load(slug: string, userId?: string): Promise<User | null>
   getIdBySlug(slug: string): Promise<string>
 }
 export interface UserService {
   search(filter: UserFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<User>>
-  load(id: string, userId?: string): Promise<User | null>
+  load(slug: string, userId?: string): Promise<User | null>
   getIdBySlug(slug: string): Promise<string>
   follow(id: string, target: string): Promise<number>
   unfollow(id: string, target: string): Promise<number>

@@ -68,9 +68,9 @@ export class JobController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const id = req.params.id
+    const slug = req.params.slug
     try {
-      const job = await this.service.load(id)
+      const job = await this.service.load(slug)
       if (!job) {
         return renderError404(req, res, resource)
       }

@@ -11,8 +11,8 @@ export class UserUseCase implements UserService {
   search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
     return this.repository.search(filter, limit, page, fields)
   }
-  load(id: string, userId?: string): Promise<User | null> {
-    return this.repository.load(id, userId)
+  load(slug: string, userId?: string): Promise<User | null> {
+    return this.repository.load(slug, userId)
   }
   getIdBySlug(slug: string): Promise<string> {
     return this.repository.getIdBySlug(slug)

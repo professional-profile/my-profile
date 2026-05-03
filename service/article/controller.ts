@@ -138,7 +138,7 @@ export class ArticleController extends SavedController {
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const langSearch = getLangSearch(lang)
-    const slug = req.params.id
+    const slug = req.params.slug
     const userId: string = res.locals.userId
     try {
       const article = await this.service.load(slug, userId)
@@ -162,7 +162,7 @@ export class ArticleController extends SavedController {
     const subPartial = isSubPartial(req)
     const view = partial && subPartial ? "shared/reviews" : "article-review"
     try {
-      const id = await this.service.getIdBySlug(req.params.id)
+      const id = await this.service.getIdBySlug(req.params.slug)
       let filter: RateFilter = { id, limit: resources.defaultLimit}
       if (hasSearch(req)) {
         filter = fromRequest<RateFilter>(req)
@@ -251,7 +251,7 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const rate = req.body as SubmittedRate   
-    const slug = req.params.id
+    const slug = req.params.slug
     try {
       const id = await this.service.getIdBySlug(slug)
       if (id === slug) {

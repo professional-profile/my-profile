@@ -8,7 +8,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
     super(db, "users", userModel, buildQuery)
   }
 
-  async load(id: string, userId?: string): Promise<User | null> {
+  async load(slug: string, userId?: string): Promise<User | null> {
     let params = []
     let query: string
 
@@ -26,7 +26,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
         left join user_info ui on u.id = ui.id
         where u.username = ${this.db.param(1)}`
     }
-    params.push(id)
+    params.push(slug)
 
     let users = await this.db.query<User>(query, params, this.map)
     if (users && users.length > 0) {
@@ -49,9 +49,9 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
         left join user_info ui on u.id = ui.id
         where u.id = ${this.db.param(1)}`
     }
-    params.push(id)
+    params.push(slug)
 
-    users = await this.db.query<User>(query, [id], this.map)
+    users = await this.db.query<User>(query, [slug], this.map)
     return users && users.length > 0 ? users[0] : null
   }
 

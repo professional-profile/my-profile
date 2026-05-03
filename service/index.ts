@@ -155,16 +155,16 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.post("/my-articles/:id", authorized, ctx.menu.build, json(), ctx.myArticles.submit)
 
   app.get("/profiles", ctx.menu.build, ctx.user.search)
-  app.get("/profiles/:id", ctx.menu.build, ctx.user.view)
-  app.get("/profiles/:id/followers", ctx.menu.build, ctx.user.getFollowers)
-  app.get("/profiles/:id/following", ctx.menu.build, ctx.user.getFollowing)
+  app.get("/profiles/:slug", ctx.menu.build, ctx.user.view)
+  app.get("/profiles/:slug/followers", ctx.menu.build, ctx.user.getFollowers)
+  app.get("/profiles/:slug/following", ctx.menu.build, ctx.user.getFollowing)
   app.patch("/profiles/:id", authorized, ctx.user.follow)
   app.delete("/profiles/:id", authorized, ctx.user.unfollow)
 
   app.get("/news", ctx.menu.build, ctx.article.search)
-  app.get("/news/:id", ctx.menu.build, ctx.article.view)
-  app.get("/news/:id/review", ctx.menu.build, ctx.article.review)
-  app.post("/news/:id/review", authorized, json(), ctx.article.rate)
+  app.get("/news/:slug", ctx.menu.build, ctx.article.view)
+  app.get("/news/:slug/review", ctx.menu.build, ctx.article.review)
+  app.post("/news/:slug/review", authorized, json(), ctx.article.rate)
   app.get("/saved-news", checkAuthen, ctx.menu.build, ctx.article.getSavedArticles)
   app.patch("/news/:id", authorized, ctx.article.save)
   app.delete("/news/:id", authorized, ctx.article.remove)
@@ -172,7 +172,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.delete("/news/:rateId/useful", authorized, ctx.article.removeUseful)
 
   app.get("/jobs", ctx.menu.build, ctx.job.search)
-  app.get("/jobs/:id", ctx.menu.build, ctx.job.view)
+  app.get("/jobs/:slug", ctx.menu.build, ctx.job.view)
 
   app.get("/", ctx.menu.build, ctx.content.view)
   app.get("/:id", ctx.menu.build, ctx.content.view)
