@@ -114,7 +114,6 @@
   left: 46px;
   margin-top: -10px;
   min-width: 200px;
-  height: 38px;
   background-color: inherit;
 }
 
@@ -195,7 +194,8 @@
 }
 
 .sidebar li > .menu-item {
-  padding-top: 10px;
+  display: flex;
+  align-items: center;
 }
 
 /*
@@ -456,7 +456,6 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
 
   .top-menu .menu.sidebar > nav > ul > li > .menu-item {
     height: 46px;
-    padding-top: 14px;
   }
 
   .top-menu .menu.sidebar > nav > ul > li > ul > li {
