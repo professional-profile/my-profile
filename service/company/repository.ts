@@ -5,40 +5,24 @@ import { Company, CompanyFilter, companyModel, CompanyRepository } from "./compa
 
 export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilter> implements CompanyRepository {
   constructor(db: DB) {
-    super(db, "companys", companyModel, buildQuery)
+    super(db, "companies", companyModel, buildQuery)
   }
   async load(slug: string): Promise<Company | null> {
-    const query = `select * from companys where slug = ${this.db.param(1)}`
+    const query = `select * from companies where slug = ${this.db.param(1)}`
     const companys = await this.db.query<Company>(query, [slug])
     return companys && companys.length > 0 ? companys[0] : null
   }
 }
 
 export function buildQuery(filter: CompanyFilter): Statement {
-  let query = `select * from companys`
+  let query = `select * from companies`
   const where: string[] = []
   const params = []
   let i = 1
 
-  if (filter.skills && filter.skills.length > 0) {
-    params.push(filter.skills)
-    where.push(`skills && ${param(i++)}`)
-  }
-
-  if (filter.publishedAt) {
-    if (filter.publishedAt.min) {
-      where.push(`published_at >= ${param(i++)}`)
-      params.push(filter.publishedAt.min)
-    }
-    if (filter.publishedAt.max) {
-      where.push(`published_at <= ${param(i++)}`)
-      params.push(filter.publishedAt.max)
-    }
-  }
-
   if (filter.q) {
     const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
-    where.push(`title ilike ${param(i++)}`)
+    where.push(`company_name ilike ${param(i++)}`)
     params.push(`%${q}%`)
   }
 

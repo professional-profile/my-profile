@@ -12,7 +12,6 @@ import {
   resources
 } from "express-core-web"
 import { Item } from "onecore"
-import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { CompanyFilter, CompanyService } from "./company"
@@ -39,16 +38,13 @@ export class CompanyController {
     try {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)
-      for (const item of list) {
-        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-      }
       const search = getSearch(req.url)
       const sortSearch = removeSort(search)
       const prefix = sortSearch ? `?${sortSearch}&` : "?"
       const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
       const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
       const sortText = sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
-      render(req, res, "companys", {
+      render(req, res, "companies", {
         resource,
         limits: resources.limits,
         filter,
@@ -74,7 +70,6 @@ export class CompanyController {
       if (!company) {
         return renderError404(req, res, resource)
       }
-      company.publishedAt = formatDateTime(company.publishedAt, dateFormat)
       render(req, res, "company", { resource, company })
     } catch (err) {
       renderError500(req, res, resource, err)

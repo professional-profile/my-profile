@@ -1,36 +1,21 @@
-import { Attributes, Filter, SearchResult, TimeRange } from "onecore"
+import { Attributes, Filter, SearchResult } from "onecore"
 
 export interface Company {
   id: string
   slug: string
-  title: string
-  description: string
-  publishedAt?: Date
-  expiredAt?: Date
-  position?: string
-  quantity?: number
-  location?: string
-  applicantCount?: number
-  skills?: string[]
-  minSalary?: number
-  maxSalary?: number
-  companyId?: string
+  companyName: string
+  overview: string
+  website?: string
+  industry?: string
+  size?: string
+  logo?: string
+  coverURL?: string
   status: string
 }
 export interface CompanyFilter extends Filter {
   id?: string
   slug?: string
-  title?: string
-  description?: string
-  requirements?: string
-  benefit?: string
-  publishedAt?: TimeRange
-  expiredAt?: TimeRange
-  skills?: string[]
-  location?: string
-  quantity?: number
-  applicantCount?: number
-  companyId?: string
+  companyName?: string
   status?: string
 }
 
@@ -52,44 +37,31 @@ export const companyModel: Attributes = {
   slug: {
     length: 150,
   },
-  title: {
-    length: 300,
+  companyName: {
+    column: "company_name",
+    length: 255,
     q: true,
   },
-  description: {
-    length: 9800,
+  overview: {
+    length: 3000,
   },
-  publishedAt: {
-    column: "published_at",
-    type: "datetime",
+  website: {
+    length: 255,
   },
-  expiredAt: {
-    column: "expired_at",
-    type: "datetime",
-  },
-  position: {
+  industry: {
     length: 100,
   },
-  quantity: {
-    type: "integer",
-    min: 1,
+  size: {
+    length: 100,
   },
-  location: {
-    length: 120,
+  logo: {
+    length: 300,
   },
-  applicantCount: {
-    column: "applicant_count",
-    type: "integer",
+  coverURL: {
+    column: "cover_url",
+    length: 500,
   },
-  skills: {
-    type: "strings",
-  },
-  minSalary: {
-    column: "min_salary",
-    type: "integer",
-  },
-  maxSalary: {
-    column: "max_salary",
-    type: "integer",
+  status: {
+    length: 1,
   },
 }

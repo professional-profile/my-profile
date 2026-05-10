@@ -12,6 +12,7 @@ import { check } from "types-validation"
 import { createValidator } from "validation-core"
 import { ArticleController, useArticleController } from "./article"
 import { SigninController } from "./authentication"
+import { CompanyController, useCompanyController } from "./company"
 import { ContentController, useContentController } from "./content"
 import { JobController, useJobController } from "./job"
 import { MyArticlesController, useMyArticlesController } from "./my-articles"
@@ -44,6 +45,7 @@ export interface ApplicationContext {
   interest: ItemController<string[]>
   myProfile: MyProfileController
   myArticles: MyArticlesController
+  company: CompanyController
   user: UserController
   content: ContentController
   article: ArticleController
@@ -141,12 +143,13 @@ export function useContext(db: DB, cfg: Config): ApplicationContext {
   const myProfile = useMyProfileController(db, skillService.save, interestService.save)
   const myArticles = useMyArticlesController(db)
 
+  const company = useCompanyController(db)
   const user = useUserController(db)
   const content = useContentController(db, ["vi"])
   const article = useArticleController(db)
   const job = useJobController(db)
 
-  return { health, menu, signin, signup, password, myProfile, skill, interest, myArticles, user, content, article, job }
+  return { health, menu, signin, signup, password, myProfile, skill, interest, myArticles, company, user, content, article, job }
 }
 
 function generate(): string {

@@ -1,0 +1,44 @@
+<div class="cover" style="background-image: url('{{company.coverURL}}')">
+</div>
+<div id="headerTrigger" class="header-trigger"></div>
+<header id="profileHeader" class="profile-header">
+  <div class="profile-header-inner">
+    <div class="avatar-wrapper">
+      <div class="avatar" style="background-image: url('{{company.imageURL}}')">
+      </div>
+      <img class="profile-status" src="/images/online.svg" alt="status" />
+    </div>
+    <div class="profile-info">
+      <h1>
+        <a id="aUser" href="/profiles/{{company.companyname}}"
+          onclick="navigate(event, 'companyBody')">{{company.displayName}}</a>
+        {% if company.followingAt and company.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
+      </h1>
+      <p>{{company.headline}}</p>
+      <div class="profile-followers">
+        <a id="followerCount" href="/profiles/{{company.companyname}}/followers"
+          onclick="navigate(event, 'companyBody')">
+          <i class="material-icons highlight">group</i>{{company.followerCount}} followers
+        </a>
+        <a id="followingCount" href="/profiles/{{company.companyname}}/following"
+          onclick="navigate(event, 'companyBody')">
+          <i class="material-icons highlight">group_add</i>{{company.followingCount}} followings
+        </a>
+      </div>
+      {% if account and account.id != company.id %}
+      {% if company.followingAt %}
+      <button type="button" id="followBtn" name="followBtn" class="btn-follow"
+        data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
+        data-followers="{{company.followerCount}}" onclick="unfollow(this, '{{company.id}}', true)">
+        {{resource.button_unfollow}}
+      </button>
+      {% else %}
+      <button type="button" id="followBtn" name="followBtn" class="btn-follow"
+        data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
+        data-followers="{{company.followerCount}}" onclick="follow(this, '{{company.id}}', true)">
+        {{resource.button_follow}}
+      </button>
+      {% endif %} {% endif %}
+    </div>
+  </div>
+</header>
