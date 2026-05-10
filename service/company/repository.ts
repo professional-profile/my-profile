@@ -9,7 +9,7 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
   }
   async load(slug: string): Promise<Company | null> {
     const query = `select * from companies where slug = ${this.db.param(1)}`
-    const companys = await this.db.query<Company>(query, [slug])
+    const companys = await this.db.query<Company>(query, [slug], this.map)
     return companys && companys.length > 0 ? companys[0] : null
   }
 }

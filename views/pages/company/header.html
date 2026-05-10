@@ -4,17 +4,17 @@
 <header id="profileHeader" class="profile-header">
   <div class="profile-header-inner">
     <div class="avatar-wrapper">
-      <div class="avatar" style="background-image: url('{{company.imageURL}}')">
+      <div class="avatar" style="background-image: url('{{company.logo}}')">
       </div>
       <img class="profile-status" src="/images/online.svg" alt="status" />
     </div>
     <div class="profile-info">
       <h1>
-        <a id="aUser" href="/profiles/{{company.companyname}}"
-          onclick="navigate(event, 'companyBody')">{{company.displayName}}</a>
+        <a id="aCompany" href="/profiles/{{company.companyName}}"
+          onclick="navigate(event, 'companyBody')">{{company.companyName}}</a>
         {% if company.followingAt and company.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
       </h1>
-      <p>{{company.headline}}</p>
+      <p>{{company.industry}}</p>
       <div class="profile-followers">
         <a id="followerCount" href="/profiles/{{company.companyname}}/followers"
           onclick="navigate(event, 'companyBody')">
@@ -42,3 +42,10 @@
     </div>
   </div>
 </header>
+<div class="tabs">
+  <div class="tab active">Overview</div>
+  <div class="tab">Reviews</div>
+  <div class="tab">Articles</div>
+  <div class="tab">Community</div>
+  <div class="tab">About</div>
+</div>

@@ -4,7 +4,6 @@ import {
   buildPages,
   buildPageSearch,
   escapeArray,
-  format,
   fromRequest,
   getSearch,
   hasSearch,
@@ -12,7 +11,7 @@ import {
   resources
 } from "express-core-web"
 import { Item } from "onecore"
-import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
+import { getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { CompanyFilter, CompanyService } from "./company"
 
@@ -24,15 +23,10 @@ export class CompanyController {
   async search(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const dateFormat = getDateFormat(lang)
     const langSearch = getLangSearch(lang)
     let filter: CompanyFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<CompanyFilter>(req)
-      format(filter, ["publishedAt"])
-    }
-    if (!filter.sort) {
-      filter.sort = "-publishedAt"
     }
     const { page, limit, sort } = filter
     try {
@@ -63,13 +57,13 @@ export class CompanyController {
   async view(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const dateFormat = getDateFormat(lang)
     const slug = req.params.slug
     try {
       const company = await this.service.load(slug)
       if (!company) {
         return renderError404(req, res, resource)
       }
+      console.log("company " + JSON.stringify(company))
       render(req, res, "company", { resource, company })
     } catch (err) {
       renderError500(req, res, resource, err)
