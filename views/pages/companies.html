@@ -24,10 +24,10 @@
         <a href="/companies/{{company.slug}}{{langSearch}}" onclick="navigate(event)">{{company.companyName}}</a>
         <button class="btn-detail"></button>
         <p class="center-align-items">
-          {{company.industry}} {% if account and account.id != user.id %} {% if user.followingAt %}
-          <i class="material-icons" onclick="unfollow(this, '{{user.id}}')">bookmark</i>
+          {{company.industry}} {% if account %} {% if company.followedAt %}
+          <i class="material-icons" onclick="unfollow(this, '{{company.id}}')">bookmark</i>
           {% else %}
-          <i class="material-icons" onclick="follow(this, '{{user.id}}')">bookmark_border</i>
+          <i class="material-icons" onclick="follow(this, '{{company.id}}')">bookmark_border</i>
           {% endif %} {% endif %}
         </p>
       </li>

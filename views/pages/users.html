@@ -24,7 +24,7 @@
         <a href="/profiles/{{user.username}}{{langSearch}}" onclick="navigate(event)">{{user.displayName}}</a>
         <button class="btn-detail"></button>
         <p class="center-align-items">
-          {{user.occupation}} {% if account and account.id != user.id %} {% if user.followingAt %}
+          {{user.occupation}} {% if account and account.id != user.id %} {% if user.followedAt %}
           <i class="material-icons" onclick="unfollow(this, '{{user.id}}')">bookmark</i>
           {% else %}
           <i class="material-icons" onclick="follow(this, '{{user.id}}')">bookmark_border</i>

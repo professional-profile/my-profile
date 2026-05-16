@@ -20,13 +20,9 @@
           onclick="navigate(event, 'companyBody')">
           <i class="material-icons highlight">group</i>{{company.followerCount}} followers
         </a>
-        <a id="followingCount" href="/profiles/{{company.companyname}}/following"
-          onclick="navigate(event, 'companyBody')">
-          <i class="material-icons highlight">group_add</i>{{company.followingCount}} followings
-        </a>
       </div>
       {% if account and account.id != company.id %}
-      {% if company.followingAt %}
+      {% if company.followedAt %}
       <button type="button" id="followBtn" name="followBtn" class="btn-follow"
         data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
         data-followers="{{company.followerCount}}" onclick="unfollow(this, '{{company.id}}', true)">

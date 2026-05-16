@@ -23,7 +23,7 @@
         </a>
       </div>
       {% if account and account.id != user.id %}
-      {% if user.followingAt %}
+      {% if user.followedAt %}
       <button type="button" id="followBtn" name="followBtn" class="btn-follow"
         data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
         data-followers="{{user.followerCount}}" onclick="unfollow(this, '{{user.id}}', true)">

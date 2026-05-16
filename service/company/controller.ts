@@ -30,6 +30,7 @@ export class CompanyController extends FollowController {
     if (hasSearch(req)) {
       filter = fromRequest<CompanyFilter>(req)
     }
+    filter.userId = res.locals.userId
     const { page, limit, sort } = filter
     try {
       const result = await this.service.search(filter, limit, page)

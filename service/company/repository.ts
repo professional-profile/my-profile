@@ -12,21 +12,20 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
     let query: string
 
     if (userId) {
-      query = `select c.*, ci.follower_count, cf.following_at, cr.followed_at
+      query = `select c.*, ci.follower_count, cr.followed_at
         from companies c
         left join company_info ci on c.id = ci.id
-        left join company_following cf on cf.id = ${this.db.param(1)} and cf.following = c.id
-        left join company_followers cr on cr.id = ${this.db.param(2)} and cr.follower = c.id
-        where c.slug = ${this.db.param(3)}`
+        left join company_followers cr on cr.id = c.id and cr.follower = ${this.db.param(1)}
+        where c.slug = ${this.db.param(2)}`
       console.log("qq " + query)
-      params.push(userId, userId)
+      params.push(userId, slug)
     } else {
       query = `select c.*, ci.follower_count
         from companies c
         left join company_info ci on c.id = ci.id
         where c.slug = ${this.db.param(1)}`
+      params.push(slug)
     }
-    params.push(slug)
 
     let companies = await this.db.query<Company>(query, params, this.map)
     if (companies && companies.length > 0) {
@@ -34,23 +33,20 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
     }
 
     params = []
-    query = `select * from companies where id = ${this.db.param(1)}`
     if (userId) {
-      query = `select c.*, ci.follower_count, cf.following_at, cr.followed_at
+      query = `select c.*, ci.follower_count, cr.followed_at
         from companies c
         left join company_info ci on c.id = ci.id
-        left join company_following cf on cf.id = ${this.db.param(1)} and cf.following = c.id
-        left join company_followers cr on cr.id = ${this.db.param(2)} and cr.follower = c.id
-        where c.id = ${this.db.param(3)}`
-      params.push(userId, userId)
+        left join company_followers cr on cr.id = c.id and cr.follower = ${this.db.param(1)}
+        where c.id = ${this.db.param(2)}`
+      params.push(userId, slug)
     } else {
       query = `select c.*, ci.follower_count
         from companies c
         left join company_info ci on c.id = ci.id
         where c.id = ${this.db.param(1)}`
+      params.push(slug)
     }
-    params.push(slug)
-
     companies = await this.db.query<Company>(query, [slug], this.map)
     return companies && companies.length > 0 ? companies[0] : null
   }
@@ -61,6 +57,20 @@ export function buildQuery(filter: CompanyFilter): Statement {
   const where: string[] = []
   const params = []
   let i = 1
+
+  let sub = ""
+  if (filter.userId) {
+    query = `
+      select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url,
+        ci.follower_count, cr.followed_at
+      from companies c ${sub}
+      left join company_info ci on c.id = ci.id
+      left join company_followers cr on cr.id = c.id and cr.follower = ${param(i++)} `
+    params.push(filter.userId)
+  } else {
+    query = `select select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url from companies c ${sub}
+      left join company_info ci on c.id = ci.id`
+  }
 
   if (filter.q) {
     const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")

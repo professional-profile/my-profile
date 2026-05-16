@@ -21,6 +21,7 @@ export interface CompanyFilter extends Filter {
   slug?: string
   companyName?: string
   status?: string
+  userId?: string
 }
 
 export interface CompanyRepository {
@@ -69,5 +70,18 @@ export const companyModel: Attributes = {
   },
   status: {
     length: 1,
+  },
+
+  followerCount: {
+    column: "follower_count",
+    type: "integer",
+    noinsert: true,
+    noupdate: true,
+  },
+  followedAt: {
+    column: "followed_at",
+    type: "datetime",
+    noinsert: true,
+    noupdate: true,
   },
 }
