@@ -1,5 +1,5 @@
 import { FollowService, SearchResult } from "onecore"
-import { FollowRepository } from "pg-extension"
+import { FollowRepository, FollowUserRepository } from "pg-extension"
 import { DB } from "sql-core"
 import { UserController } from "./controller"
 import { SqlUserRepository } from "./repository"
@@ -22,16 +22,16 @@ export class UserUseCase extends FollowService<string> implements UserService {
 }
 
 export function useUserController(db: DB): UserController {
-  const followRepository = new FollowRepository<string>(
+  const followRepository = new FollowUserRepository<string>(
     db.executeBatch,
-    "user_following",
-    "id",
-    "following",
-    "following_at",
     "user_followers",
     "id",
     "follower",
     "followed_at",
+    "user_following",
+    "id",
+    "following",
+    "following_at",
     "user_info",
     "id",
     "follower_count",

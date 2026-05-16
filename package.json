@@ -29,7 +29,7 @@
     "onecore": "^0.5.11",
     "password-service": "^0.1.0",
     "pg": "^8.20.0",
-    "pg-extension": "^0.3.6",
+    "pg-extension": "^0.3.8",
     "rate-sql": "^0.1.4",
     "signup-service": "^0.1.0",
     "sql-core": "^0.1.3",

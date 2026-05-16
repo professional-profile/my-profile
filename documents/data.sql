@@ -22,8 +22,7 @@ create table companies (
 )
 create table company_info (
   id varchar(40) primary key,
-  follower_count bigint default 0,
-  following_count bigint default 0
+  follower_count bigint default 0
 );
 create table company_followers (
   id varchar(40) not null,

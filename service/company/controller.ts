@@ -62,12 +62,12 @@ export class CompanyController extends FollowController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const slug = req.params.slug
+    const userId: string = res.locals.userId
     try {
-      const company = await this.service.load(slug)
+      const company = await this.service.load(slug, userId)
       if (!company) {
         return renderError404(req, res, resource)
       }
-      console.log("company " + JSON.stringify(company))
       render(req, res, "company", { resource, company })
     } catch (err) {
       renderError500(req, res, resource, err)

@@ -13,26 +13,25 @@ export class CompanyUseCase extends FollowService<string> implements CompanyServ
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>> {
     return this.repository.search(filter, limit, page, fields)
   }
-  load(slug: string): Promise<Company | null> {
-    return this.repository.load(slug)
+  load(slug: string, userId?: string): Promise<Company | null> {
+    return this.repository.load(slug, userId)
   }
 }
 
 export function useCompanyController(db: DB): CompanyController {
   const followRepository = new FollowRepository<string>(
     db.executeBatch,
-    "company_following",
-    "id",
-    "following",
-    "following_at",
     "company_followers",
     "id",
     "follower",
     "followed_at",
+    "company_following",
+    "id",
+    "following",
+    "following_at",
     "company_info",
     "id",
     "follower_count",
-    "following_count",
   )
   const repository = new SqlCompanyRepository(db)
   const service = new CompanyUseCase(repository, followRepository)

@@ -12,18 +12,19 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
     let query: string
 
     if (userId) {
-      query = `select c.*, ci.follower_count, ci.following_count, uf.following_at, ur.followed_at
+      query = `select c.*, ci.follower_count, cf.following_at, cr.followed_at
         from companies c
         left join company_info ci on c.id = ci.id
-        left join company_following uf on cf.id = ${this.db.param(1)} and cf.following = c.id
+        left join company_following cf on cf.id = ${this.db.param(1)} and cf.following = c.id
         left join company_followers cr on cr.id = ${this.db.param(2)} and cr.follower = c.id
         where c.slug = ${this.db.param(3)}`
+      console.log("qq " + query)
       params.push(userId, userId)
     } else {
-      query = `select c.*, ci.follower_count, ci.following_count
+      query = `select c.*, ci.follower_count
         from companies c
-        left join company_info ci on u.id = ci.id
-        where u.slug = ${this.db.param(1)}`
+        left join company_info ci on c.id = ci.id
+        where c.slug = ${this.db.param(1)}`
     }
     params.push(slug)
 
@@ -35,7 +36,7 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
     params = []
     query = `select * from companies where id = ${this.db.param(1)}`
     if (userId) {
-      query = `select c.*, ci.follower_count, ci.following_count, cf.following_at, cr.followed_at
+      query = `select c.*, ci.follower_count, cf.following_at, cr.followed_at
         from companies c
         left join company_info ci on c.id = ci.id
         left join company_following cf on cf.id = ${this.db.param(1)} and cf.following = c.id
@@ -43,7 +44,7 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
         where c.id = ${this.db.param(3)}`
       params.push(userId, userId)
     } else {
-      query = `select c.*, ci.follower_count, ci.following_count
+      query = `select c.*, ci.follower_count
         from companies c
         left join company_info ci on c.id = ci.id
         where c.id = ${this.db.param(1)}`
