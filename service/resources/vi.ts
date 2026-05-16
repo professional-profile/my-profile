@@ -19,9 +19,9 @@ export const vi = {
 
   search: "Tìm kiếm",
   submit: "Submit",
-  save: "Save",
-  cancel: "Cancel",
-  close: "Close",
+  save: "Lưu",
+  cancel: "Hủy",
+  close: "Đóng",
 
   msg_no_data_found: "No data found.",
   msg_search_result_sequence: "Items {0} to {1}.",
@@ -38,8 +38,8 @@ export const vi = {
   button_no: "No",
   button_home: "Home",
 
-  msg_confirm_save: "Are you sure you want to save?",
-  msg_save_success: "Data have been saved successfully.",
+  msg_confirm_save: "Bạn có chắc chắn là bạn muốn lưu?",
+  msg_save_success: "Lưu dữ liệu thành công.",
 
   error_undefined: "{0} không được phép tồn tại.",
   error_exp: "{0} không khớp với biểu thức chính quy.",

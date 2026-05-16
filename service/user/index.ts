@@ -1,4 +1,4 @@
-import { SearchResult } from "onecore"
+import { FollowService, SearchResult } from "onecore"
 import { FollowRepository } from "pg-extension"
 import { DB } from "sql-core"
 import { UserController } from "./controller"
@@ -6,8 +6,10 @@ import { SqlUserRepository } from "./repository"
 import { User, UserFilter, UserRepository, UserService } from "./user"
 export * from "./controller"
 
-export class UserUseCase implements UserService {
-  constructor(private repository: UserRepository, private followRepository: FollowRepository<string>) {}
+export class UserUseCase extends FollowService<string> implements UserService {
+  constructor(protected repository: UserRepository, protected followRepository: FollowRepository<string>) {
+    super(followRepository)
+  }
   search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
     return this.repository.search(filter, limit, page, fields)
   }
@@ -16,15 +18,6 @@ export class UserUseCase implements UserService {
   }
   getIdBySlug(slug: string): Promise<string> {
     return this.repository.getIdBySlug(slug)
-  }
-  follow(id: string, target: string): Promise<number> {
-    return this.followRepository.follow(id, target)
-  }
-  unfollow(id: string, target: string): Promise<number> {
-    return this.followRepository.unfollow(id, target)
-  }
-  checkFollow(id: string, target: string): Promise<number> {
-    return this.followRepository.checkFollow(id, target).then((result) => (result ? 1 : 0))
   }
 }
 

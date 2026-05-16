@@ -7,10 +7,51 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
   constructor(db: DB) {
     super(db, "companies", companyModel, buildQuery)
   }
-  async load(slug: string): Promise<Company | null> {
-    const query = `select * from companies where slug = ${this.db.param(1)}`
-    const companys = await this.db.query<Company>(query, [slug], this.map)
-    return companys && companys.length > 0 ? companys[0] : null
+  async load(slug: string, userId?: string): Promise<Company | null> {
+    let params = []
+    let query: string
+
+    if (userId) {
+      query = `select c.*, ci.follower_count, ci.following_count, uf.following_at, ur.followed_at
+        from companies c
+        left join company_info ci on c.id = ci.id
+        left join company_following uf on cf.id = ${this.db.param(1)} and cf.following = c.id
+        left join company_followers cr on cr.id = ${this.db.param(2)} and cr.follower = c.id
+        where c.slug = ${this.db.param(3)}`
+      params.push(userId, userId)
+    } else {
+      query = `select c.*, ci.follower_count, ci.following_count
+        from companies c
+        left join company_info ci on u.id = ci.id
+        where u.slug = ${this.db.param(1)}`
+    }
+    params.push(slug)
+
+    let companies = await this.db.query<Company>(query, params, this.map)
+    if (companies && companies.length > 0) {
+      return companies[0]
+    }
+
+    params = []
+    query = `select * from companies where id = ${this.db.param(1)}`
+    if (userId) {
+      query = `select c.*, ci.follower_count, ci.following_count, cf.following_at, cr.followed_at
+        from companies c
+        left join company_info ci on c.id = ci.id
+        left join company_following cf on cf.id = ${this.db.param(1)} and cf.following = c.id
+        left join company_followers cr on cr.id = ${this.db.param(2)} and cr.follower = c.id
+        where c.id = ${this.db.param(3)}`
+      params.push(userId, userId)
+    } else {
+      query = `select c.*, ci.follower_count, ci.following_count
+        from companies c
+        left join company_info ci on c.id = ci.id
+        where c.id = ${this.db.param(1)}`
+    }
+    params.push(slug)
+
+    companies = await this.db.query<Company>(query, [slug], this.map)
+    return companies && companies.length > 0 ? companies[0] : null
   }
 }
 

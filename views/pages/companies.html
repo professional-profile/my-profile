@@ -20,7 +20,7 @@
     <ul class="row list">
       {% for company in list %}
       <li class="col s12 l6 img-item">
-        <img src="{{company.logo}}" alt="company logo" class="round-border" />
+        <img src="{{company.logo}}" alt="company logo" />
         <a href="/companies/{{company.slug}}{{langSearch}}" onclick="navigate(event)">{{company.companyName}}</a>
         <button class="btn-detail"></button>
         <p class="center-align-items">

@@ -4,6 +4,7 @@ import {
   buildPages,
   buildPageSearch,
   escapeArray,
+  FollowController,
   fromRequest,
   getSearch,
   hasSearch,
@@ -15,8 +16,9 @@ import { getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { CompanyFilter, CompanyService } from "./company"
 
-export class CompanyController {
-  constructor(private service: CompanyService) {
+export class CompanyController extends FollowController {
+  constructor(protected service: CompanyService) {
+    super(service, "id", "userId")
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
   }
@@ -33,11 +35,13 @@ export class CompanyController {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)
       const search = getSearch(req.url)
+
       const sortSearch = removeSort(search)
       const prefix = sortSearch ? `?${sortSearch}&` : "?"
       const sort1: Item = {id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc}
       const sort2: Item = {id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc}
       const sortText = sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
+
       render(req, res, "companies", {
         resource,
         limits: resources.limits,

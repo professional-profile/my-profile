@@ -1,12 +1,15 @@
-import { SearchResult } from "onecore"
+import { FollowService, SearchResult } from "onecore"
+import { FollowRepository } from "pg-extension"
 import { DB } from "sql-core"
 import { Company, CompanyFilter, CompanyRepository, CompanyService } from "./company"
 import { CompanyController } from "./controller"
 import { SqlCompanyRepository } from "./repository"
 export * from "./controller"
 
-export class CompanyUseCase implements CompanyService {
-  constructor(private repository: CompanyRepository) {}
+export class CompanyUseCase extends FollowService<string> implements CompanyService {
+  constructor(private repository: CompanyRepository, protected followRepository: FollowRepository<string>) {
+    super(followRepository)
+  }
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>> {
     return this.repository.search(filter, limit, page, fields)
   }
@@ -16,7 +19,22 @@ export class CompanyUseCase implements CompanyService {
 }
 
 export function useCompanyController(db: DB): CompanyController {
+  const followRepository = new FollowRepository<string>(
+    db.executeBatch,
+    "company_following",
+    "id",
+    "following",
+    "following_at",
+    "company_followers",
+    "id",
+    "follower",
+    "followed_at",
+    "company_info",
+    "id",
+    "follower_count",
+    "following_count",
+  )
   const repository = new SqlCompanyRepository(db)
-  const service = new CompanyUseCase(repository)
+  const service = new CompanyUseCase(repository, followRepository)
   return new CompanyController(service)
 }

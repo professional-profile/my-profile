@@ -69,6 +69,7 @@ export class TokenVerifier {
             })
           }
         } else {
+          removeJWTFields(decoded)
           if (!decoded.displayName) {
             decoded.displayName = decoded.username
           }
@@ -156,6 +157,8 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/companies", ctx.menu.build, ctx.company.search)
   app.get("/companies/:slug", ctx.menu.build, ctx.company.view)
+  app.patch("/profiles/:id", authorized, ctx.company.follow)
+  app.delete("/profiles/:id", authorized, ctx.company.unfollow)
 
   app.get("/profiles", ctx.menu.build, ctx.user.search)
   app.get("/profiles/:slug", ctx.menu.build, ctx.user.view)

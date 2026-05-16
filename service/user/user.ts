@@ -86,7 +86,6 @@ export interface UserService {
   getIdBySlug(slug: string): Promise<string>
   follow(id: string, target: string): Promise<number>
   unfollow(id: string, target: string): Promise<number>
-  checkFollow(id: string, target: string): Promise<number>
 }
 
 export const skillsModel: Attributes = {

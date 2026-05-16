@@ -4,10 +4,13 @@ import { en as articleEN } from "./article/en"
 import { vi as articleVI } from "./article/vi"
 import { en as authenticationEN } from "./authentication/en"
 import { vi as authenticationVI } from "./authentication/vi"
+import { en as companyEN } from "./company/en"
+import { vi as companyVI } from "./company/vi"
 import { en as commonEN } from "./en"
 import { en as profileEN } from "./profile/en"
 import { vi as profileVI } from "./profile/vi"
 import { vi as commonVI } from "./vi"
+
 
 export interface Resource {
   resource(): StringMap
@@ -26,12 +29,14 @@ const en: StringMap = {
   ...authenticationEN,
   ...articleEN,
   ...profileEN,
+  ...companyEN
 }
 const vi: StringMap = {
   ...commonVI,
   ...authenticationVI,
   ...articleVI,
   ...profileVI,
+  ...companyVI
 }
 
 export const resources: Resources = {

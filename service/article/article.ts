@@ -43,8 +43,6 @@ export interface ArticleService {
   save(userId: string, id: string): Promise<number>
   remove(userId: string, id: string): Promise<number>
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>>
-  setUseful(rateId: string, userId: string): Promise<number>
-  removeUseful(rateId: string, userId: string): Promise<number>
 }
 
 export const Published = "P"

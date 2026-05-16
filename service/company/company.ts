@@ -21,11 +21,13 @@ export interface CompanyFilter extends Filter {
 
 export interface CompanyRepository {
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
-  load(slug: string): Promise<Company | null>
+  load(slug: string, userId?: string): Promise<Company | null>
 }
 export interface CompanyService {
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
-  load(slug: string): Promise<Company | null>
+  load(slug: string, userId?: string): Promise<Company | null>
+  follow(id: string, target: string): Promise<number>
+  unfollow(id: string, target: string): Promise<number>
 }
 
 export const companyModel: Attributes = {

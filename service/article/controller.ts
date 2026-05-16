@@ -271,7 +271,7 @@ export class ArticleController extends SavedController {
     const rateId = req.params.rateId
     const userId: string = res.locals.userId
     try {
-      const result = await this.service.setUseful(rateId, userId)
+      const result = await this.rateService.setUseful(rateId, userId)
       const status = result > 0 ? 200 : 409
       res.status(status).json(result).end()
     } catch (err) {
@@ -282,7 +282,7 @@ export class ArticleController extends SavedController {
     const rateId = req.params.rateId
     const userId: string = res.locals.userId
     try {
-      const result = await this.service.removeUseful(rateId, userId)
+      const result = await this.rateService.removeUseful(rateId, userId)
       const status = result > 0 ? 200 : 410
       res.status(status).json(result).end()
     } catch (err) {

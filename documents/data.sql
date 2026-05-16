@@ -20,6 +20,23 @@ create table companies (
   gallery character varying[],
   status char(1)
 )
+create table company_info (
+  id varchar(40) primary key,
+  follower_count bigint default 0,
+  following_count bigint default 0
+);
+create table company_followers (
+  id varchar(40) not null,
+  follower varchar(40) not null,
+  followed_at timestamptz not null,
+  primary key (id, follower)
+);
+create table company_following (
+  id varchar(40) not null,
+  following varchar(40) not null,
+  following_at timestamptz not null,
+  primary key (id, following)
+);
 
 create table users (
   id varchar(40) primary key,
