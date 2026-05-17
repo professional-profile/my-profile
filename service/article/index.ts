@@ -1,13 +1,15 @@
 import { nanoid } from "nanoid"
-import { SavedRepository, SavedService, SearchResult } from "onecore"
-import { buildToSave, SqlSavedRepository } from "pg-extension"
-import { Rate, Rater, SqlRateRepository } from "rate-sql"
+import { SavedRepository, SearchResult } from "onecore"
+import { buildToSave } from "pg-extension"
+import { Rate, Rater, SqlRateRepository } from "rate-service"
+import { SqlUsefulRepository } from "rate-sql"
+import { SavedService, SqlSavedRepository } from "saved-service"
 import { buildToInsert, buildToUpdate, DB } from "sql-core"
 import { rateModel, rateReactionModel, RateSummary, RateSummaryRepository, zeroSummary } from "../shared/rate"
 import { RateFilter, RatesRepository, Rate as SearchRate, SearchRateRepository } from "../shared/rates"
 import { Article, ArticleFilter, ArticleRepository, ArticleService } from "./article"
 import { ArticleController } from "./controller"
-import { SqlArticleRepository, SqlRateSummaryRepository, SqlUsefulRepository } from "./repository"
+import { SqlArticleRepository, SqlRateSummaryRepository } from "./repository"
 export * from "./controller"
 
 export class ArticleUseCase extends SavedService<string, string> implements ArticleService {
@@ -35,8 +37,8 @@ export class ArticleUseCase extends SavedService<string, string> implements Arti
 export function useArticleController(db: DB): ArticleController {
   const repository = new SqlArticleRepository(db)
   const savedRepository = new SqlSavedRepository(db, "saved_articles", "user_id", "id", "saved_at")
-  const ratesRepository = new SearchRateRepository(db)
   const rateSummaryRepository = new SqlRateSummaryRepository(db)
+  const ratesRepository = new SearchRateRepository(db)
   const rateRepository = new SqlRateRepository<Rate>(db, "article_rates", rateModel, 5, "article_info", buildToInsert, buildToUpdate, generateId, "rateId", "rate", "count", "score", "author", "id")
   const usefulRepository = new SqlUsefulRepository(db, "article_rate_reactions", rateReactionModel, buildToSave, "article_rates", "rate_id", "useful_count")
   const rateService = new Rater(db, rateRepository, rateSummaryRepository, usefulRepository)

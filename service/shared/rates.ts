@@ -68,24 +68,24 @@ export function buildQuery(filter: RateFilter): Statement {
   const params = []
   let i = 1
   if (filter.userId) {
-    query = `select ar.*, rr.reaction, u.display_name
-      from article_rates ar 
+    query = `select r.*, rr.reaction, u.display_name
+      from article_rates r 
       inner join users u
-        on ar.author = u.id
+        on r.author = u.id
       left join article_rate_reactions rr 
-        on ar.rate_id = rr.rate_id and rr.user_id = ${param(i++)}`
+        on r.rate_id = rr.rate_id and rr.user_id = ${param(i++)}`
     params.push(filter.userId)
   } else {
-    query = `select ar.*, u.display_name from article_rates ar inner join users u on ar.author = u.id`
+    query = `select r.*, u.display_name from article_rates r inner join users u on r.author = u.id`
   }
 
   if (filter.id) {
     params.push(filter.id)
-    where.push(`ar.id = ${param(i++)}`)
+    where.push(`r.id = ${param(i++)}`)
   }
   if (filter.rate) {
     params.push(filter.rate)
-    where.push(`ar.rate = ${param(i++)}`)
+    where.push(`r.rate = ${param(i++)}`)
   }
 
   if (where.length > 0) {

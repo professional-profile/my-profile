@@ -1,6 +1,5 @@
-import { FollowService, SearchResult } from "onecore"
-import { FollowRepository, FollowUserRepository } from "pg-extension"
-import { DB } from "sql-core"
+import { FollowService, FollowUserRepository } from "follow-service"
+import { DB, FollowRepository, SearchResult } from "onecore"
 import { UserController } from "./controller"
 import { SqlUserRepository } from "./repository"
 import { User, UserFilter, UserRepository, UserService } from "./user"

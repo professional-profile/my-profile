@@ -31,8 +31,8 @@ export interface CompanyRepository {
 export interface CompanyService {
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
   load(slug: string, userId?: string): Promise<Company | null>
-  follow(id: string, target: string): Promise<number>
-  unfollow(id: string, target: string): Promise<number>
+  follow(id: string, companyId: string): Promise<number>
+  unfollow(id: string, companyId: string): Promise<number>
 }
 
 export const companyModel: Attributes = {

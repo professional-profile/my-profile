@@ -18,7 +18,7 @@ import {
   SavedController
 } from "express-core-web"
 import { Item } from "onecore"
-import { RateService, SubmittedRate } from "rate-sql"
+import { RateService, SubmittedRate } from "rate-service"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { calculatePercent, formatRate } from "../shared/rate"

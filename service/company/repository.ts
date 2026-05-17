@@ -1,6 +1,6 @@
-import { DB } from "onecore"
+import { DB, Statement } from "onecore"
 import { param } from "pg-extension"
-import { buildSort, SearchRepository, Statement } from "sql-core"
+import { buildSort, SearchRepository } from "sql-core"
 import { Company, CompanyFilter, companyModel, CompanyRepository } from "./company"
 
 export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilter> implements CompanyRepository {
@@ -17,7 +17,6 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
         left join company_info ci on c.id = ci.id
         left join company_followers cr on cr.id = c.id and cr.follower = ${this.db.param(1)}
         where c.slug = ${this.db.param(2)}`
-      console.log("qq " + query)
       params.push(userId, slug)
     } else {
       query = `select c.*, ci.follower_count

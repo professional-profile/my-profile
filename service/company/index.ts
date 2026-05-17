@@ -1,6 +1,5 @@
-import { FollowService, SearchResult } from "onecore"
-import { FollowRepository } from "pg-extension"
-import { DB } from "sql-core"
+import { FollowService, SqlFollowRepository } from "follow-service"
+import { DB, FollowRepository, SearchResult } from "onecore"
 import { Company, CompanyFilter, CompanyRepository, CompanyService } from "./company"
 import { CompanyController } from "./controller"
 import { SqlCompanyRepository } from "./repository"
@@ -19,7 +18,7 @@ export class CompanyUseCase extends FollowService<string> implements CompanyServ
 }
 
 export function useCompanyController(db: DB): CompanyController {
-  const followRepository = new FollowRepository<string>(
+  const followRepository = new SqlFollowRepository<string>(
     db.executeBatch,
     "company_followers",
     "id",
