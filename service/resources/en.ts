@@ -134,6 +134,7 @@ export const en = {
   quantity: "Quantity",
   location: "Location",
 
+  reviews: "Reviews",
   ratings_and_reviews: "Ratings and Reviews",
   write_a_review: "Write a review",
   review_placeholder: "Share your experience",

@@ -134,6 +134,7 @@ export const vi = {
   quantity: "Số lượng",
   location: "Vị trí",
 
+  reviews: "Đánh giá",
   ratings_and_reviews: "Đánh giá và nhận xét",
   write_a_review: "Đánh giá",
   review_placeholder: "Viết nhận xét",
@@ -143,7 +144,7 @@ export const vi = {
   sort_time_asc: "Cũ nhất",
   sort_rate_desc: "Đánh giá cao nhất",
   sort_rate_asc: "Đánh giá thấp nhất",
-  
+
   sort_desc_useful_desc: "Sắp xếp theo Có ích nhất",
   sort_desc_time_desc: "Sắp xếp theo Mới nhất",
   sort_desc_time_asc: "Sắp xếp theo Cũ nhất",

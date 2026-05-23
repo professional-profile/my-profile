@@ -1,13 +1,13 @@
-<div class="profile">
+<div id="companyPage" class="profile">
   {% include "pages/company/header.html" %}
   <nav class="tabs">
-    <a href="/companies/{{company.slug}}" class="tab">Overview</a>
-    <a href="#" class="tab">Reviews</a>
-    <a href="/companies/{{company.slug}}/articles" class="tab">Articles</a>
-    <a href="/companies/{{company.slug}}/followers" class="tab active">Followers</a>
-    <a href="#" class="tab">Community</a>
+    <a class="tab" href="/companies/{{company.slug}}">{{resource.overview}}</a>
+    <a class="tab" href="#">{{resource.reviews}}</a>
+    <a class="tab" href="/companies/{{company.slug}}/articles">{{resource.articles}}</a>
+    <a class="tab active" href="/companies/{{company.slug}}/followers">{{resource.followers}}</a>
+    <a class="tab" href="#">Community</a>
   </nav>
-  <div id="userBody" class="profile-body">
+  <div id="companyBody" class="profile-body">
     {% include "pages/company/followers.html" %}
   </div>
 </div>

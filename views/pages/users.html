@@ -18,16 +18,16 @@
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />
     </form>
     <ul class="row list">
-      {% for user in list %}
-      <li class="col s12 m6 l4 xl3 img-item">
-        <img src="{{user.imageURL}}" alt="user avatar" class="round-border" />
-        <a href="/profiles/{{user.username}}{{langSearch}}" onclick="navigate(event)">{{user.displayName}}</a>
+      {% for item in list %}
+      <li class="col s12 m6 img-item">
+        <img src="{{item.imageURL}}" alt="item avatar" class="round-border" />
+        <a href="/profiles/{{item.username}}{{langSearch}}" onclick="navigate(event)">{{item.displayName}}</a>
         <button class="btn-detail"></button>
         <p class="center-align-items">
-          {{user.occupation}} {% if account and account.id != user.id %} {% if user.followedAt %}
-          <i class="material-icons" onclick="unfollow(this, '{{user.id}}')">bookmark</i>
+          {{item.occupation}} {% if account and account.id != item.id %} {% if item.followedAt %}
+          <i class="material-icons" onclick="unfollow(this, '{{item.id}}')">bookmark</i>
           {% else %}
-          <i class="material-icons" onclick="follow(this, '{{user.id}}')">bookmark_border</i>
+          <i class="material-icons" onclick="follow(this, '{{item.id}}')">bookmark_border</i>
           {% endif %} {% endif %}
         </p>
       </li>

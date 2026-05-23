@@ -3,6 +3,7 @@ import {
   buildMessage,
   buildPages,
   buildPageSearch,
+  buildSorts,
   buildSortSearch,
   escape,
   escapeArray,
@@ -10,6 +11,7 @@ import {
   format,
   fromRequest,
   getSearch,
+  getSortText,
   hasSearch,
   isPartial,
   isSubPartial,
@@ -267,7 +269,7 @@ export class UserController extends FollowController {
       filter = fromRequest<CompanyFilter>(req)
     }
     if (!filter.sort) {
-      filter.sort = "name"
+      filter.sort = "-following_at"
     }
     filter.status = Published
     filter.currentUserId = res.locals.userId
@@ -292,11 +294,17 @@ export class UserController extends FollowController {
       const result = await this.service.getCompanies(filter, limit, page)
       const list = escapeArray(result.list)
       const search = getSearch(req.url)
+
       const sortSearch = removeSort(search)
-      const prefix = sortSearch ? `?${sortSearch}&` : "?"
-      const sort1: Item = { id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc }
-      const sort2: Item = { id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc }
-      const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
+      const prefix = sortSearch ? `?${sortSearch}&` : `?`
+      const sort1: Item = { id: "followingDescSort", value: "-followingAt", text: resource.sort_following_at_desc }
+      const sort2: Item = { id: "followingAscSort", value: "followingAt", text: resource.sort_following_at_asc }
+      const sort3: Item = { id: "nameAscSort", value: "name", text: resource.sort_name_asc }
+      const sort4: Item = { id: "nameDescSort", value: "-name", text: resource.sort_name_desc }
+      const sorts = [sort1, sort2, sort3, sort4]
+      const sortText = getSortText(sorts, filter.sort, resource.sort_following_at_desc)
+      buildSorts(sorts, `${prefix}${resources.sort}=`)
+
       const ctx: any = {
         resource,
         limits: resources.limits,
@@ -305,7 +313,7 @@ export class UserController extends FollowController {
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
         langSearch,
-        sorts: [sort1, sort2],
+        sorts,
         sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       }

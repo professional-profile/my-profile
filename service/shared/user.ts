@@ -18,6 +18,8 @@ export interface User {
   location?: string
 
   followedAt?: Date
+  followerCount?: number
+  followingCount?: number
 }
 
 export const userModel: Attributes = {
@@ -73,6 +75,18 @@ export const userModel: Attributes = {
     length: 100,
   },
 
+  followingCount: {
+    column: "following_count",
+    type: "integer",
+    noinsert: true,
+    noupdate: true,
+  },
+  followerCount: {
+    column: "follower_count",
+    type: "integer",
+    noinsert: true,
+    noupdate: true,
+  },
   followedAt: {
     column: "followed_at",
     type: "datetime",

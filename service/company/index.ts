@@ -21,7 +21,10 @@ export class CompanyUseCase extends FollowService<string> implements CompanyServ
     return this.repository.getIdBySlug(slug)
   }
   getFollowers(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
-    return this.userRepository.search(filter, limit, page, fields)
+    return this.userRepository.search(filter, limit, page, fields).then(res => {
+      console.log(JSON.stringify(res.list))
+      return res
+    })
   }
 }
 

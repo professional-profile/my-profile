@@ -4,7 +4,7 @@ import { buildSort, SearchRepository } from "sql-core"
 import { User, userModel } from "../shared/user"
 
 export interface UserFilter extends Filter {
-  companyId: string
+  companyId?: string
   userId?: string
 }
 export interface UserRepository {
@@ -33,9 +33,10 @@ export function buildFollowerQuery(filter: UserFilter): Statement {
     params.push(filter.companyId, filter.userId)
   } else {
     query = `
-      select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline 
+      select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline, cf.followed_at
       from company_followers cf
-        inner join users u on cf.id = ${param(i++)} and cf.follower = u.id `
+        inner join users u on cf.id = ${param(i++)} and cf.follower = u.id
+        left join user_info ui on u.id = ui.id `
     params.push(filter.companyId)
   }
 

@@ -11,10 +11,8 @@ import {
   hasSearch,
   isPartial,
   isSubPartial,
-  removeSort,
   resources
 } from "express-core-web"
-import { Item } from "onecore"
 import { getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Company, CompanyFilter, CompanyService } from "./company"
@@ -41,13 +39,6 @@ export class CompanyController extends FollowController {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)
       const search = getSearch(req.url)
-
-      const sortSearch = removeSort(search)
-      const prefix = sortSearch ? `?${sortSearch}&` : "?"
-      const sort1: Item = { id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc }
-      const sort2: Item = { id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc }
-      const sortText = sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
-
       render(req, res, "companies", {
         resource,
         limits: resources.limits,
@@ -56,8 +47,6 @@ export class CompanyController extends FollowController {
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
         langSearch,
-        sorts: [sort1, sort2],
-        sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       })
     } catch (err) {

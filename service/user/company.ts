@@ -27,14 +27,14 @@ export function buildCompanyQuery(filter: CompanyFilter): Statement {
   if (filter.currentUserId) {
     query = `
       select c.id, c.slug, c.name, c.website, c.industry, c.size, c.logo, c.cover_url,
-        ci.follower_count, cr.followed_at
+        ci.follower_count, f.following_at, cr.followed_at
       from company_following f
         inner join companies c on f.id = ${param(i++)} and c.id = f.following
         left join company_info ci on c.id = ci.id
         left join company_followers cr on cr.id = c.id and cr.follower = ${param(i++)} `
     params.push(filter.userId, filter.currentUserId)
   } else {
-    query = `select c.id, c.slug, c.name, c.website, c.industry, c.size, c.logo, c.cover_url, ci.follower_count
+    query = `select c.id, c.slug, c.name, c.website, c.industry, c.size, c.logo, c.cover_url, ci.follower_count, f.following_at
       from company_following f
         inner join companies c on f.id = ${param(i++)} and c.id = f.following
         left join company_info ci on c.id = ci.id `
