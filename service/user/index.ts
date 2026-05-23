@@ -1,12 +1,16 @@
 import { FollowService, FollowUserRepository } from "follow-service"
 import { DB, FollowRepository, SearchResult } from "onecore"
+import { Article } from "../shared/article"
+import { Company } from "../shared/company"
+import { ArticleFilter, ArticleRepository, SqlArticleRepository } from "./article"
+import { CompanyFilter, CompanyRepository, SqlCompanyRepository } from "./company"
 import { UserController } from "./controller"
 import { SqlUserRepository } from "./repository"
 import { User, UserFilter, UserRepository, UserService } from "./user"
 export * from "./controller"
 
 export class UserUseCase extends FollowService<string> implements UserService {
-  constructor(protected repository: UserRepository, protected followRepository: FollowRepository<string>) {
+  constructor(protected repository: UserRepository, protected followRepository: FollowRepository<string>, protected articleRepository: ArticleRepository, protected companyRepository: CompanyRepository) {
     super(followRepository)
   }
   search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
@@ -17,6 +21,12 @@ export class UserUseCase extends FollowService<string> implements UserService {
   }
   getIdBySlug(slug: string): Promise<string> {
     return this.repository.getIdBySlug(slug)
+  }
+  getArticles(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
+    return this.articleRepository.search(filter, limit, page, fields)
+  }
+  getCompanies(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>> {
+    return this.companyRepository.search(filter, limit, page, fields)
   }
 }
 
@@ -37,6 +47,8 @@ export function useUserController(db: DB): UserController {
     "following_count",
   )
   const repository = new SqlUserRepository(db)
-  const service = new UserUseCase(repository, followRepository)
+  const articleRepository = new SqlArticleRepository(db)
+  const companyRepository = new SqlCompanyRepository(db)
+  const service = new UserUseCase(repository, followRepository, articleRepository, companyRepository)
   return new UserController(service)
 }

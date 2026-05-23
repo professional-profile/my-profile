@@ -10,14 +10,13 @@
     </div>
     <div class="profile-info">
       <h1>
-        <a id="aCompany" href="/profiles/{{company.companyName}}"
+        <a id="companyA" href="/companies/{{company.slug}}"
           onclick="navigate(event, 'companyBody')">{{company.companyName}}</a>
         {% if company.followingAt and company.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
       </h1>
       <p>{{company.industry}}</p>
       <div class="profile-followers">
-        <a id="followerCount" href="/profiles/{{company.companyname}}/followers"
-          onclick="navigate(event, 'companyBody')">
+        <a id="followerCount" href="/companies/{{company.slug}}/followers" onclick="navigate(event, 'companyBody')">
           <i class="material-icons highlight">group</i>{{company.followerCount}} followers
         </a>
       </div>
@@ -38,10 +37,3 @@
     </div>
   </div>
 </header>
-<div class="tabs">
-  <div class="tab active">Overview</div>
-  <div class="tab">Reviews</div>
-  <div class="tab">Articles</div>
-  <div class="tab">Community</div>
-  <div class="tab">About</div>
-</div>

@@ -1,12 +1,14 @@
 import { FollowService, SqlFollowRepository } from "follow-service"
 import { DB, FollowRepository, SearchResult } from "onecore"
+import { User } from "../shared/user"
 import { Company, CompanyFilter, CompanyRepository, CompanyService } from "./company"
 import { CompanyController } from "./controller"
 import { SqlCompanyRepository } from "./repository"
+import { SqlUserRepository, UserFilter, UserRepository } from "./user"
 export * from "./controller"
 
 export class CompanyUseCase extends FollowService<string> implements CompanyService {
-  constructor(private repository: CompanyRepository, protected followRepository: FollowRepository<string>) {
+  constructor(private repository: CompanyRepository, protected followRepository: FollowRepository<string>, protected userRepository: UserRepository) {
     super(followRepository)
   }
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>> {
@@ -14,6 +16,12 @@ export class CompanyUseCase extends FollowService<string> implements CompanyServ
   }
   load(slug: string, userId?: string): Promise<Company | null> {
     return this.repository.load(slug, userId)
+  }
+  getIdBySlug(slug: string): Promise<string> {
+    return this.repository.getIdBySlug(slug)
+  }
+  getFollowers(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
+    return this.userRepository.search(filter, limit, page, fields)
   }
 }
 
@@ -33,6 +41,7 @@ export function useCompanyController(db: DB): CompanyController {
     "follower_count",
   )
   const repository = new SqlCompanyRepository(db)
-  const service = new CompanyUseCase(repository, followRepository)
+  const userRepository = new SqlUserRepository(db)
+  const service = new CompanyUseCase(repository, followRepository, userRepository)
   return new CompanyController(service)
 }

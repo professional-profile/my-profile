@@ -10,7 +10,7 @@
     </div>
     <div class="profile-info">
       <h1>
-        <a id="aUser" href="/profiles/{{user.username}}" onclick="navigate(event, 'userBody')">{{user.displayName}}</a>
+        <a id="userA" href="/profiles/{{user.username}}" onclick="navigate(event, 'userBody')">{{user.displayName}}</a>
         {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
       </h1>
       <p>{{user.headline}}</p>

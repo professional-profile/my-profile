@@ -156,6 +156,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get("/companies", ctx.menu.build, ctx.company.search)
   app.get("/companies/:slug", ctx.menu.build, ctx.company.view)
+  app.get("/companies/:slug/followers", ctx.menu.build, ctx.company.getFollowers)
   app.patch("/companies/:id", authorized, ctx.company.follow)
   app.delete("/companies/:id", authorized, ctx.company.unfollow)
 
@@ -163,6 +164,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/profiles/:slug", ctx.menu.build, ctx.user.view)
   app.get("/profiles/:slug/followers", ctx.menu.build, ctx.user.getFollowers)
   app.get("/profiles/:slug/following", ctx.menu.build, ctx.user.getFollowing)
+  app.get("/profiles/:slug/articles", ctx.menu.build, ctx.user.getArticles)
   app.patch("/profiles/:id", authorized, ctx.user.follow)
   app.delete("/profiles/:id", authorized, ctx.user.unfollow)
 

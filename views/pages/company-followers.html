@@ -1,0 +1,13 @@
+<div class="profile">
+  {% include "pages/company/header.html" %}
+  <nav class="tabs">
+    <a href="/companies/{{company.slug}}" class="tab">Overview</a>
+    <a href="#" class="tab">Reviews</a>
+    <a href="/companies/{{company.slug}}/articles" class="tab">Articles</a>
+    <a href="/companies/{{company.slug}}/followers" class="tab active">Followers</a>
+    <a href="#" class="tab">Community</a>
+  </nav>
+  <div id="userBody" class="profile-body">
+    {% include "pages/shared/followers.html" %}
+  </div>
+</div>

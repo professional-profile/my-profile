@@ -1,3 +1,10 @@
+<nav class="tabs">
+  <a class="tab active" href="/profiles/{{user.username}}" onclick="navigate(event, 'userBody')">Overview</a>
+  <a class="tab" href="/profiles/{{user.username}}/articles" onclick="navigate(event, 'userBody')">Articles</a>
+  <a class="tab" href="/profiles/{{user.username}}/followers" onclick="navigate(event, 'userBody')">Followers</a>
+  <a class="tab" href="/profiles/{{user.username}}/following" onclick="navigate(event, 'userBody')">Following</a>
+  <a class="tab" href="/profiles/{{user.username}}/companies" onclick="navigate(event, 'userBody')">Companies</a>
+</nav>
 <form id="userForm" name="userForm">
   <div class="row list card-grid">
     <div class="col m12 l4">

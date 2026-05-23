@@ -7,10 +7,15 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
   constructor(db: DB) {
     super(db, "companies", companyModel, buildQuery)
   }
+  async getIdBySlug(slug: string): Promise<string> {
+    const query = `select c.id from companies c where c.slug = ${this.db.param(1)}`
+    console.log("q 0 " + query)
+    const articles = await this.db.query<Company>(query, [slug], this.map)
+    return (articles && articles.length > 0 ? articles[0].id : slug)
+  }
   async load(slug: string, userId?: string): Promise<Company | null> {
     let params = []
     let query: string
-
     if (userId) {
       query = `select c.*, ci.follower_count, cr.followed_at
         from companies c
@@ -26,6 +31,7 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
       params.push(slug)
     }
 
+    console.log("q 1 " + query)
     let companies = await this.db.query<Company>(query, params, this.map)
     if (companies && companies.length > 0) {
       return companies[0]
@@ -46,6 +52,7 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
         where c.id = ${this.db.param(1)}`
       params.push(slug)
     }
+    console.log("q 2 " + query)
     companies = await this.db.query<Company>(query, [slug], this.map)
     return companies && companies.length > 0 ? companies[0] : null
   }
@@ -57,17 +64,16 @@ export function buildQuery(filter: CompanyFilter): Statement {
   const params = []
   let i = 1
 
-  let sub = ""
   if (filter.userId) {
     query = `
       select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url,
         ci.follower_count, cr.followed_at
-      from companies c ${sub}
+      from companies c
       left join company_info ci on c.id = ci.id
       left join company_followers cr on cr.id = c.id and cr.follower = ${param(i++)} `
     params.push(filter.userId)
   } else {
-    query = `select select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url from companies c ${sub}
+    query = `select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url from companies c
       left join company_info ci on c.id = ci.id`
   }
 

@@ -1,4 +1,6 @@
 import { Attributes, Filter, SearchResult } from "onecore"
+import { User } from "../shared/user"
+import { UserFilter } from "./user"
 
 export interface Company {
   id: string
@@ -27,12 +29,15 @@ export interface CompanyFilter extends Filter {
 export interface CompanyRepository {
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
   load(slug: string, userId?: string): Promise<Company | null>
+  getIdBySlug(slug: string): Promise<string>
 }
 export interface CompanyService {
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
   load(slug: string, userId?: string): Promise<Company | null>
+  getIdBySlug(slug: string): Promise<string>
   follow(id: string, companyId: string): Promise<number>
   unfollow(id: string, companyId: string): Promise<number>
+  getFollowers(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>>
 }
 
 export const companyModel: Attributes = {

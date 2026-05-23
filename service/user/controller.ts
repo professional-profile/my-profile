@@ -7,16 +7,22 @@ import {
   escape,
   escapeArray,
   FollowController,
+  format,
   fromRequest,
   getSearch,
   hasSearch,
   isPartial,
   isSubPartial,
+  removeSort,
   resources
 } from "express-core-web"
-import { getLang, getLangSearch, getResource } from "../resources"
+import { Item } from "onecore"
+import { formatDateTime } from "ui-formatter"
+import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
+import { Published } from "../shared/article"
 import { render, renderError404, renderError500 } from "../template"
-import { UserFilter, UserService } from "./user"
+import { ArticleFilter } from "./article"
+import { User, UserFilter, UserService } from "./user"
 
 const fields = ["id", "username", "email", "displayName", "status"]
 export class UserController extends FollowController {
@@ -26,6 +32,8 @@ export class UserController extends FollowController {
     this.view = this.view.bind(this)
     this.getFollowers = this.getFollowers.bind(this)
     this.getFollowing = this.getFollowing.bind(this)
+    this.getArticles = this.getArticles.bind(this)
+    this.getCompanies = this.getCompanies.bind(this)
   }
   async search(req: Request, res: Response) {
     const lang = getLang(req)
@@ -117,7 +125,8 @@ export class UserController extends FollowController {
       }
       const partial = isPartial(req)
       const subPartial = isSubPartial(req)
-      const view = partial && subPartial ? "user/followers" : "user-followers"
+      const view = partial && subPartial ? "shared/followers" : "user-followers"
+      console.log("view " + view)
       if (!partial) {
         const slug = req.params.slug
         const user = await this.service.load(slug, userId)
@@ -173,6 +182,145 @@ export class UserController extends FollowController {
         if (!user) {
           return renderError404(req, res, resource)
         }
+        ctx.user = escape(user)
+      }
+      render(req, res, view, ctx)
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
+  }
+  async getArticles(req: Request, res: Response) {
+    const lang = getLang(req)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
+    const langSearch = getLangSearch(lang)
+    const userId = res.locals.userId
+    let filter: ArticleFilter = {
+      limit: resources.defaultLimit,
+      publishedAt: {},
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<ArticleFilter>(req)
+      format(filter, ["publishedAt"])
+    }
+    if (!filter.sort) {
+      filter.sort = "-publishedAt"
+    }
+    filter.status = Published
+    filter.userId = userId
+    const { page, limit } = filter
+
+    const slug = req.params.slug
+    const partial = isPartial(req)
+    const subPartial = isSubPartial(req)
+    const view = partial && subPartial ? "shared/articles" : "user-articles"
+    let authorId = ""
+    let user: User | null = null
+    try {
+      if (partial) {
+        authorId = await this.service.getIdBySlug(slug)
+      } else {
+        user = await this.service.load(slug, userId)
+        if (!user) {
+          return renderError404(req, res, resource)
+        }
+        authorId = user.id
+      }
+      filter.authorId = authorId
+      const result = await this.service.getArticles(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of result.list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const search = getSearch(req.url)
+      const sortSearch = removeSort(search)
+      const prefix = sortSearch ? `?${sortSearch}&` : "?"
+      const sort1: Item = { id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc }
+      const sort2: Item = { id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc }
+      const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
+      const ctx: any = {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        langSearch,
+        sorts: [sort1, sort2],
+        sortText,
+        message: buildMessage(resource, list, limit, page, result.total),
+      }
+      if (user) {
+        ctx.user = escape(user)
+      }
+      render(req, res, view, ctx)
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
+  }
+  async getCompanies(req: Request, res: Response) {
+    const lang = getLang(req)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
+    const langSearch = getLangSearch(lang)
+    const userId = res.locals.userId
+    let filter: ArticleFilter = {
+      limit: resources.defaultLimit,
+      publishedAt: {},
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<ArticleFilter>(req)
+      format(filter, ["publishedAt"])
+    }
+    if (!filter.sort) {
+      filter.sort = "-publishedAt"
+    }
+    const id = await this.service.getIdBySlug(req.params.slug)
+    filter.status = Published
+    filter.userId = id
+    const { page, limit } = filter
+
+    const slug = req.params.slug
+    const partial = isPartial(req)
+    const subPartial = isSubPartial(req)
+    const view = partial && subPartial ? "shared/articles" : "user-articles"
+    let authorId = ""
+    let user: User | null = null
+    try {
+      if (partial) {
+        authorId = await this.service.getIdBySlug(slug)
+      } else {
+        user = await this.service.load(slug, userId)
+        if (!user) {
+          return renderError404(req, res, resource)
+        }
+        authorId = user.id
+      }
+      filter.authorId = authorId
+      const result = await this.service.getArticles(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of result.list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const search = getSearch(req.url)
+      const sortSearch = removeSort(search)
+      const prefix = sortSearch ? `?${sortSearch}&` : "?"
+      const sort1: Item = { id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc }
+      const sort2: Item = { id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc }
+      const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
+      const ctx: any = {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        langSearch,
+        sorts: [sort1, sort2],
+        sortText,
+        message: buildMessage(resource, list, limit, page, result.total),
+      }
+      if (user) {
         ctx.user = escape(user)
       }
       render(req, res, view, ctx)
