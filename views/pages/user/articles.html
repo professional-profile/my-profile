@@ -11,7 +11,7 @@
           <button id="sortBtn" type="button" class="btn-sort" onclick="toggleSort(event)">{{sortText}}</button>
           <div id="sortDropdown" class="dropdown">
             {% for item in sorts %}
-            <a id="{{item.id}}" href="{{item.value}}" onclick="navigate(event)">{{item.text}}</a>
+            <a id="{{item.id}}" href="{{item.value}}" onclick="navigate(event, 'userBody')">{{item.text}}</a>
             {% endfor %}
           </div>
         </div>

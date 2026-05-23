@@ -266,6 +266,7 @@ a.tab.active,
   padding-top: unset;
   max-height: unset;
   height: unset;
+  min-height: 320px;
 }
 .profile .profile-body > header {
   margin-bottom: 4px;

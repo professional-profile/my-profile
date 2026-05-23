@@ -297,12 +297,12 @@ export class UserController extends FollowController {
 
       const sortSearch = removeSort(search)
       const prefix = sortSearch ? `?${sortSearch}&` : `?`
-      const sort1: Item = { id: "followingDescSort", value: "-followingAt", text: resource.sort_following_at_desc }
-      const sort2: Item = { id: "followingAscSort", value: "followingAt", text: resource.sort_following_at_asc }
+      const sort1: Item = { id: "followingDescSort", value: "-followingAt", text: resource.sort_time_desc }
+      const sort2: Item = { id: "followingAscSort", value: "followingAt", text: resource.sort_time_asc }
       const sort3: Item = { id: "nameAscSort", value: "name", text: resource.sort_name_asc }
       const sort4: Item = { id: "nameDescSort", value: "-name", text: resource.sort_name_desc }
       const sorts = [sort1, sort2, sort3, sort4]
-      const sortText = getSortText(sorts, filter.sort, resource.sort_following_at_desc)
+      const sortText = getSortText(sorts, filter.sort, resource.sort_time_desc)
       buildSorts(sorts, `${prefix}${resources.sort}=`)
 
       const ctx: any = {

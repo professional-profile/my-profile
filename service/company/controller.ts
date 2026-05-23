@@ -3,16 +3,20 @@ import {
   buildMessage,
   buildPages,
   buildPageSearch,
+  buildSorts,
   escape,
   escapeArray,
   FollowController,
   fromRequest,
   getSearch,
+  getSortText,
   hasSearch,
   isPartial,
   isSubPartial,
+  removeSort,
   resources
 } from "express-core-web"
+import { Item } from "onecore"
 import { getLang, getLangSearch, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Company, CompanyFilter, CompanyService } from "./company"
@@ -93,6 +97,9 @@ export class CompanyController extends FollowController {
       if (hasSearch(req)) {
         filter = fromRequest<UserFilter>(req)
       }
+      if (!filter.sort) {
+        filter.sort = "-followedAt"
+      }
       filter.userId = userId
       filter.companyId = id
       const { page, limit } = filter
@@ -106,6 +113,17 @@ export class CompanyController extends FollowController {
         })
       }
       const search = getSearch(req.url)
+
+      const sortSearch = removeSort(search)
+      const prefix = sortSearch ? `?${sortSearch}&` : `?`
+      const sort1: Item = { id: "timeDescSort", value: "-followedAt", text: resource.sort_time_desc }
+      const sort2: Item = { id: "timeAscSort", value: "followedAt", text: resource.sort_time_asc }
+      const sort3: Item = { id: "nameAscSort", value: "displayName", text: resource.sort_name_asc }
+      const sort4: Item = { id: "nameDescSort", value: "-displayName", text: resource.sort_name_desc }
+      const sorts = [sort1, sort2, sort3, sort4]
+      const sortText = getSortText(sorts, filter.sort, resource.sort_time_desc)
+      buildSorts(sorts, `${prefix}${resources.sort}=`)
+
       const ctx: any = {
         resource,
         limits: resources.limits,
@@ -113,6 +131,8 @@ export class CompanyController extends FollowController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
+        sorts,
+        sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       }
       if (company) {
