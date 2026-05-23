@@ -1,10 +1,10 @@
 <div id="profilePage" class="profile">
   {% include "pages/company/header.html" %}
   <nav class="tabs">
-    <a class="tab active" href="/companies/{{company.slug}}">Overview</a>
-    <a class="tab" href="#">Reviews</a>
-    <a class="tab" href="/companies/{{company.slug}}/articles">Articles</a>
-    <a class="tab" href="/companies/{{company.slug}}/followers">Followers</a>
+    <a class="tab active" href="/companies/{{company.slug}}">{{resource.overview}}</a>
+    <a class="tab" href="#">{{resource.review}}</a>
+    <a class="tab" href="/companies/{{company.slug}}/articles">{{resource.articles}}</a>
+    <a class="tab" href="/companies/{{company.slug}}/followers">{{resource.followers}}</a>
     <a class="tab" href="#">Community</a>
   </nav>
   <div id="companyBody" class="profile-body">

@@ -126,7 +126,6 @@ export class UserController extends FollowController {
       const partial = isPartial(req)
       const subPartial = isSubPartial(req)
       const view = partial && subPartial ? "shared/followers" : "user-followers"
-      console.log("view " + view)
       if (!partial) {
         const slug = req.params.slug
         const user = await this.service.load(slug, userId)

@@ -4,9 +4,13 @@ export const en = {
   profiles: "Profiles",
   about: "About",
 
+  articles: "Articles",
   saved_articles: "My saved articles",
   my_articles: "My articles",
   my_article: "My article",
+  followers: "Followers",
+  following: "Following",
+  overview: "Overview",
 
   menu: "Menu",
   sidebar: "Sidebar",

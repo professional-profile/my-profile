@@ -1,11 +1,16 @@
 <div id="profilePage" class="profile">
   {% include "pages/user/header.html" %}
   <nav class="tabs">
-    <a class="tab active" href="/profiles/{{user.username}}" onclick="navigate(event, 'userBody')">Overview</a>
-    <a class="tab" href="/profiles/{{user.username}}/articles" onclick="navigate(event, 'userBody')">Articles</a>
-    <a class="tab" href="/profiles/{{user.username}}/followers" onclick="navigate(event, 'userBody')">Followers</a>
-    <a class="tab" href="/profiles/{{user.username}}/following" onclick="navigate(event, 'userBody')">Following</a>
-    <a class="tab" href="/profiles/{{user.username}}/companies" onclick="navigate(event, 'userBody')">Companies</a>
+    <a class="tab active" href="/profiles/{{user.username}}" onclick="navigate(event, 'userBody')">
+      {{resource.overview}}</a>
+    <a class="tab" href="/profiles/{{user.username}}/articles" onclick="navigate(event, 'userBody')">
+      {{resource.articles}}</a>
+    <a class="tab" href="/profiles/{{user.username}}/followers" onclick="navigate(event, 'userBody')">
+      {{resource.followers}}</a>
+    <a class="tab" href="/profiles/{{user.username}}/following" onclick="navigate(event, 'userBody')">
+      {{resource.following}}</a>
+    <a class="tab" href="/profiles/{{user.username}}/companies" onclick="navigate(event, 'userBody')">
+      {{resource.companies}}</a>
   </nav>
   <div id="userBody" class="profile-body">
     {% include "pages/user/main.html" %}

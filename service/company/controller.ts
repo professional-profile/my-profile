@@ -92,10 +92,8 @@ export class CompanyController extends FollowController {
     const view = partial && subPartial ? "shared/followers" : "company-followers"
     try {
       if (partial) {
-        console.log("partial " + partial)
         id = await this.service.getIdBySlug(slug)
       } else {
-        console.log("no partial " + partial)
         company = await this.service.load(slug, userId)
         if (!company) {
           return renderError404(req, res, resource)
@@ -108,7 +106,6 @@ export class CompanyController extends FollowController {
       }
       filter.userId = userId
       filter.companyId = id
-      console.log("company filter " + JSON.stringify(filter))
       const { page, limit } = filter
       const result = await this.service.getFollowers(filter, limit, page)
       const list = escapeArray(result.list)

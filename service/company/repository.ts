@@ -9,7 +9,6 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
   }
   async getIdBySlug(slug: string): Promise<string> {
     const query = `select c.id from companies c where c.slug = ${this.db.param(1)}`
-    console.log("q 0 " + query)
     const articles = await this.db.query<Company>(query, [slug], this.map)
     return (articles && articles.length > 0 ? articles[0].id : slug)
   }
@@ -30,8 +29,6 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
         where c.slug = ${this.db.param(1)}`
       params.push(slug)
     }
-
-    console.log("q 1 " + query)
     let companies = await this.db.query<Company>(query, params, this.map)
     if (companies && companies.length > 0) {
       return companies[0]
@@ -52,7 +49,6 @@ export class SqlCompanyRepository extends SearchRepository<Company, CompanyFilte
         where c.id = ${this.db.param(1)}`
       params.push(slug)
     }
-    console.log("q 2 " + query)
     companies = await this.db.query<Company>(query, [slug], this.map)
     return companies && companies.length > 0 ? companies[0] : null
   }

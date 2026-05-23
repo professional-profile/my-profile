@@ -4,9 +4,13 @@ export const vi = {
   profiles: "Hồ sơ",
   about: "Giới thiệu",
 
+  articles: "Bài viết",
   saved_articles: "Bài viết đã lưu",
   my_articles: "Bài viết của tôi",
   my_article: "Bài viết của tôi",
+  followers: "Người theo dõi",
+  following: "Người được theo dõi",
+  overview: "Tổng quan",
 
   menu: "Menu",
   sidebar: "Sidebar",

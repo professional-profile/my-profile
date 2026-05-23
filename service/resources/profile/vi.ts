@@ -5,8 +5,6 @@ export const vi = {
   skills: "Kỹ năng",
   interests: "Quan tâm",
   achievements: "Thành tựu",
-  followers: "Người theo dõi",
-  following: "Người được theo dõi",
 
   button_follow: "Theo dõi",
   button_unfollow: "Bỏ theo dõi",
