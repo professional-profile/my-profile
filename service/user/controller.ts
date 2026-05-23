@@ -22,6 +22,7 @@ import { getDateFormat, getLang, getLangSearch, getResource } from "../resources
 import { Published } from "../shared/article"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter } from "./article"
+import { CompanyFilter } from "./company"
 import { User, UserFilter, UserService } from "./user"
 
 const fields = ["id", "username", "email", "displayName", "status"]
@@ -125,7 +126,7 @@ export class UserController extends FollowController {
       }
       const partial = isPartial(req)
       const subPartial = isSubPartial(req)
-      const view = partial && subPartial ? "shared/followers" : "user-followers"
+      const view = partial && subPartial ? "user/followers" : "user-followers"
       if (!partial) {
         const slug = req.params.slug
         const user = await this.service.load(slug, userId)
@@ -212,7 +213,7 @@ export class UserController extends FollowController {
     const slug = req.params.slug
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)
-    const view = partial && subPartial ? "shared/articles" : "user-articles"
+    const view = partial && subPartial ? "user/articles" : "user-articles"
     let authorId = ""
     let user: User | null = null
     try {
@@ -260,47 +261,36 @@ export class UserController extends FollowController {
   async getCompanies(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const dateFormat = getDateFormat(lang)
     const langSearch = getLangSearch(lang)
-    const userId = res.locals.userId
-    let filter: ArticleFilter = {
-      limit: resources.defaultLimit,
-      publishedAt: {},
-    }
+    let filter: CompanyFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
-      filter = fromRequest<ArticleFilter>(req)
-      format(filter, ["publishedAt"])
+      filter = fromRequest<CompanyFilter>(req)
     }
     if (!filter.sort) {
-      filter.sort = "-publishedAt"
+      filter.sort = "name"
     }
-    const id = await this.service.getIdBySlug(req.params.slug)
     filter.status = Published
-    filter.userId = id
+    filter.currentUserId = res.locals.userId
     const { page, limit } = filter
 
     const slug = req.params.slug
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)
-    const view = partial && subPartial ? "shared/articles" : "user-articles"
-    let authorId = ""
+    const view = partial && subPartial ? "user/companies" : "user-companies"
     let user: User | null = null
     try {
       if (partial) {
-        authorId = await this.service.getIdBySlug(slug)
+        const id = await this.service.getIdBySlug(slug)
+        filter.userId = id
       } else {
-        user = await this.service.load(slug, userId)
+        user = await this.service.load(slug, res.locals.userId)
         if (!user) {
           return renderError404(req, res, resource)
         }
-        authorId = user.id
+        filter.userId = user.id
       }
-      filter.authorId = authorId
-      const result = await this.service.getArticles(filter, limit, page)
+      const result = await this.service.getCompanies(filter, limit, page)
       const list = escapeArray(result.list)
-      for (const item of result.list) {
-        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-      }
       const search = getSearch(req.url)
       const sortSearch = removeSort(search)
       const prefix = sortSearch ? `?${sortSearch}&` : "?"

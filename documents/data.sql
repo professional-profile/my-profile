@@ -10,7 +10,7 @@ create table code_masters (
 create table companies (
   id varchar(80) primary key,
   slug varchar(255) unique,
-  company_name varchar(255),
+  name varchar(255),
   overview character varying(3000),
   website character varying(255),
   industry varchar(100),
@@ -197,7 +197,7 @@ insert into categories (id,name,status,path,resource_key,icon,sequence,type,pare
 
 update categories set version = 1;
 
-insert into companies (id,slug,company_name,overview,website,industry,size,logo,cover_url,gallery,status) values
+insert into companies (id,slug,name,overview,website,industry,size,logo,cover_url,gallery,status) values
   ('tma-solutions','tma-solutions','TMA Solutions','TMA is a leading software company in Vietnam with 4,000 engineers and 28 years of experience in providing quality software services for clients in 30 countries. Besides 6 offices in Vietnam, TMA also has offices in Canada, USA, Japan, Australia, Germany and Singapore.','https://www.tmasolutions.com','Software Development','1,001-5,000 employees','https://cdn-images-1.medium.com/max/800/1*i6kcLjh6K7Gu07O7mbXzxA.jpeg','https://cdn-images-1.medium.com/max/800/1*HUq_nQPoayfFfPKLKRBQnQ.jpeg','{}','A'),
   ('fpt-software','fpt-software','FPT Software','FPT Software is a global technology and IT services provider headquartered in Vietnam, with USD 1.34 billion in revenue (2025) and over 33,000 employees in 30+ countries. Embracing an AI-first approach, FPT Software enables breakthrough speed, scalability and quality through AI-powered services and solutions and an AI-augmented workforce. It has partnered with over 1,100 clients worldwide, more than 130 of which are Fortune Global 500 companies in Aviation, Automotive, Banking, Financial Services and Insurance, Healthcare, Logistics, Manufacturing, Utilities, and more.','http://www.fptsoftware.com','IT Services and IT Consulting','10,001+ employees','https://cdn-images-1.medium.com/max/800/1*XbCE_KaYde8EOW8Ys1WSuQ.jpeg','https://cdn-images-1.medium.com/max/800/1*d6LjFkSg3MqO-4EPQpix0A.jpeg','{}','A'),
   ('kbtg','kbtg','KASIKORN Business-Technology Group','Established in 2016, KASIKORN Business-Technology Group is the technology arm of KASIKORNBANK (KBank), one of Thailand’s leading commercial banks. The organization consists of eight sub-companies, including K-Tech (a China-based fintech powerhouse) and KBTG Vietnam (extended IT arm and regional one-stop-service solution). By optimizing the capability in each area and collaborating harmoniously as one, KBTG diligently oversees more than 500 applications across KBank’s, KBTG’s, and K-Group’s ecosystems, with a commitment to make finance accessible, convenient, and inclusive for our customers across the region.','https://www.kbtg.tech','IT Services and IT Consulting','1,001-5,000 employees','https://cdn-images-1.medium.com/max/800/1*Z4k_onsvwMs4e0Oyvlvvgg.jpeg','https://cdn-images-1.medium.com/max/800/1*OTqlZAJHtlVogANXbsAs5A.jpeg','{}','A'),

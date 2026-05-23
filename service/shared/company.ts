@@ -3,7 +3,7 @@ import { Attributes } from "onecore"
 export interface Company {
   id: string
   slug: string
-  companyName: string
+  name: string
   overview: string
   website?: string
   industry?: string
@@ -26,8 +26,7 @@ export const companyModel: Attributes = {
   slug: {
     length: 150,
   },
-  companyName: {
-    column: "company_name",
+  name: {
     length: 255,
     q: true,
   },

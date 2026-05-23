@@ -165,6 +165,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/profiles/:slug/followers", ctx.menu.build, ctx.user.getFollowers)
   app.get("/profiles/:slug/following", ctx.menu.build, ctx.user.getFollowing)
   app.get("/profiles/:slug/articles", ctx.menu.build, ctx.user.getArticles)
+  app.get("/profiles/:slug/companies", ctx.menu.build, ctx.user.getCompanies)
   app.patch("/profiles/:id", authorized, ctx.user.follow)
   app.delete("/profiles/:id", authorized, ctx.user.unfollow)
 

@@ -1,9 +1,9 @@
 <div>
   <header>
-    <h2>{{resource.news}}</h2>
+    <h2>{{resource.articles}}</h2>
   </header>
   <div class="main-body">
-    <form id="articlesForm" name="articlesForm" class="form" novalidate>
+    <form id="articlesForm" name="articlesForm" class="form" data-part="userBody" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">
         <label class="col s12 m6 l4 xl6 search-input">{% include "partials/advance-search.html" %}</label>

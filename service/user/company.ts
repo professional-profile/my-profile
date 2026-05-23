@@ -1,19 +1,12 @@
-import { DB, Filter, SearchResult, Statement, TimeRange } from "onecore"
+import { DB, Filter, SearchResult, Statement } from "onecore"
 import { param } from "pg-extension"
 import { buildSort, SearchRepository } from "sql-core"
 import { Company, companyModel } from "../shared/company"
 
 export interface CompanyFilter extends Filter {
-  userSlug?: string
-  id?: string
-  slug?: string
-  title?: string
-  description?: string
-  publishedAt: TimeRange
-  tags?: string[]
   status?: string
-  authorId?: string
   userId?: string
+  currentUserId?: string
   isSaved?: boolean
 }
 export interface CompanyRepository {
@@ -31,25 +24,26 @@ export function buildCompanyQuery(filter: CompanyFilter): Statement {
   const params = []
   let i = 1
 
-  if (filter.userId) {
+  if (filter.currentUserId) {
     query = `
-      select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url,
+      select c.id, c.slug, c.name, c.website, c.industry, c.size, c.logo, c.cover_url,
         ci.follower_count, cr.followed_at
       from company_following f
-        inner join companies c on c.id = f.following
+        inner join companies c on f.id = ${param(i++)} and c.id = f.following
         left join company_info ci on c.id = ci.id
         left join company_followers cr on cr.id = c.id and cr.follower = ${param(i++)} `
-    params.push(filter.userId)
+    params.push(filter.userId, filter.currentUserId)
   } else {
-    query = `select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url, ci.follower_count
+    query = `select c.id, c.slug, c.name, c.website, c.industry, c.size, c.logo, c.cover_url, ci.follower_count
       from company_following f
-        inner join companies c on c.id = f.following
-        left join company_info ci on c.id = ci.id`
+        inner join companies c on f.id = ${param(i++)} and c.id = f.following
+        left join company_info ci on c.id = ci.id `
+    params.push(filter.userId)
   }
 
   if (filter.q) {
     const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
-    where.push(`company_name ilike ${param(i++)}`)
+    where.push(`name ilike ${param(i++)}`)
     params.push(`%${q}%`)
   }
 

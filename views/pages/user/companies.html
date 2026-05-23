@@ -2,7 +2,7 @@
   <h3>{{resource.companies}}</h3>
 </header>
 <div class="main-body">
-  <form id="companiesForm" name="companiesForm" class="form" novalidate>
+  <form id="companiesForm" name="companiesForm" class="form" data-part="userBody" novalidate>
     <span class="hidden-message">{{message}}</span>
     <section class="row search-group">
       <label class="col s12 m6 search-input">{% include "partials/advance-search.html" %}</label>
@@ -20,7 +20,7 @@
     {% for company in list %}
     <li class="col s12 l6 img-item">
       <img src="{{company.logo}}" alt="company logo" />
-      <a href="/companies/{{company.slug}}{{langSearch}}" onclick="navigate(event)">{{company.companyName}}</a>
+      <a href="/companies/{{company.slug}}{{langSearch}}" onclick="navigate(event)">{{company.name}}</a>
       <button class="btn-detail"></button>
       <p class="center-align-items">
         {{company.industry}} {% if account %} {% if company.followedAt %}

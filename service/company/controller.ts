@@ -89,7 +89,7 @@ export class CompanyController extends FollowController {
     let company: Company | null = null
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)
-    const view = partial && subPartial ? "shared/followers" : "company-followers"
+    const view = partial && subPartial ? "company/followers" : "company-followers"
     try {
       if (partial) {
         id = await this.service.getIdBySlug(slug)

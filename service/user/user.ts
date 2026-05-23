@@ -1,6 +1,8 @@
 import { Attributes, DateRange, Filter, SearchResult } from "onecore"
 import { Article } from "../shared/article"
+import { Company } from "../shared/company"
 import { ArticleFilter } from "./article"
+import { CompanyFilter } from "./company"
 
 export interface User {
   id: string
@@ -89,6 +91,7 @@ export interface UserService {
   follow(id: string, target: string): Promise<number>
   unfollow(id: string, target: string): Promise<number>
   getArticles(filter: ArticleFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Article>>
+  getCompanies(filter: CompanyFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Company>>
 }
 
 export const skillsModel: Attributes = {

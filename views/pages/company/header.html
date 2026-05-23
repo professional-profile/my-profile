@@ -11,7 +11,7 @@
     <div class="profile-info">
       <h1>
         <a id="companyA" href="/companies/{{company.slug}}"
-          onclick="navigate(event, 'companyBody')">{{company.companyName}}</a>
+          onclick="navigate(event, 'companyBody')">{{company.name}}</a>
         {% if company.followingAt and company.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
       </h1>
       <p>{{company.industry}}</p>

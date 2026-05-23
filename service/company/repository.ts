@@ -62,20 +62,20 @@ export function buildQuery(filter: CompanyFilter): Statement {
 
   if (filter.userId) {
     query = `
-      select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url,
+      select c.id, c.slug, c.name, c.website, c.industry, c.size, c.logo, c.cover_url,
         ci.follower_count, cr.followed_at
       from companies c
       left join company_info ci on c.id = ci.id
       left join company_followers cr on cr.id = c.id and cr.follower = ${param(i++)} `
     params.push(filter.userId)
   } else {
-    query = `select c.id, c.slug, c.company_name, c.website, c.industry, c.size, c.logo, c.cover_url from companies c
+    query = `select c.id, c.slug, c.name, c.website, c.industry, c.size, c.logo, c.cover_url from companies c
       left join company_info ci on c.id = ci.id`
   }
 
   if (filter.q) {
     const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
-    where.push(`company_name ilike ${param(i++)}`)
+    where.push(`name ilike ${param(i++)}`)
     params.push(`%${q}%`)
   }
 
