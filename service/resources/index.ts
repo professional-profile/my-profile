@@ -1,5 +1,6 @@
 import { Request } from "express"
 import { query } from "express-core-web"
+import { enLocale, getLocale } from "locale-service"
 import { en as articleEN } from "./article/en"
 import { vi as articleVI } from "./article/vi"
 import { en as authenticationEN } from "./authentication/en"
@@ -45,10 +46,11 @@ export const resources: Resources = {
 }
 
 export function getDateFormat(lang?: string): string {
-  if (lang === "vi") {
-    return "d/M/yyyy"
+  if (!lang) {
+    return enLocale.dateFormat
   }
-  return "M/d/yyyy"
+  const locale = getLocale(lang) || enLocale
+  return locale.dateFormat
 }
 export function getLang(req: Request): string {
   let lang = query(req, "lang")

@@ -9,6 +9,8 @@
       {{resource.articles}}</a>
     <a class="tab" href="/companies/{{company.slug}}/followers" onclick="navigate(event, 'companyBody')">
       {{resource.followers}}</a>
+    <a class="tab" href="/companies/{{company.slug}}/jobs" onclick="navigate(event, 'companyBody')">
+      {{resource.jobs}}</a>
   </nav>
   <div id="companyBody" class="profile-body">
     {% include "pages/company/main.html" %}

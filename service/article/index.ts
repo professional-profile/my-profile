@@ -27,7 +27,7 @@ export class ArticleUseCase extends SavedService<string, string> implements Arti
   }
   async getRateSummary(id: string): Promise<RateSummary> {
     let rateSummary = await this.rateSummaryRepository.load(id)
-    return (rateSummary ? rateSummary : { ...zeroSummary, id})
+    return (rateSummary ? rateSummary : { ...zeroSummary, id })
   }
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>> {
     return this.ratesRepository.search(filter, limit, page, fields)

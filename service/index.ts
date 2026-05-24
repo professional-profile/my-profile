@@ -158,6 +158,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.get("/companies/:slug", ctx.menu.build, ctx.company.view)
   app.get("/companies/:slug/reviews", ctx.menu.build, ctx.company.review)
   app.get("/companies/:slug/articles", ctx.menu.build, ctx.company.getArticles)
+  app.get("/companies/:slug/jobs", ctx.menu.build, ctx.company.getJobs)
   app.get("/companies/:slug/followers", ctx.menu.build, ctx.company.getFollowers)
   app.patch("/companies/:id", authorized, ctx.company.follow)
   app.delete("/companies/:id", authorized, ctx.company.unfollow)

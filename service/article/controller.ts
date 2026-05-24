@@ -198,13 +198,13 @@ export class ArticleController extends SavedController {
 
       const sortSearch = removeSort(search)
       const prefix = sortSearch ? `?${sortSearch}&` : `?`
-      const sort0: Item = { id: "usefulDescSort", value: "-usefulCount", text: resource.sort_useful_desc }
-      const sort1: Item = { id: "timeDescSort", value: "-time", text: resource.sort_time_desc }
-      const sort2: Item = { id: "timeAscSort", value: "time", text: resource.sort_time_asc }
-      const sort3: Item = { id: "rateDescSort", value: "-rate", text: resource.sort_rate_desc }
-      const sort4: Item = { id: "rateAscSort", value: "rate", text: resource.sort_rate_asc }
+      const sort0: Item = { id: "usefulDescSort", value: "-usefulCount", text: resource.sort_useful_desc, fulltext: resource.sort_desc_useful_desc }
+      const sort1: Item = { id: "timeDescSort", value: "-time", text: resource.sort_time_desc, fulltext: resource.sort_desc_time_desc }
+      const sort2: Item = { id: "timeAscSort", value: "time", text: resource.sort_time_asc, fulltext: resource.sort_desc_time_asc }
+      const sort3: Item = { id: "rateDescSort", value: "-rate", text: resource.sort_rate_desc, fulltext: resource.sort_desc_rate_desc }
+      const sort4: Item = { id: "rateAscSort", value: "rate", text: resource.sort_rate_asc, fulltext: resource.sort_desc_rate_asc }
       const sorts = [sort0, sort1, sort2, sort3, sort4]
-      const sortText = getSortText(sorts, filter.sort, resource.sort_useful_desc)
+      const sortText = getSortText(sorts, filter.sort, resource.sort_desc_useful_desc)
       buildSorts(sorts, `${prefix}${resources.sort}=`)
 
       if (filter.sort && filter.sort != "time" && filter.sort != "-time") {

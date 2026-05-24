@@ -34,6 +34,7 @@ export class CompanyController extends FollowController {
     this.getArticles = this.getArticles.bind(this)
     this.getFollowers = this.getFollowers.bind(this)
     this.review = this.review.bind(this)
+    this.getJobs = this.getJobs.bind(this)
   }
   async search(req: Request, res: Response) {
     const lang = getLang(req)
@@ -228,6 +229,12 @@ export class CompanyController extends FollowController {
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)
     const view = partial && subPartial ? "company/reviews" : "company-reviews"
+    render(req, res, view, {})
+  }
+  async getJobs(req: Request, res: Response) {
+    const partial = isPartial(req)
+    const subPartial = isSubPartial(req)
+    const view = partial && subPartial ? "company/jobs" : "company-jobs"
     render(req, res, view, {})
   }
 }
