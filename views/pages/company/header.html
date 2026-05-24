@@ -6,19 +6,15 @@
     <div class="avatar-wrapper">
       <div class="avatar" style="background-image: url('{{company.logo}}')">
       </div>
-      <img class="profile-status" src="/images/online.svg" alt="status" />
     </div>
     <div class="profile-info">
       <h1>
-        <a id="companyA" href="/companies/{{company.slug}}"
-          onclick="navigate(event, 'companyBody')">{{company.name}}</a>
+        <span>{{company.name}}</span>
         {% if company.followingAt and company.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
       </h1>
       <p>{{company.industry}}</p>
       <div class="profile-followers">
-        <a id="followerCount" href="/companies/{{company.slug}}/followers" onclick="navigate(event, 'companyBody')">
-          <i class="material-icons highlight">group</i>{{company.followerCount}} followers
-        </a>
+        <span><i class="material-icons highlight">group</i>{{company.followerCount}} followers</span>
       </div>
       {% if account and account.id != company.id %}
       {% if company.followedAt %}

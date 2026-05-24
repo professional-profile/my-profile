@@ -66,6 +66,7 @@ export class CompanyController extends FollowController {
   async view(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
+    const langSearch = getLangSearch(lang)
     const slug = req.params.slug
     const userId: string = res.locals.userId
     try {
@@ -73,7 +74,10 @@ export class CompanyController extends FollowController {
       if (!company) {
         return renderError404(req, res, resource)
       }
-      render(req, res, "company", { resource, company })
+      const partial = isPartial(req)
+      const subPartial = isSubPartial(req)
+      const view = partial && subPartial ? "company/main" : "company"
+      render(req, res, view, { resource, langSearch, company: escape(company) })
     } catch (err) {
       renderError500(req, res, resource, err)
     }

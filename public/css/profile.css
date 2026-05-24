@@ -50,6 +50,7 @@
 }
 .profile-body {
   margin-top: 16px;
+  min-height: 240px;
 }
 @media only screen and (min-width: 1201px) {
   .profile {
@@ -265,12 +266,6 @@ a.tab.active,
   flex-direction: unset;
 }
 
-.profile .main-body {
-  padding-top: unset;
-  max-height: unset;
-  height: unset;
-  min-height: 320px;
-}
 .profile .profile-body > header {
   margin-bottom: 4px;
 }

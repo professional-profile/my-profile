@@ -10,17 +10,13 @@
     </div>
     <div class="profile-info">
       <h1>
-        <a id="userA" href="/profiles/{{user.username}}" onclick="navigate(event, 'userBody')">{{user.displayName}}</a>
+        <span>{{user.displayName}}</span>
         {% if user.followingAt and user.followedAt %}<i class="material-icons highlight">group</i>{% endif %}
       </h1>
       <p>{{user.headline}}</p>
       <div class="profile-followers">
-        <a id="followerCount" href="/profiles/{{user.username}}/followers" onclick="navigate(event, 'userBody')">
-          <i class="material-icons highlight">group</i>{{user.followerCount}} followers
-        </a>
-        <a id="followingCount" href="/profiles/{{user.username}}/following" onclick="navigate(event, 'userBody')">
-          <i class="material-icons highlight">group_add</i>{{user.followingCount}} followings
-        </a>
+        <span><i class="material-icons highlight">group</i>{{user.followerCount}} followers</span>
+        <span><i class="material-icons highlight">group_add</i>{{user.followingCount}} followings</span>
       </div>
       {% if account and account.id != user.id %}
       {% if user.followedAt %}
