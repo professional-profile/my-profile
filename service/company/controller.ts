@@ -202,7 +202,7 @@ export class CompanyController extends FollowController {
       const sort3: Item = { id: "nameAscSort", value: "displayName", text: resource.sort_name_asc }
       const sort4: Item = { id: "nameDescSort", value: "-displayName", text: resource.sort_name_desc }
       const sorts = [sort1, sort2, sort3, sort4]
-      const sortText = getSortText(sorts, filter.sort, resource.sort_time_desc)
+      const sortText = getSortText(sorts, filter.sort, resource.sort_time_desc, true)
       buildSorts(sorts, `${prefix}${resources.sort}=`)
 
       const ctx: any = {
