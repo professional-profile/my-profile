@@ -9,6 +9,7 @@ create table articles (
   thumbnail varchar(400),
   high_thumbnail varchar(400),
   author_id varchar(40),
+  company_id varchar(80),
   status char(1),
   created_at timestamptz
 );
@@ -90,12 +91,7 @@ insert into article_rates (rate_id,id,author,rate,"time",review,useful_count,rep
   ('ntnawq9Kse','t4bqlIi5SB','flMmQvyizP',5,'2026-04-12 16:59:15.693+07','Great',0,0,null,null),
   ('Srd31lqH1J','wsXtnt1ZvP','flMmQvyizP',4,'2026-04-12 17:00:58.707+07','Good article',0,0,null,null);
 
-/*
-insert into article_rate_reactions values ('s9zKgiZEr7', 'ayyQ9RqeMa', 'axzYT4jyEa', '2023-04-03 09:21:09.311', 1);
-insert into article_comment_thread_reaction values ('7qUfAFE_z', 'axzYT4jyEa', 'axzYT4jyEa', '2023-04-03 14:22:45.504+07', 1);
-insert into article_rate_comments values ('LPRa64I3p', 's9zKgiZEr7', 'ayyQ9RqeMa', 'beb4MaVRxA', 'Their growth rate is impressive', '2023-03-27 09:58:46.409', null, null, true);
-insert into article_rate_comments values ('jf1hIVDHf', 's9zKgiZEr7', 'ayyQ9RqeMa', 'cb3OH0WVk2', 'The company is also attracting foreign talent', '2023-03-27 11:01:08.198', null, null, false);
-*/
+
 insert into articles (id,slug,title,description,content,published_at,tags,thumbnail,high_thumbnail,author_id,status,created_at) values
 	 ('s9zKgiZEr7','fpt-software-wins-job-creation-award-at-esgbusiness-awards-2-s9zKgiZEr7','FPT Software Wins Job Creation Award at ESGBusiness Awards 2024','This recognition highlights FPT Software''s commitment to nurturing top talent and fostering diverse and inclusive workplaces across the global IT industry.','<figure>
   <img src="https://fptsoftware.com/-/media/project/fpt-software/fso/1.webp"></img>
@@ -215,7 +211,7 @@ insert into articles (id,slug,title,description,content,published_at,tags,thumbn
   As part of the company''s global expansion, FPT has been actively involved in M&A deals to amplify its offshore delivery capabilities and local
   footprint, notably the recent acquisition of an 80% stake in the French IT consulting firm AOSIS. Last year, its French subsidiary also entered
   France''s Top 100 ICT Companies.
-</p>','2024-07-22 17:06:00+07','{"Francophone Community","Bolster Growth",Francophone}','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/francophone-day-2024_1.webp','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/francophone-day-2024_1.webp','acAoryR2VH','P','2024-07-22 17:06:23.844+07'),
+</p>','2024-07-22 17:06:00+07','{"Francophone Community","Bolster Growth",Francophone}','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/francophone-day-2024_1.webp','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/francophone-day-2024_1.webp','beb4MaVRxA','P','2024-07-22 17:06:23.844+07'),
 	 ('wsXtnt1ZvP','fpt-software-and-meerana-technologies-partner-to-drive-digit-wsXtnt1ZvP','FPT Software and Meerana Technologies Partner to Drive Digital Transformation in UAE','This partnership aims to expand FPT Software’s footprint in the region and address the market needs across various sectors, including Utilities, BFSI, Logistics, Transportation, and more.','<p>
   Global IT services provider FPT Software recently announced a strategic partnership with Meerana Technologies, an emerging provider of smart IT
   solutions. This collaboration not only strengthens FPT Software’s presence in the United Arab Emirates but also aligns with FPT Software’s vision of
@@ -718,3 +714,5 @@ insert into articles (id,slug,title,description,content,published_at,tags,thumbn
   With sustainability at the heart of its operation, the Environmental Policy reflects FPT''s consistent strategy of aligning company growth with
   social responsibility, while also delivering a greater impact for its customers, accompanying them in their green transformation journey.
 </p>','2024-05-30 17:25:00+07','{"greenhouse gas",GHG,"Net Zero emissions"}','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/fpt-issues-first-ever-environmental-policy.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/fpt-issues-first-ever-environmental-policy.webp','acAoryR2VH','P','2024-05-30 17:25:05.967+07');
+
+update articles set company_id = 'fpt-software';

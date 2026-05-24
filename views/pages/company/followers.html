@@ -1,7 +1,7 @@
 <header>
   <h3>{{resource.followers}}</h3>
 </header>
-<div class="main-body">
+<div>
   <form id="followersForm" name="followersForm" class="form" data-part="companyBody" novalidate>
     <span class="hidden-message">{{message}}</span>
     <section class="row search-group">
@@ -25,7 +25,7 @@
       <a href="/profiles/{{item.username}}{{langSearch}}" onclick="navigate(event)">{{item.displayName}}</a>
       <button class="btn-detail"></button>
       <p class="center-align-items">
-        {{item.occupation}} {% if account and account.id != item.id %} {% if item.followedAt %}
+        {{item.occupation}} {% if account and account.id != item.id %} {% if item.userFollowedAt %}
         <i class="material-icons" onclick="unfollow(this, '{{item.id}}')">bookmark</i>
         {% else %}
         <i class="material-icons" onclick="follow(this, '{{item.id}}')">bookmark_border</i>

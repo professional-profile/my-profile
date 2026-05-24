@@ -93,4 +93,10 @@ export const userModel: Attributes = {
     noinsert: true,
     noupdate: true,
   },
+  userFollowedAt: {
+    column: "user_followed_at",
+    type: "datetime",
+    noinsert: true,
+    noupdate: true,
+  },
 }

@@ -118,13 +118,16 @@
   gap: 16px;
   color: inherit;
 }
+.profile-followers > span,
 .profile-followers > a {
   display: flex;
   color: inherit;
 }
+.profile-followers > span > i,
 .profile-followers > a > i {
   margin-right: 8px;
 }
+.profile-followers > span > i.material-icons,
 .profile-followers > a > i.material-icons {
   font-size: 19px;
 }

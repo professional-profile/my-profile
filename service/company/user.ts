@@ -25,7 +25,7 @@ export function buildFollowerQuery(filter: UserFilter): Statement {
   if (filter.userId) {
     query = `
       select u.id, u.username, u.email, u.image_url, u.display_name, u.occupation, u.headline,
-        ui.follower_count, ui.following_count, cf.followed_at
+        ui.follower_count, ui.following_count, cf.followed_at, ur.followed_at as user_followed_at
       from company_followers cf 
         inner join users u on cf.id = ${param(i++)} and cf.follower = u.id
         left join user_info ui on u.id = ui.id

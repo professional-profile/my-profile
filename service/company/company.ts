@@ -1,5 +1,7 @@
 import { Attributes, Filter, SearchResult } from "onecore"
+import { Article } from "../shared/article"
 import { User } from "../shared/user"
+import { ArticleFilter } from "./article"
 import { UserFilter } from "./user"
 
 export interface Company {
@@ -13,7 +15,7 @@ export interface Company {
   logo?: string
   coverURL?: string
   status: string
-  
+
   followerCount?: number
   followingAt?: Date
   followedAt?: Date
@@ -35,6 +37,7 @@ export interface CompanyService {
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
   load(slug: string, userId?: string): Promise<Company | null>
   getIdBySlug(slug: string): Promise<string>
+  getArticles(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
   follow(id: string, companyId: string): Promise<number>
   unfollow(id: string, companyId: string): Promise<number>
   getFollowers(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>>

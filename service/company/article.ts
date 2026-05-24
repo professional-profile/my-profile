@@ -8,6 +8,7 @@ export interface ArticleFilter extends Filter {
   tags?: string[]
   status?: string
   authorId?: string
+  companyId?: string
   userId?: string
 }
 export interface ArticleRepository {
@@ -34,6 +35,10 @@ export function buildArticleQuery(filter: ArticleFilter): Statement {
     query = `select a.id, a.thumbnail, a.slug, a.title, a.description, a.published_at from articles a`
   }
 
+  if (filter.companyId) {
+    params.push(filter.companyId)
+    where.push(`company_id = ${param(i++)}`)
+  }
   if (filter.authorId) {
     params.push(filter.authorId)
     where.push(`author_id = ${param(i++)}`)

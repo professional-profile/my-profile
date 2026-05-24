@@ -1,9 +1,9 @@
 <div id="companyPage" class="profile">
   {% include "pages/company/header.html" %}
   <nav class="tabs">
-    <a class="tab active" href="/companies/{{company.slug}}" onclick="navigate(event, 'companyBody')">
+    <a class="tab" href="/companies/{{company.slug}}" onclick="navigate(event, 'companyBody')">
       {{resource.overview}}</a>
-    <a class="tab" href="/companies/{{company.slug}}/reviews" onclick="navigate(event, 'companyBody')">
+    <a class="tab active" href="/companies/{{company.slug}}/reviews" onclick="navigate(event, 'companyBody')">
       {{resource.reviews}}</a>
     <a class="tab" href="/companies/{{company.slug}}/articles" onclick="navigate(event, 'companyBody')">
       {{resource.articles}}</a>
@@ -11,7 +11,7 @@
       {{resource.followers}}</a>
   </nav>
   <div id="companyBody" class="profile-body">
-    {% include "pages/company/main.html" %}
+    {% include "pages/company/reviews.html" %}
   </div>
   {% include "pages/company/script.html" %}
 </div>

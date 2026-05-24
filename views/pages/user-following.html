@@ -15,4 +15,26 @@
   <div id="userBody" class="profile-body">
     {% include "pages/user/following.html" %}
   </div>
+  <script data-init-script="true">
+    resources.load = function (pageBody) {
+      const page = document.getElementById("profilePage")
+      const trigger = document.getElementById("headerTrigger")
+      const header = document.getElementById("profileHeader")
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            header.classList.remove("compact")
+          }
+          else {
+            header.classList.add("compact")
+          }
+        },
+        {
+          root: page,
+          threshold: 0
+        }
+      )
+      observer.observe(trigger)
+    }
+  </script>
 </div>
