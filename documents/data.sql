@@ -36,7 +36,105 @@ create table company_following (
   following_at timestamptz not null,
   primary key (id, following)
 );
-
+create table company_rate_summary (
+  id varchar(40) primary key,
+  rate real default 0,
+  rate1 integer default 0,
+  rate2 integer default 0,
+  rate3 integer default 0,
+  rate4 integer default 0,
+  rate5 integer default 0,
+  count integer default 0,
+  score integer default 0
+);
+create table company_rates (
+  rate_id varchar(40) primary key,
+  id varchar(40),
+  author varchar(40) not null,
+  rate float not null,
+  time timestamptz,
+  review text,
+  useful_count integer default 0,
+  reply_count integer default 0,
+  histories jsonb[],
+  anonymous boolean,
+  unique (id, author)
+);
+create table company_rate_info (
+  rate_id varchar(40) primary key,
+  id varchar(40),
+  author varchar(40) not null,
+  rate float not null,
+  time timestamptz,
+  review text,
+  useful_count integer default 0,
+  reply_count integer default 0,
+  histories jsonb[],
+  anonymous boolean,
+  unique (id, author)
+);
+create table company_rate1 (
+  id varchar(40) primary key,
+  rate real default 0,
+  rate1 integer default 0,
+  rate2 integer default 0,
+  rate3 integer default 0,
+  rate4 integer default 0,
+  rate5 integer default 0,
+  count integer default 0,
+  score integer default 0
+);
+create table company_rate2 (
+  id varchar(40) primary key,
+  rate real default 0,
+  rate1 integer default 0,
+  rate2 integer default 0,
+  rate3 integer default 0,
+  rate4 integer default 0,
+  rate5 integer default 0,
+  count integer default 0,
+  score integer default 0
+);
+create table company_rate3 (
+  id varchar(40) primary key,
+  rate real default 0,
+  rate1 integer default 0,
+  rate2 integer default 0,
+  rate3 integer default 0,
+  rate4 integer default 0,
+  rate5 integer default 0,
+  count integer default 0,
+  score integer default 0
+);
+create table company_rate4 (
+  id varchar(40) primary key,
+  rate real default 0,
+  rate1 integer default 0,
+  rate2 integer default 0,
+  rate3 integer default 0,
+  rate4 integer default 0,
+  rate5 integer default 0,
+  count integer default 0,
+  score integer default 0
+);
+create table company_rate5 (
+  id varchar(40) primary key,
+  rate real default 0,
+  rate1 integer default 0,
+  rate2 integer default 0,
+  rate3 integer default 0,
+  rate4 integer default 0,
+  rate5 integer default 0,
+  count integer default 0,
+  score integer default 0
+);
+/*
+insert into company_info (id,follower_count) values
+  ('nab',1),
+  ('fpt-software',2),
+  ('tma-solutions',3),
+  ('kbtg',3);
+*/
 create table users (
   id varchar(40) primary key,
   username varchar(255) not null,

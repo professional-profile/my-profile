@@ -30,7 +30,7 @@ create table article_info (
   rate4 integer default 0,
   rate5 integer default 0,
   count integer default 0,
-  score numeric default 0
+  score integer default 0
 );
 create table article_rates (
   rate_id varchar(40) primary key,

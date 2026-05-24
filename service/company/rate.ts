@@ -1,4 +1,4 @@
-import { Attributes, DB, Statement, StringMap } from "onecore";
+import { Attributes, DB, Statement, StringMap, Transaction } from "onecore";
 import { metadata } from "pg-extension";
 import { buildToInsert, buildToUpdate } from "sql-core";
 
@@ -7,9 +7,9 @@ export interface BaseRate {
   rates: number[];
 }
 export class SqlRatesRepository<R extends BaseRate> {
-  constructor(public db: DB, public table: string, public fullTable: string, public tables: string[], public attributes: Attributes,
+  constructor(protected db: DB, protected table: string, protected attributes: Attributes, protected max: number, protected fullTable: string, protected tables: string[],
     protected buildToSave: <K>(obj: K, table: string, attrs: Attributes, ver?: string, buildParam?: (i: number) => string, i?: number) => Statement | undefined,
-    public max: number, rateField?: string, count?: string, score?: string, authorCol?: string, id?: string, idField?: string, idCol?: string,
+    protected generateId: () => string, protected rateIdField: string, rateField?: string, count?: string, score?: string, authorCol?: string, id?: string, idField?: string, idCol?: string,
     rateCol?: string) {
     const m = metadata(attributes);
     this.map = m.map;
@@ -41,7 +41,7 @@ export class SqlRatesRepository<R extends BaseRate> {
       }
     }
     this.load = this.load.bind(this);
-    this.insert = this.insert.bind(this);
+    this.create = this.create.bind(this);
     this.update = this.update.bind(this);
     this.insertInfo = this.insertInfo.bind(this);
     this.insertFullInfo = this.insertFullInfo.bind(this);
@@ -59,19 +59,21 @@ export class SqlRatesRepository<R extends BaseRate> {
   idCol: string;
   authorCol: string;
 
-  load(id: string, author: string, ctx?: any): Promise<R | null> {
-    return this.db.query<R>(`select * from ${this.table} where ${this.idCol} = ${this.db.param(1)} and ${this.authorCol} = ${this.db.param(2)}`, [id, author], this.map, undefined, ctx).then(rates => {
+  load(id: string, author: string, tx?: Transaction): Promise<R | null> {
+    const db = tx ? tx : this.db
+    return db.query<R>(`select * from ${this.table} where ${this.idCol} = ${this.db.param(1)} and ${this.authorCol} = ${this.db.param(2)}`, [id, author], this.map).then(rates => {
       return rates && rates.length > 0 ? rates[0] : null;
     });
   }
-  insert(rate: R, newInfo?: boolean): Promise<number> {
+  create(rate: R, newInfo?: boolean, tx?: Transaction): Promise<number> {
     if (rate.rates.length !== this.tables.length) {
       return Promise.reject('Invalid rates length');
     }
     const obj: any = rate;
+    obj[this.rateIdField] = this.generateId()
     const id: string = obj[this.idField];
     const mainStmt = buildToInsert<R>(rate, this.table, this.attributes, this.db.param);
-    if (!mainStmt) {
+    if (!mainStmt.query) {
       return Promise.reject('cannot build to insert rate');
     }
     const stmts: Statement[] = [];
@@ -93,6 +95,7 @@ export class SqlRatesRepository<R extends BaseRate> {
         stmts.push({ query: sql, params: [id] });
       }
       stmts.push(mainStmt);
+      console.log(JSON.stringify(stmts))
       return this.db.executeBatch(stmts, true);
     }
   }
@@ -171,7 +174,7 @@ export class SqlRatesRepository<R extends BaseRate> {
     const stmts: Statement[] = [];
     const stmt = buildToUpdate(rate, this.table, this.attributes, this.db.param);
     if (r && rates && rates.length > 0) {
-      if (stmt) {
+      if (stmt.query) {
         const obj: any = rate;
         const id: string = obj[this.idField];
         for (let i = 0; i < rate.rates.length; i++) {
@@ -186,7 +189,7 @@ export class SqlRatesRepository<R extends BaseRate> {
         return Promise.resolve(-1);
       }
     } else {
-      if (!stmt) {
+      if (!stmt.query) {
         return Promise.reject('cannot build to insert rate');
       } else {
         stmts.push(stmt);
@@ -204,18 +207,17 @@ export interface History {
 }
 export interface Rates {
   id: string;
+  author: string;
+  rate: number;
   rates: number[];
   time: Date;
   review: string;
-  usefulCount: number;
-  replyCount: number;
   histories?: History[];
-
-  author: string;
-  rate: number;
+  // usefulCount: number;
+  // replyCount: number;
 }
 export interface BaseRepository<R> {
-  insert(rate: R, newInfo?: boolean): Promise<number>;
+  create(rate: R, newInfo?: boolean): Promise<number>;
   update(rate: R, oldRate: number): Promise<number>;
   load(id: string, author: string): Promise<R | null>;
 }
@@ -229,25 +231,30 @@ export function avg(n: number[]): number {
   }
   return sum / n.length;
 }
+export interface SubmittedRate {
+  id: string;
+  author: string;
+  rates: number[];
+  review: string;
+}
 export class RatesService {
   constructor(
     public repository: BaseRepository<Rates>,
     public infoRepository: InfoRepository) {
     this.rate = this.rate.bind(this);
   }
-  async rate(rate: Rates): Promise<number> {
-    const info = await this.infoRepository.exist(rate.id);
-    if (rate.rates && rate.rates.length > 0) {
-      rate.rate = avg(rate.rates);
-    }
+  async rate(rateReq: SubmittedRate): Promise<number> {
+    const info = await this.infoRepository.exist(rateReq.id);
+    const r = avg(rateReq.rates)
+    const rate: Rates = { id: rateReq.id, author: rateReq.author, rate: r, rates: rateReq.rates, time: new Date(), review: rateReq.review }
     rate.time = new Date();
     if (!info) {
-      const r0 = await this.repository.insert(rate, true);
+      const r0 = await this.repository.create(rate, true);
       return r0;
     }
     const exist = await this.repository.load(rate.id, rate.author);
     if (!exist) {
-      const r1 = await this.repository.insert(rate);
+      const r1 = await this.repository.create(rate);
       return r1;
     }
     const sr: History = { review: exist.review, rates: exist.rates, time: exist.time };
