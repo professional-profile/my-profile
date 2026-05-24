@@ -43,10 +43,10 @@ export class SqlRatesRepository<R extends BaseRate> {
     this.load = this.load.bind(this);
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
-    this.insertInfo = this.insertInfo.bind(this);
-    this.insertFullInfo = this.insertFullInfo.bind(this);
-    this.updateFullInfo = this.updateFullInfo.bind(this);
-    this.updateNewInfo = this.updateNewInfo.bind(this);
+    this.insertOrUpdateInfo = this.insertOrUpdateInfo.bind(this);
+    this.insertOrUpdateFullInfo = this.insertOrUpdateFullInfo.bind(this);
+    //this.updateFullInfo = this.updateFullInfo.bind(this);
+    //this.updateNewInfo = this.updateNewInfo.bind(this);
     this.updateOldInfo = this.updateOldInfo.bind(this);
   }
   map?: StringMap;
@@ -65,72 +65,85 @@ export class SqlRatesRepository<R extends BaseRate> {
       return rates && rates.length > 0 ? rates[0] : null;
     });
   }
-  create(rate: R, newInfo?: boolean, tx?: Transaction): Promise<number> {
+  create(rate: R, tx?: Transaction): Promise<number> {
     if (rate.rates.length !== this.tables.length) {
       return Promise.reject('Invalid rates length');
     }
     const obj: any = rate;
     obj[this.rateIdField] = this.generateId()
     const id: string = obj[this.idField];
+    console.log("JSON rate " + JSON.stringify(rate))
     const mainStmt = buildToInsert<R>(rate, this.table, this.attributes, this.db.param);
     if (!mainStmt.query) {
       return Promise.reject('cannot build to insert rate');
     }
     const stmts: Statement[] = [];
-    if (newInfo) {
-      for (let i = 0; i < rate.rates.length; i++) {
-        const sql = this.insertInfo(rate.rates[i], this.tables[i]);
-        stmts.push({ query: sql, params: [id] });
-      }
-      const fullStmt: Statement = { query: this.insertFullInfo(rate.rate, this.fullTable, this.tables), params: [id, id, id, id, id, id] };
-      stmts.push(fullStmt);
-      console.log(fullStmt);
-      stmts.push(mainStmt);
-      return this.db.executeBatch(stmts, true);
-    } else {
-      const fullStmt: Statement = { query: this.updateFullInfo(rate.rate, this.fullTable, this.tables), params: [id, id, id, id, id, id] };
-      stmts.push(fullStmt);
-      for (let i = 0; i < rate.rates.length; i++) {
-        const sql = this.updateNewInfo(rate.rates[i], this.tables[i]);
-        stmts.push({ query: sql, params: [id] });
-      }
-      stmts.push(mainStmt);
-      console.log(JSON.stringify(stmts))
-      return this.db.executeBatch(stmts, true);
+    stmts.push(mainStmt);
+    const params: any[] = []
+    for (let i = 0; i < rate.rates.length; i++) {
+      const sql = this.insertOrUpdateInfo(rate.rates[i], this.tables[i]);
+      // console.log(sql)
+      stmts.push({ query: sql, params: [id] });
+      params.push(id)
     }
+    params.push(id)
+    const fullStmt: Statement = { query: this.insertOrUpdateFullInfo(rate.rate, this.fullTable, this.tables), params };
+    stmts.push(fullStmt);
+
+    // console.log(JSON.stringify(stmts));
+
+    //return this.db.execute(fullStmt.query, fullStmt.params)
+    console.log(mainStmt.query)
+    return this.db.execute(mainStmt.query, mainStmt.params)
+    //return Promise.resolve(1)
+    // return this.db.executeBatch(stmts);
   }
-  protected insertInfo(r: number, table: string): string {
+  protected insertOrUpdateInfo(r: number, table: string): string {
     const rateCols: string[] = [];
     const ps: string[] = [];
     for (let i = 1; i <= this.max; i++) {
       rateCols.push(`${this.rate}${i}`);
       if (i === r) {
-        ps.push('' + 1);
+        ps.push('1');
       } else {
         ps.push('0');
       }
     }
     const query = `
       insert into ${table} (${this.id}, ${this.rate}, ${this.count}, ${this.score}, ${rateCols.join(',')})
-      values (${this.db.param(1)}, ${r}, 1, ${r}, ${ps.join(',')})`;
+      values (${this.db.param(1)}, ${r}, 1, ${r}, ${ps.join(',')})
+      on conflict (${this.id}) do update set ${this.rate} = (${table}.${this.score} + ${r})/(${table}.${this.count} + 1), ${this.count} = ${table}.${this.count} + 1, ${this.score} = ${table}.${this.score} + ${r}, ${this.rate}${r} = ${table}.${this.rate}${r} + 1`;
     return query;
   }
-  protected insertFullInfo(r: number, table: string, tables: string[]): string {
+  protected updateNewInfo(r: number, table: string): string {
+    const query = `
+      update ${table} set ${this.rate} = (${this.score} + ${r})/(${this.count} + 1), ${this.count} = ${this.count} + 1, ${this.score} = ${this.score} + ${r}, ${this.rate}${r} = ${this.rate}${r} + 1
+      where ${this.id} = ${this.db.param(1)}`;
+    return query;
+  }
+  protected insertOrUpdateFullInfo(r: number, table: string, tables: string[]): string {
     const rateCols: string[] = [];
     const s: string[] = [];
-    for (let i = 1; i <= tables.length; i++) {
+    const us: string[] = [];
+    let i = 1
+    for (i = 1; i <= tables.length; i++) {
       rateCols.push(`${this.rate}${i}`);
-      s.push(`(select avg(${this.rate}) from ${tables[i - 1]} where ${this.id} = ${this.db.param(i)} group by ${this.id})`);
+      s.push(`coalesce((select avg(${this.rate}) from ${tables[i - 1]} where ${this.id} = ${this.db.param(i)} group by ${this.id}), 0)`);
+      us.push(`${this.rate}${i} = coalesce((select avg(${this.rate}) from ${tables[i - 1]} where ${this.id} = ${this.db.param(i)} group by ${this.id}), 0)`);
     }
     const query = `
       insert into ${table} (${this.id}, ${this.rate}, ${this.count}, ${this.score}, ${rateCols.join(', ')})
-      values (${this.db.param(6)}, ${r}, 1, ${r}, ${s.join(',')})`;
+      values (${this.db.param(i++)}, ${r}, 1, ${r}, ${s.join(',')})
+      on conflict (${this.id}) do update set ${this.rate} = (${table}.${this.score} + ${r})/(${table}.${this.count} + 1), ${this.score} = ${table}.${this.score} + ${r},${this.count} = ${table}.${this.count} + 1, ${us.join(',')}`;
+    // console.log("query " + query)
     return query;
   }
+  /*
   protected updateFullInfo(r: number, table: string, tables?: string[]): string {
     if (tables && tables.length > 0) {
       const s: string[] = [];
-      for (let i = 1; i <= tables.length; i++) {
+      let i = 1
+      for (i = 1; i <= tables.length; i++) {
         s.push(`${this.rate}${i} = (select avg(${this.rate}) from ${tables[i - 1]} where ${this.id} = ${this.db.param(i)} group by ${this.id})`);
       }
       const query = `
@@ -143,28 +156,24 @@ export class SqlRatesRepository<R extends BaseRate> {
         where ${this.id} = ${this.db.param(6)}`;
       return query;
     }
-  }
-  protected updateNewInfo(r: number, table: string): string {
-    const query = `
-      update ${table} set ${this.rate} = (${this.score} + ${r})/(${this.count} + 1), ${this.count} = ${this.count} + 1, ${this.score} = ${this.score} + ${r}, ${this.rate}${r} = ${this.rate}${r} + 1
-      where ${this.id} = ${this.db.param(1)}`;
-    return query;
-  }
+  }*/
+
   protected updateOldInfo(newRate: number, oldRate: number, table: string, tables?: string[]): string {
     const delta = newRate - oldRate;
     const s: string[] = [];
+    let i = 1
     if (tables && tables.length > 0) {
-      for (let i = 1; i <= tables.length; i++) {
-        s.push(`${this.rate}${i} = (select avg(${this.rate}) from ${tables[i - 1]} where ${this.id} = ${this.db.param(i)} group by ${this.id})`);
+      for (i = 1; i <= tables.length; i++) {
+        s.push(`${this.rate}${i} = coalesce((select avg(${this.rate}) from ${tables[i - 1]} where ${this.id} = ${this.db.param(i)} group by ${this.id}), 0)`);
       }
       const query = `
         update ${table} set ${this.rate} = (${this.score} + ${delta})/${this.count}, ${this.score} = ${this.score} + ${delta}, ${this.count} = ${this.count}, ${s.join(',')}
-        where ${this.id} = ${this.db.param(6)}`;
+        where ${this.id} = ${this.db.param(i++)}`;
       return query;
     } else {
       const query = `
         update ${table} set ${this.rate} = (${this.score} + ${delta})/${this.count}, ${this.score} = ${this.score} + ${delta}, ${this.count} = ${this.count}
-        where ${this.id} = ${this.db.param(6)}`;
+        where ${this.id} = ${this.db.param(i++)}`;
       return query;
     }
   }
@@ -178,7 +187,7 @@ export class SqlRatesRepository<R extends BaseRate> {
         const obj: any = rate;
         const id: string = obj[this.idField];
         for (let i = 0; i < rate.rates.length; i++) {
-          const sql = this.updateNewInfo(rate.rates[i], this.tables[i]);
+          const sql = this.insertOrUpdateInfo(rate.rates[i], this.tables[i]);
           stmts.push({ query: sql, params: [id] });
         }
         const query: Statement = { query: this.updateOldInfo(rate.rate, oldRate, this.fullTable, this.tables), params: [id, id, id, id, id, id] };
@@ -199,11 +208,10 @@ export class SqlRatesRepository<R extends BaseRate> {
   }
 }
 
-
 export interface History {
   rates: number[];
   time: Date;
-  review: string;
+  review?: string;
 }
 export interface Rates {
   id: string;
@@ -211,18 +219,15 @@ export interface Rates {
   rate: number;
   rates: number[];
   time: Date;
-  review: string;
+  review?: string;
   histories?: History[];
   // usefulCount: number;
   // replyCount: number;
 }
 export interface BaseRepository<R> {
-  create(rate: R, newInfo?: boolean): Promise<number>;
+  create(rate: R): Promise<number>;
   update(rate: R, oldRate: number): Promise<number>;
   load(id: string, author: string): Promise<R | null>;
-}
-export interface InfoRepository {
-  exist(id: string, ctx?: any): Promise<boolean>;
 }
 export function avg(n: number[]): number {
   let sum = 0;
@@ -235,23 +240,16 @@ export interface SubmittedRate {
   id: string;
   author: string;
   rates: number[];
-  review: string;
+  review?: string;
 }
-export class RatesService {
-  constructor(
-    public repository: BaseRepository<Rates>,
-    public infoRepository: InfoRepository) {
+export class Rater {
+  constructor(protected repository: BaseRepository<Rates>) {
     this.rate = this.rate.bind(this);
   }
   async rate(rateReq: SubmittedRate): Promise<number> {
-    const info = await this.infoRepository.exist(rateReq.id);
     const r = avg(rateReq.rates)
     const rate: Rates = { id: rateReq.id, author: rateReq.author, rate: r, rates: rateReq.rates, time: new Date(), review: rateReq.review }
     rate.time = new Date();
-    if (!info) {
-      const r0 = await this.repository.create(rate, true);
-      return r0;
-    }
     const exist = await this.repository.load(rate.id, rate.author);
     if (!exist) {
       const r1 = await this.repository.create(rate);

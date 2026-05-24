@@ -22,7 +22,15 @@ create table companies (
 )
 create table company_info (
   id varchar(40) primary key,
-  follower_count bigint default 0
+  follower_count bigint default 0,
+  rate real default 0,
+  rate1 integer default 0,
+  rate2 integer default 0,
+  rate3 integer default 0,
+  rate4 integer default 0,
+  rate5 integer default 0,
+  count integer default 0,
+  score integer default 0
 );
 create table company_followers (
   id varchar(40) not null,

@@ -32,11 +32,6 @@ export const rateModel: Attributes = {
     min: 1,
     max: 5,
   },
-  rates: {
-    type: 'integers',
-    min: 5,
-    max: 5,
-  },
   time: {
     type: 'datetime',
   },
