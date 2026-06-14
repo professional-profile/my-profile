@@ -125,7 +125,7 @@ export const rateReactionModel: Attributes = {
 
 export const zeroSummary: RateSummary = {
   id: "",
-  rate: 0, 
+  rate: 0,
   rate1: 0,
   rate2: 0,
   rate3: 0,
@@ -147,7 +147,7 @@ export interface RateFormat {
   star5?: string
 }
 
-export function formatRate(r: RateSummary): RateFormat  {
+export function formatRate(r: RateSummary): RateFormat {
   const rCount = r.rate1 + r.rate2 + r.rate3 + r.rate4 + r.rate5
   const score = r.rate1 + r.rate2 * 2 + r.rate3 * 3 + r.rate4 * 4 + r.rate5 * 5
   const count = rCount > 0 ? rCount : 1
@@ -156,14 +156,14 @@ export function formatRate(r: RateSummary): RateFormat  {
   const f: any = {
     rate: srate,
     count: rCount,
-    rate1: `style="width: ${((r.rate1 * 100)/count).toFixed(0)}%"`,
-    rate2: `style="width: ${((r.rate2 * 100)/count).toFixed(0)}%"`,
-    rate3: `style="width: ${((r.rate3 * 100)/count).toFixed(0)}%"`,
-    rate4: `style="width: ${((r.rate4 * 100)/count).toFixed(0)}%"`,
-    rate5: `style="width: ${((r.rate5 * 100)/count).toFixed(0)}%"`,
+    rate1: `style="width: ${((r.rate1 * 100) / count).toFixed(0)}%"`,
+    rate2: `style="width: ${((r.rate2 * 100) / count).toFixed(0)}%"`,
+    rate3: `style="width: ${((r.rate3 * 100) / count).toFixed(0)}%"`,
+    rate4: `style="width: ${((r.rate4 * 100) / count).toFixed(0)}%"`,
+    rate5: `style="width: ${((r.rate5 * 100) / count).toFixed(0)}%"`,
   }
   for (let i = 1; i <= 5; i++) {
-    const x = (rate - i + 1)*100
+    const x = (rate - i + 1) * 100
     f["star" + i] = x > 100 ? `class="star"` : (x <= 0 ? `class="star empty-star"` : `class="star partial-star" style="--w: ${x.toFixed(0)}%;"`)
   }
   return f

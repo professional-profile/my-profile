@@ -32,7 +32,7 @@ export class SqlUserRepository extends CRUDRepository<User, string> implements U
 }
 
 export class MyProfileUseCase implements MyProfileService {
-  constructor(private repository: UserRepository) {}
+  constructor(private repository: UserRepository) { }
   async getMyProfile(id: string): Promise<User | null> {
     const user = await this.repository.load(id)
     if (user) {

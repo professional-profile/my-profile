@@ -11,7 +11,7 @@ export interface Company {
   logo?: string
   coverURL?: string
   status: string
-  
+
   followerCount?: number
   followingAt?: Date
   followedAt?: Date

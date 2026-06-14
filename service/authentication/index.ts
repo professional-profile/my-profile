@@ -70,7 +70,7 @@ export class SigninController {
             console.log("User = " + JSON.stringify(result.user))
             const account = result.user
             if (!account.displayName) {
-              account.displayName = (account.username ? account.username : (account.email ? account.email :account.id))
+              account.displayName = (account.username ? account.username : (account.email ? account.email : account.id))
             }
             const token = sign({ id: account.id, username: user.username, displayName: account.displayName, language: account.language, dateFormat: account.dateFormat }, this.secret, {
               expiresIn: this.expiresIn,

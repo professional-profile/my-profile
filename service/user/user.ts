@@ -222,7 +222,7 @@ export const userModel: Attributes = {
     type: "object",
     typeof: userSettingsModel,
   },
-  
+
   followingCount: {
     column: "following_count",
     type: "integer",
