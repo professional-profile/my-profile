@@ -1,14 +1,11 @@
 import { FollowService, SqlFollowRepository } from "follow-service"
 import { nanoid } from "nanoid"
 import { DB, FollowRepository, SearchResult } from "onecore"
-import { buildToSave } from "pg-extension"
 import { Article } from "../shared/article"
 import { User } from "../shared/user"
 import { ArticleFilter, ArticleRepository, SqlArticleRepository } from "./article"
 import { Company, CompanyFilter, CompanyRepository, CompanyService } from "./company"
 import { CompanyController } from "./controller"
-import { rateModel } from "./model"
-import { Rater, Rates, SqlRatesRepository, SubmittedRate } from "./rate"
 import { SqlCompanyRepository } from "./repository"
 import { SqlUserRepository, UserFilter, UserRepository } from "./user"
 export * from "./controller"
@@ -53,11 +50,12 @@ export function useCompanyController(db: DB): CompanyController {
   const articleRepository = new SqlArticleRepository(db)
   const userRepository = new SqlUserRepository(db)
   const service = new CompanyUseCase(repository, followRepository, articleRepository, userRepository)
-
-  const rateRepository = new SqlRatesRepository<Rates>(db, "company_rates", rateModel, 5, "company_info", ["company_rate1", "company_rate2", "company_rate3", "company_rate4", "company_rate5"], buildToSave, generateId, "rateId", "rate", "count", "score", "author", "id")
-  const rateService = new Rater(rateRepository)
-  const rate: SubmittedRate = { id: "nab", author: "acAoryR2VH", rates: [4, 5, 3, 3, 2], review: "Good company" }
-  rateService.rate(rate)
+  /*
+    const rateRepository = new SqlRatesRepository<Rates>(db, "company_rates", rateModel, 5, "company_info", ["company_rate1", "company_rate2", "company_rate3", "company_rate4", "company_rate5"], buildToSave, generateId, "rateId", "rate", "count", "score", "author", "id")
+    const rateService = new Rater(rateRepository)
+    const rate: SubmittedRate = { id: "nab", author: "acAoryR2VH", rates: [4, 5, 3, 3, 2], review: "Good company" }
+    rateService.rate(rate)
+    */
   return new CompanyController(service)
 }
 function generateId(): string {

@@ -192,7 +192,7 @@ section.row.search-group nav.col {
   display: inline-flex;
   top: 0;
   left: 16px;
-  width: 158px;
+  width: 174px;
   height: 36px;
   border: 1px solid;
   border-radius: 18px;
@@ -221,7 +221,7 @@ section.row.search-group nav.col {
 }
 
 .section.search > .btn-search {
-  width: 118px;
+  min-width: 118px;
   height: 36px;
   padding: 6px 30px;
   font-size: 15px;
@@ -321,9 +321,29 @@ i.sort-down:after {
   font-weight: 700;
   border: none;
   background-color: inherit;
+  margin-right: 8px;
+  padding-right: 20px;
 }
 .btn-limit::after {
-  content: " > ";
+  content: "";
+  border-bottom: 1.5px solid;
+  border-right: 1.5px solid;
+  width: 8px;
+  height: 8px;
+  transition: transform 0.2s;
+  display: inline-block;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 11px;
+  right: 12px;
+}
+.section.search > label > .limit .btn-limit {
+  margin-right: 16px;
+  padding-right: 0;
+}
+.section.search > label > .limit .btn-limit::after {
+  top: 3px;
+  right: 0;
 }
 .btn-rate,
 .btn-sort {

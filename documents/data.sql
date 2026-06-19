@@ -19,7 +19,7 @@ create table companies (
   cover_url character varying(300),
   gallery character varying[],
   status char(1)
-)
+);
 create table company_info (
   id varchar(40) primary key,
   follower_count bigint default 0,
