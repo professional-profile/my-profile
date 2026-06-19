@@ -1,38 +1,16 @@
 import { nanoid } from "nanoid"
-import { SavedRepository, SearchResult } from "onecore"
+import { DB } from "onecore"
 import { buildToSave } from "pg-extension"
 import { Rate, Rater, SqlRateRepository } from "rate-service"
 import { SqlUsefulRepository } from "rate-sql"
-import { SavedService, SqlSavedRepository } from "saved-service"
-import { buildToInsert, buildToUpdate, DB } from "sql-core"
-import { rateModel, rateReactionModel, RateSummary, RateSummaryRepository, zeroSummary } from "../shared/rate"
-import { RateFilter, RatesRepository, Rate as SearchRate, SearchRateRepository } from "../shared/rates"
-import { Article, ArticleFilter, ArticleRepository, ArticleService } from "./article"
+import { SqlSavedRepository } from "saved-service"
+import { buildToInsert, buildToUpdate } from "sql-core"
+import { rateModel, rateReactionModel } from "../shared/rate"
+import { SearchRateRepository } from "../shared/rates"
 import { ArticleController } from "./controller"
 import { SqlArticleRepository, SqlRateSummaryRepository } from "./repository"
+import { ArticleUseCase } from "./service"
 export * from "./controller"
-
-export class ArticleUseCase extends SavedService<string, string> implements ArticleService {
-  constructor(protected repository: ArticleRepository, protected savedRepository: SavedRepository<string, string>, protected max: number, protected rateSummaryRepository: RateSummaryRepository, protected ratesRepository: RatesRepository) {
-    super(savedRepository, max)
-  }
-  search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
-    return this.repository.search(filter, limit, page, fields)
-  }
-  load(slug: string, userId?: string): Promise<Article | null> {
-    return this.repository.load(slug, userId)
-  }
-  getIdBySlug(slug: string): Promise<string> {
-    return this.repository.getIdBySlug(slug)
-  }
-  async getRateSummary(id: string): Promise<RateSummary> {
-    let rateSummary = await this.rateSummaryRepository.load(id)
-    return (rateSummary ? rateSummary : { ...zeroSummary, id })
-  }
-  searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<SearchRate>> {
-    return this.ratesRepository.search(filter, limit, page, fields)
-  }
-}
 
 export function useArticleController(db: DB): ArticleController {
   const repository = new SqlArticleRepository(db)
