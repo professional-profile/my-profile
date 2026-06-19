@@ -192,7 +192,7 @@ section.row.search-group nav.col {
   display: inline-flex;
   top: 0;
   left: 16px;
-  width: 174px;
+  width: 176px;
   height: 36px;
   border: 1px solid;
   border-radius: 18px;
@@ -315,6 +315,9 @@ i.sort-down:after {
   margin: 4px 0;
   color: inherit;
 }
+.limit {
+  padding-left: 8px !important;
+}
 .btn-limit {
   height: 36px;
   font-size: 15px;
@@ -325,17 +328,17 @@ i.sort-down:after {
   padding-right: 20px;
 }
 .btn-limit::after {
+  position: absolute;
+  display: inline-block;
+  top: 11px;
+  right: 12px;
   content: "";
   border-bottom: 1.5px solid;
   border-right: 1.5px solid;
   width: 8px;
   height: 8px;
   transition: transform 0.2s;
-  display: inline-block;
   transform: rotate(45deg);
-  position: absolute;
-  top: 11px;
-  right: 12px;
 }
 .section.search > label > .limit .btn-limit {
   margin-right: 16px;
