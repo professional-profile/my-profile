@@ -65,9 +65,6 @@ const CTRL_KEYS = {
   x: true,
 } as const
 
-function detectCtrlKeyCombination(e: KeyboardEvent): boolean {
-  return e.ctrlKey && !!CTRL_KEYS[e.key.toLowerCase() as keyof typeof CTRL_KEYS]
-}
 function digitOnKeyPress(e: KeyboardEvent): boolean {
   const key = e.key
 
@@ -88,38 +85,41 @@ function integerOnKeyPress(e: KeyboardEvent): boolean {
   const input = e.target as HTMLInputElement
 
   if (key === "-") {
-    const min = Number(input.min)
-
-    return !input.value.includes("-") && !Number.isNaN(min) && min < 0
+    if (!input.min) {
+      return true
+    } else {
+      const min = Number(input.min)
+      return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
+    }
   }
 
   return key.length === 1 && key >= "0" && key <= "9"
 }
 
 function numberOnKeyPress(e: KeyboardEvent) {
-  if (detectCtrlKeyCombination(e)) {
+  const key = e.key
+
+  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase() as keyof typeof CTRL_KEYS]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
     return true
   }
-  const key = window.event ? (e as any).keyCode : (e as any).which
-  if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
-    return key
-  }
-  var ele = e.target as HTMLInputElement
-  var keychar = String.fromCharCode(key)
-  if (keychar == "-") {
-    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min as any) || parseInt(ele.min) >= 0) {
-      return false
+
+  const input = e.target as HTMLInputElement
+
+  if (key === "-") {
+    if (!input.min) {
+      return true
+    } else {
+      const min = Number(input.min)
+      return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
     }
-    return key
   }
-  if (keychar == "." || keychar == ",") {
-    if (ele.value.indexOf(keychar) >= 0 || keychar !== getDecimalSeparator(ele)) {
-      return false
-    }
-    return key
+
+  if (key === "." || key === "," || key === "٫") {
+    const separator = getDecimalSeparator(input)
+    return key === separator && !input.value.includes(separator)
   }
-  var reg = /\d/
-  return reg.test(keychar)
+
+  return key.length === 1 && key >= "0" && key <= "9"
 }
 function trimTime(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
@@ -322,7 +322,7 @@ function normalizePhone(s?: string | null): string {
   let j = 0
   for (let i = 0; i < len; i++) {
     const c = s.charCodeAt(i)
-    if (c === 43 || (c >= 48 && c <= 57)) {
+    if ((c >= 48 && c <= 57) || c === 43) {
       buf[j++] = s[i]
     }
   }
@@ -337,7 +337,7 @@ function normalizeInteger(s?: string | null): string {
   let j = 0
   for (let i = 0; i < len; i++) {
     const c = s.charCodeAt(i)
-    if (c >= 48 && c <= 57) {
+    if ((c >= 48 && c <= 57) || c === 45) {
       buf[j++] = s[i]
     }
   }
@@ -355,8 +355,8 @@ function removeSeparators(s?: string | null): string {
 
   for (let i = 0; i < len; i++) {
     const c = s.charCodeAt(i)
-    // '0'–'9' (48–57), '.' (46)
-    if ((c >= 48 && c <= 57) || c === 46) {
+    // '0'–'9' (48–57), '-' (45), '.' (46)
+    if ((c >= 48 && c <= 57) || c === 45 || c === 46) {
       buffer[write++] = c
     }
   }
@@ -374,7 +374,7 @@ function normalizeNumber(s?: string | null): string {
   for (let i = 0; i < len; i++) {
     const c = s.charCodeAt(i)
 
-    if (c >= 48 && c <= 57) {
+    if ((c >= 48 && c <= 57) || c === 45) {
       buf[j++] = s[i]
     } else if (c === 44 || c === 1643) {
       buf[j++] = "."
