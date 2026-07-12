@@ -143,6 +143,7 @@ function integerOnKeyDown(e: KeyboardEvent): boolean {
  * Allow:
  *   -123.45
  *   -123,45
+ *   -123٫45 (Arabic decimal separator)
  * depending on getDecimalSeparator()
  */
 function numberOnKeyDown(e: KeyboardEvent): boolean {
