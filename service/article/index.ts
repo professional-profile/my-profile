@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid"
 import { DB } from "onecore"
-import { buildToSave } from "pg-extension"
+import { buildToSave } from "postgres-kit"
 import { Rate, Rater, SqlRateRepository } from "rate-service"
 import { SqlUsefulRepository } from "rate-sql"
 import { SqlSavedRepository } from "saved-service"

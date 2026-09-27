@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { getView } from "express-core-web"
+import { getView } from "express-web-kit"
 import { getResource } from "../resources"
 import { renderError404, renderError500 } from "../template"
 import { ContentService } from "./content"
@@ -9,8 +9,8 @@ export class ContentController {
     this.view = this.view.bind(this)
   }
   async view(req: Request, res: Response) {
-    let id = req.params.id
-    let lang = req.params.lang
+    let id = req.params.id as string
+    let lang = req.params.lang as string
     if (!id && !lang) {
       id = "home"
       lang = "en"

@@ -2,12 +2,11 @@ import { merge } from "config-plus"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
-import { resources as expressResources, generateStarChips, generateTags } from "express-core-web"
+import { resources as expressResources, generateStarChips, generateTags } from "express-web-kit"
 import http from "http"
 import { createLogger } from "logger-core"
 import nunjucks from "nunjucks"
 import { Pool } from "pg"
-import { PoolManager } from "pg-extension"
 import { datetimeToString } from "ui-formatter"
 import { config, env } from "./config"
 import { route, TokenVerifier } from "./service"
@@ -47,8 +46,8 @@ app.use(cookieParser(), verifier.verify)
 // app.use(allow(conf.allow), json())
 
 const pool = new Pool(cfg.db)
-const db = new PoolManager(pool)
-const ctx = useContext(db, cfg)
+
+const ctx = useContext(pool, cfg)
 route(app, ctx)
 
 app.locals.datetimeToString = datetimeToString

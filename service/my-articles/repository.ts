@@ -1,5 +1,5 @@
 import { DB } from "onecore"
-import { param } from "pg-extension"
+import { param } from "postgres-kit"
 import { buildSort, Repository, Statement } from "sql-core"
 import { Article, ArticleFilter, articleModel, ArticleRepository } from "./article"
 

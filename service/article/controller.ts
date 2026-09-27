@@ -18,7 +18,7 @@ import {
   removeSort,
   resources,
   SavedController
-} from "express-core-web"
+} from "express-web-kit"
 import { Item } from "onecore"
 import { RateService, SubmittedRate } from "rate-service"
 import { formatDateTime } from "ui-formatter"
@@ -140,7 +140,7 @@ export class ArticleController extends SavedController {
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const langSearch = getLangSearch(lang)
-    const slug = req.params.slug
+    const slug = req.params.slug as string
     const userId: string = res.locals.userId
     try {
       const article = await this.service.load(slug, userId)
@@ -164,7 +164,7 @@ export class ArticleController extends SavedController {
     const subPartial = isSubPartial(req)
     const view = partial && subPartial ? "shared/reviews" : "article-review"
     try {
-      const id = await this.service.getIdBySlug(req.params.slug)
+      const id = await this.service.getIdBySlug(req.params.slug as string)
       let filter: RateFilter = { id, limit: resources.defaultLimit }
       if (hasSearch(req)) {
         filter = fromRequest<RateFilter>(req)
@@ -240,7 +240,7 @@ export class ArticleController extends SavedController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const rate = req.body as SubmittedRate
-    const slug = req.params.slug
+    const slug = req.params.slug as string
     try {
       const id = await this.service.getIdBySlug(slug)
       if (id === slug) {
@@ -257,7 +257,7 @@ export class ArticleController extends SavedController {
     }
   }
   async setUseful(req: Request, res: Response) {
-    const rateId = req.params.rateId
+    const rateId = req.params.rateId as string
     const userId: string = res.locals.userId
     try {
       const result = await this.rateService.setUseful(rateId, userId)
@@ -268,7 +268,7 @@ export class ArticleController extends SavedController {
     }
   }
   async removeUseful(req: Request, res: Response) {
-    const rateId = req.params.rateId
+    const rateId = req.params.rateId as string
     const userId: string = res.locals.userId
     try {
       const result = await this.rateService.removeUseful(rateId, userId)

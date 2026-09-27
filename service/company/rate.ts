@@ -1,5 +1,5 @@
 import { Attributes, DB, Statement, StringMap, Transaction } from "onecore";
-import { metadata } from "pg-extension";
+import { metadata } from "postgres-kit";
 import { buildToInsert, buildToUpdate } from "sql-core";
 
 export interface BaseRate {

@@ -16,7 +16,7 @@ import {
   isSubPartial,
   removeSort,
   resources
-} from "express-core-web"
+} from "express-web-kit"
 import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
@@ -68,7 +68,7 @@ export class CompanyController extends FollowController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const langSearch = getLangSearch(lang)
-    const slug = req.params.slug
+    const slug = req.params.slug as string
     const userId: string = res.locals.userId
     try {
       const company = await this.service.load(slug, userId)
@@ -105,7 +105,7 @@ export class CompanyController extends FollowController {
     filter.userId = userId
     const { page, limit } = filter
 
-    const slug = req.params.slug
+    const slug = req.params.slug as string
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)
     const view = partial && subPartial ? "company/articles" : "company-articles"
@@ -157,7 +157,7 @@ export class CompanyController extends FollowController {
   async getFollowers(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const slug = req.params.slug
+    const slug = req.params.slug as string
     const userId: string = res.locals.userId
     let id = ""
     let company: Company | null = null

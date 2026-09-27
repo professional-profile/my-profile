@@ -1,13 +1,13 @@
 import { Authenticator, initializeStatus, SqlAuthTemplateConfig, Token, useUserRepository } from "authen-service"
 import { compare, hash } from "bcryptjs"
 import { MenuBuilder, MenuItemLoader } from "content-menu"
-import { HealthController, ItemController, resources } from "express-core-web"
+import { HealthController, ItemController, resources } from "express-web-kit"
 import { nanoid } from "nanoid"
 import { MailConfig, MailData, StringMap } from "onecore"
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from "password-service"
-import { CodeRepository, StringService } from "pg-extension"
+import { Pool } from "pg"
+import { CodeRepository, PoolManager, PostgreSQLChecker, StringRepository } from "postgres-kit"
 import { initStatus, Signup, SignupSender, SignupService, SignupTemplateConfig, useRepository, Validator } from "signup-service"
-import { createChecker, DB } from "sql-core"
 import { check } from "types-validation"
 import { createValidator } from "validation-core"
 import { ArticleController, useArticleController } from "./article"
@@ -53,12 +53,12 @@ export interface ApplicationContext {
 }
 
 export class Comparator {
-  constructor(saltOrRounds?: string|number) {
+  constructor(saltOrRounds?: string | number) {
     this.saltOrRounds = (saltOrRounds ? saltOrRounds : 10);
     this.compare = this.compare.bind(this);
     this.hash = this.hash.bind(this);
   }
-  saltOrRounds: string|number;
+  saltOrRounds: string | number;
   compare(data: string, encrypted: string): Promise<boolean> {
     return compare(data, encrypted);
   }
@@ -67,8 +67,9 @@ export class Comparator {
   }
 }
 
-export function useContext(db: DB, cfg: Config): ApplicationContext {
-  const sqlChecker = createChecker(db)
+export function useContext(pool: Pool, cfg: Config): ApplicationContext {
+  const db = new PoolManager(pool)
+  const sqlChecker = new PostgreSQLChecker(pool)
   const health = new HealthController([sqlChecker])
 
   const menuItemsLoader = new MenuItemLoader(
@@ -136,9 +137,9 @@ export function useContext(db: DB, cfg: Config): ApplicationContext {
   )
   const password = new PasswordController(passwordService)
 
-  const skillService = new StringService("skills", "skill", db.query, db.execute)
+  const skillService = new StringRepository("skills", "skill", db.query, db.execute)
   const skill = new ItemController<string[]>(skillService.load, "q")
-  const interestService = new StringService("interests", "interest", db.query, db.execute)
+  const interestService = new StringRepository("interests", "interest", db.query, db.execute)
   const interest = new ItemController<string[]>(interestService.load, "q")
   const myProfile = useMyProfileController(db, skillService.save, interestService.save)
   const myArticles = useMyArticlesController(db)

@@ -1,5 +1,5 @@
 import { DB, Statement } from "onecore"
-import { param } from "pg-extension"
+import { param } from "postgres-kit"
 import { buildSort, SearchRepository, SqlLoader } from "sql-core"
 import { RateSummary, rateSummaryModel, RateSummaryRepository } from "../shared/rate"
 import { Article, ArticleFilter, articleModel, ArticleRepository } from "./article"

@@ -1,5 +1,5 @@
 import { Request } from "express"
-import { query } from "express-core-web"
+import { query } from "express-web-kit"
 import { getLocale, usLocale } from "locale-service"
 import { en as articleEN } from "./article/en"
 import { vi as articleVI } from "./article/vi"

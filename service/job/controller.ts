@@ -10,7 +10,7 @@ import {
   hasSearch,
   removeSort,
   resources
-} from "express-core-web"
+} from "express-web-kit"
 import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
@@ -68,7 +68,7 @@ export class JobController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const slug = req.params.slug
+    const slug = req.params.slug as string
     try {
       const job = await this.service.load(slug)
       if (!job) {

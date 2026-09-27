@@ -15,7 +15,7 @@ import {
   removeSort,
   resources,
   respondError
-} from "express-core-web"
+} from "express-web-kit"
 import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "validation-core"
@@ -82,7 +82,7 @@ export class MyArticlesController {
     const lang = getLang(req)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const id = req.params.id
+    const id = req.params.id as string
     const userId: string = res.locals.userId
     try {
       const article = await this.service.load(id)
@@ -104,7 +104,7 @@ export class MyArticlesController {
     if (errors.length > 0) {
       return respondError(res, errors)
     }
-    const id = req.params.id
+    const id = req.params.id as string
     const editMode = id !== "new"
     try {
       if (!editMode) {

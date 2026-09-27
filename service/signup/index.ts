@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { handleError } from "express-core-web"
+import { handleError } from "express-web-kit"
 import { Attributes, ErrorMessage } from "onecore"
 import { SignupService, Status, User } from "signup-service"
 import { validate } from "validation-core"
@@ -85,8 +85,8 @@ export class SignUpController {
     }
   }
   verify(req: Request, res: Response) {
-    let userId = req.params.id
-    let passcode = req.params.code
+    let userId = req.params.id as string
+    let passcode = req.params.code as string
     const resource = getResource(req)
     this.service
       .verify(userId, passcode)
