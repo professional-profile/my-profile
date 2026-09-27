@@ -3,6 +3,7 @@ import { nanoid } from "nanoid"
 import { DB } from "onecore"
 import { SqlArticleRepository } from "./article"
 import { CompanyController } from "./controller"
+import { SqlJobRepository } from "./job"
 import { SqlCompanyRepository } from "./repository"
 import { CompanyUseCase } from "./service"
 import { SqlUserRepository } from "./user"
@@ -25,14 +26,9 @@ export function useCompanyController(db: DB): CompanyController {
   )
   const repository = new SqlCompanyRepository(db)
   const articleRepository = new SqlArticleRepository(db)
+  const jobRepository = new SqlJobRepository(db)
   const userRepository = new SqlUserRepository(db)
-  const service = new CompanyUseCase(repository, followRepository, articleRepository, userRepository)
-  /*
-    const rateRepository = new SqlRatesRepository<Rates>(db, "company_rates", rateModel, 5, "company_info", ["company_rate1", "company_rate2", "company_rate3", "company_rate4", "company_rate5"], buildToSave, generateId, "rateId", "rate", "count", "score", "author", "id")
-    const rateService = new Rater(rateRepository)
-    const rate: SubmittedRate = { id: "nab", author: "acAoryR2VH", rates: [4, 5, 3, 3, 2], review: "Good company" }
-    rateService.rate(rate)
-    */
+  const service = new CompanyUseCase(repository, articleRepository, jobRepository, userRepository, followRepository)
   return new CompanyController(service)
 }
 function generateId(): string {

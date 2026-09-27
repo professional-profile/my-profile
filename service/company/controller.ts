@@ -21,6 +21,7 @@ import { Item } from "onecore"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { Published } from "../shared/article"
+import { JobFilter } from "../shared/job"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter } from "./article"
 import { Company, CompanyFilter, CompanyService } from "./company"
@@ -32,6 +33,7 @@ export class CompanyController extends FollowController {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.getArticles = this.getArticles.bind(this)
+    this.getJobs = this.getJobs.bind(this)
     this.getFollowers = this.getFollowers.bind(this)
     this.review = this.review.bind(this)
     this.getJobs = this.getJobs.bind(this)
@@ -154,6 +156,75 @@ export class CompanyController extends FollowController {
     }
   }
 
+  async getJobs(req: Request, res: Response) {
+    const lang = getLang(req)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
+    const langSearch = getLangSearch(lang)
+    const userId = res.locals.userId
+    let filter: JobFilter = {
+      limit: resources.defaultLimit,
+      publishedAt: {},
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<JobFilter>(req)
+      format(filter, ["publishedAt"])
+    }
+    if (!filter.sort) {
+      filter.sort = "-publishedAt"
+    }
+    //filter.status = Published
+    const { page, limit } = filter
+
+    const slug = req.params.slug as string
+    const partial = isPartial(req)
+    const subPartial = isSubPartial(req)
+    const view = partial && subPartial ? "company/jobs" : "company-jobs"
+    let companyId = ""
+    let company: Company | null = null
+    try {
+      if (partial) {
+        companyId = await this.service.getIdBySlug(slug)
+      } else {
+        company = await this.service.load(slug, userId)
+        if (!company) {
+          return renderError404(req, res, resource)
+        }
+        companyId = company.id
+      }
+      filter.companyId = companyId
+      const result = await this.service.getJobs(filter, limit, page)
+      const list = escapeArray(result.list)
+      for (const item of result.list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const search = getSearch(req.url)
+      const sortSearch = removeSort(search)
+      const prefix = sortSearch ? `?${sortSearch}&` : "?"
+      const sort1: Item = { id: "timeDescSort", value: `${prefix}${resources.sort}=-publishedAt`, text: resource.sort_time_desc }
+      const sort2: Item = { id: "timeAscSort", value: `${prefix}${resources.sort}=publishedAt`, text: resource.sort_time_asc }
+      const sortText = filter.sort == "publishedAt" ? resource.sort_desc_time_asc : resource.sort_desc_time_desc
+      const ctx: any = {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        langSearch,
+        sorts: [sort1, sort2],
+        sortText,
+        message: buildMessage(resource, list, limit, page, result.total),
+      }
+      if (company) {
+        ctx.company = escape(company)
+      }
+      render(req, res, view, ctx)
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
+  }
+
   async getFollowers(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
@@ -229,12 +300,6 @@ export class CompanyController extends FollowController {
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)
     const view = partial && subPartial ? "company/reviews" : "company-reviews"
-    render(req, res, view, {})
-  }
-  async getJobs(req: Request, res: Response) {
-    const partial = isPartial(req)
-    const subPartial = isSubPartial(req)
-    const view = partial && subPartial ? "company/jobs" : "company-jobs"
     render(req, res, view, {})
   }
 }
