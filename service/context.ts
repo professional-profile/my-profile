@@ -6,7 +6,7 @@ import { nanoid } from "nanoid"
 import { MailConfig, MailData, StringMap } from "onecore"
 import { MailSender, PasswordService, PasswordTemplateConfig, usePasswordRepository } from "password-service"
 import { Pool } from "pg"
-import { CodeRepository, PoolManager, PostgreSQLChecker, StringRepository } from "postgres-kit"
+import { CodeRepository, PoolManager, PostgreSQLChecker, StringService } from "postgres-kit"
 import { initStatus, Signup, SignupSender, SignupService, SignupTemplateConfig, useRepository, Validator } from "signup-service"
 import { check } from "types-validation"
 import { createValidator } from "validation-core"
@@ -137,9 +137,9 @@ export function useContext(pool: Pool, cfg: Config): ApplicationContext {
   )
   const password = new PasswordController(passwordService)
 
-  const skillService = new StringRepository("skills", "skill", db.query, db.execute)
+  const skillService = new StringService("skills", "skill", db.query, db.execute)
   const skill = new ItemController<string[]>(skillService.load, "q")
-  const interestService = new StringRepository("interests", "interest", db.query, db.execute)
+  const interestService = new StringService("interests", "interest", db.query, db.execute)
   const interest = new ItemController<string[]>(interestService.load, "q")
   const myProfile = useMyProfileController(db, skillService.save, interestService.save)
   const myArticles = useMyArticlesController(db)

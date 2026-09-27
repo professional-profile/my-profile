@@ -30,7 +30,7 @@
     "onecore": "^0.6.7",
     "password-service": "^0.1.0",
     "pg": "^8.23.0",
-    "postgres-kit": "^0.0.5",
+    "postgres-kit": "^0.0.7",
     "rate-service": "^0.0.1",
     "rate-sql": "^0.2.0",
     "saved-service": "^0.0.1",
