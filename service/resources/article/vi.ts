@@ -3,9 +3,15 @@ export const vi = {
   published: "Xuất bản",
   draft: "Nháp",
 
-  article_save_success: "Save article successfully",
-  article_save_conflict: "No change. You already unsaved this article before.",
-  article_save_fail: "You reach the maximum of saved articles: 200. Remove some articles to have more slots to save.",
-  article_unsave_success: "Unsave article successfully.",
-  article_unsave_conflict: "No change. You already saved this article before.",
+  article_save_success: "Lưu bài viết thành công",
+  article_save_conflict: "Không có thay đổi. Bạn đã bỏ lưu bài viết này trước đó.",
+  article_save_fail: "Bạn đã đạt đến giới hạn số lượng bài viết đã lưu: 200. Hãy xóa một số bài viết để có thêm vị trí lưu.",
+  article_unsave_success: "Bỏ lưu bài viết thành công.",
+  article_unsave_conflict: "Không có thay đổi. Bạn đã lưu bài viết này trước đó.",
+
+  job_save_success: "Lưu công việc thành công",
+  job_save_conflict: "Không có thay đổi. Bạn đã bỏ lưu công việc này trước đó.",
+  job_save_fail: "Bạn đã đạt đến giới hạn số lượng công việc đã lưu: 200. Hãy xóa một số công việc để có thêm vị trí lưu.",
+  job_unsave_success: "Bỏ lưu công việc thành công.",
+  job_unsave_conflict: "Không có thay đổi. Bạn đã lưu công việc này trước đó.",
 }

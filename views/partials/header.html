@@ -47,9 +47,14 @@
             <li><i class="material-icons">bookmark</i>
               <a href="/saved-news" onclick="navigate(event)">{{resource.saved_articles}}</a>
             </li>
+            <li><i class="material-icons">bookmark</i>
+              <a href="/saved-jobs" onclick="navigate(event)">{{resource.saved_jobs}}</a>
+            </li>
             {% endif %}
             <hr style="margin: 0px" />
-            <li><i class="material-icons">exit_to_app</i><button>Sign out</button></li>
+            <li><i class="material-icons">exit_to_app</i>
+              <a href="/logout">{{resource.button_signout}}</a>
+            </li>
           </ul>
         </div>
       </section>

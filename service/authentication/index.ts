@@ -41,6 +41,7 @@ export class SigninController {
   ) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
+    this.signout = this.signout.bind(this)
   }
   render(req: Request, res: Response) {
     const resource = getResource(req)
@@ -88,7 +89,7 @@ export class SigninController {
 
             let redirectUrl = query(req, "redirectUrl")
             if (!redirectUrl || redirectUrl === "") {
-              redirectUrl = "news"
+              redirectUrl = "/companies/fpt-software/review"
             }
             return res.redirect(redirectUrl)
           } else {
@@ -99,5 +100,10 @@ export class SigninController {
         })
         .catch((err) => handleError(err, res))
     }
+  }
+  signout(req: Request, res: Response) {
+    res.clearCookie(this.remember)
+    res.clearCookie(this.token)
+    return res.redirect("/login")
   }
 }

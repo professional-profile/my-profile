@@ -106,7 +106,7 @@ export class ArticleController extends SavedController {
     filter.status = Published
     filter.userId = res.locals.userId
     filter.isSaved = true
-    const { page, limit, sort } = filter
+    const { page, limit } = filter
     try {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)

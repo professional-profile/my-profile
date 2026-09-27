@@ -1,8 +1,6 @@
 "use strict"
-function saveArticle(target, id, remove) {
-  var url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  var strue = remove ? ", true" : ""
+function saveArticle(target, id) {
+  var url = "/news/" + id
   if (target.nodeName !== "I") {
     target = target.parentElement
   }
@@ -14,16 +12,14 @@ function saveArticle(target, id, remove) {
   })
     .then(function (response) {
       hideLoading()
-      if (response.ok) {
+      if (response.ok || response.status === 409) {
         toast(resource.article_save_success)
         target.onclick = null
         target.innerText = "bookmark"
-        target.setAttribute("onclick", "removeItem(this, '" + escapeHTML(id) + "'" + strue + ")")
+        target.setAttribute("onclick", "unsaveArticle(this, '" + escapeHTML(id) + "')")
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 409) {
-          toast(resource.article_save_conflict)
         } else if (response.status === 422) {
           alertWarning(resource.article_save_fail)
         }
@@ -33,10 +29,8 @@ function saveArticle(target, id, remove) {
       return handleError(err, resource.error_network)
     })
 }
-function unsaveArticle(target, id, remove) {
-  var url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  var strue = remove ? ", true" : ""
+function unsaveArticle(target, id) {
+  var url = "/news/" + id
   if (target.nodeName !== "I") {
     target = target.parentElement
   }
@@ -48,16 +42,72 @@ function unsaveArticle(target, id, remove) {
   })
     .then(function (response) {
       hideLoading()
-      if (response.ok) {
+      if (response.ok || response.status === 410) {
         toast(resource.article_unsave_success)
         target.onclick = null
         target.innerText = "bookmark_border"
-        target.setAttribute("onclick", "saveItem(this, '" + escapeHTML(id) + "'" + strue + ")")
+        target.setAttribute("onclick", "saveArticle(this, '" + escapeHTML(id) + "')")
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 410) {
-          toast(resource.article_unsave_success)
+        }
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
+}
+function saveJob(target, id) {
+  var url = "/jobs/" + id
+  if (target.nodeName !== "I") {
+    target = target.parentElement
+  }
+  var resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "PATCH",
+    headers: getHttpHeaders(),
+  })
+    .then(function (response) {
+      hideLoading()
+      if (response.ok || response.status === 409) {
+        toast(resource.job_save_success)
+        target.onclick = null
+        target.innerText = "bookmark"
+        target.setAttribute("onclick", "unsaveJob(this, '" + escapeHTML(id) + "')")
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
+        } else if (response.status === 422) {
+          alertWarning(resource.job_save_fail)
+        }
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
+}
+function unsaveJob(target, id) {
+  var url = "/jobs/" + id
+  if (target.nodeName !== "I") {
+    target = target.parentElement
+  }
+  var resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "DELETE",
+    headers: getHttpHeaders(),
+  })
+    .then(function (response) {
+      hideLoading()
+      if (response.ok || response.status === 410) {
+        toast(resource.job_unsave_success)
+        target.onclick = null
+        target.innerText = "bookmark_border"
+        target.setAttribute("onclick", "saveJob(this, '" + escapeHTML(id) + "')")
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
         }
       }
     })
@@ -134,13 +184,23 @@ function removeUseful(target, id) {
       return handleError(err, resource.error_network)
     })
 }
-function follow(target, id, remove) {
-  var url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  if (target.nodeName !== "I" && target.nodeName !== "BUTTON") {
-    target = target.parentElement
-  }
-  var strue = remove ? ", true" : ""
+function followCompany(target, id) {
+  var resource = getResource()
+  follow(target, id, "/companies/" + id, "unfollowCompany", resource.company_followers, resource.company_follow_success)
+}
+function unfollowCompany(target, id) {
+  var resource = getResource()
+  unfollow(target, id, "/companies/" + id, "followCompany", resource.company_followers, resource.company_unfollow_success)
+}
+function followUser(target, id) {
+  var resource = getResource()
+  follow(target, id, "/users/" + id, "unfollowUser", resource.user_profile_followers, resource.user_profile_follow_success)
+}
+function unfollowUser(target, id) {
+  var resource = getResource()
+  unfollow(target, id, "/users/" + id, "followUser", resource.user_profile_followers, resource.user_profile_unfollow_success)
+}
+function follow(target, id, url, unfollowFunction, folowersText, successMsg) {
   var resource = getResource()
   showLoading()
   fetch(url, {
@@ -149,30 +209,28 @@ function follow(target, id, remove) {
   })
     .then(function (response) {
       hideLoading()
-      if (response.ok) {
-        toast(resource.user_profile_follow_success)
+      if (response.ok || response.status === 409) {
+        toast(successMsg)
         if (target.nodeName === "I") {
           target.onclick = null
           target.innerText = "bookmark"
-          target.setAttribute("onclick", "unfollow(this, '" + escapeHTML(id) + "'" + strue + ")")
+          target.setAttribute("onclick", unfollowFunction + "(this, '" + escapeHTML(id) + "')")
         } else if (target.nodeName === "BUTTON") {
           target.onclick = null
           target.innerText = target.getAttribute("data-unfollow-text") || ""
-          target.setAttribute("onclick", "unfollow(this, '" + escapeHTML(id) + "'" + strue + ")")
+          target.setAttribute("onclick", unfollowFunction + "(this, '" + escapeHTML(id) + "')")
           var followers = parseInt(target.getAttribute("data-followers") || "0", 10)
           followers = followers + 1
           target.setAttribute("data-followers", "" + followers)
           var p = document.getElementById("followerCount")
           if (p && p.lastChild) {
-            var newText = format(resource.user_profile_followers, followers)
+            var newText = format(folowersText, followers)
             p.lastChild.textContent = newText
           }
         }
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 409) {
-          toast(resource.user_profile_follow_conflict)
         }
       }
     })
@@ -180,10 +238,7 @@ function follow(target, id, remove) {
       return handleError(err, resource.error_network)
     })
 }
-function unfollow(target, id, remove) {
-  var url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  var strue = remove ? ", true" : ""
+function unfollow(target, id, url, followFunction, folowersText, successMsg) {
   showLoading()
   fetch(url, {
     method: "DELETE",
@@ -191,30 +246,28 @@ function unfollow(target, id, remove) {
   })
     .then(function (response) {
       hideLoading()
-      if (response.ok) {
-        toast(resource.user_profile_unfollow_success)
+      if (response.ok || response.status === 410) {
+        toast(successMsg)
         if (target.nodeName === "I") {
           target.onclick = null
           target.innerText = "bookmark_border"
-          target.setAttribute("onclick", "follow(this, '" + escapeHTML(id) + "'" + strue + ")")
+          target.setAttribute("onclick", "follow(this, '" + escapeHTML(id) + "')")
         } else if (target.nodeName === "BUTTON") {
           target.onclick = null
           target.innerText = target.getAttribute("data-follow-text") || ""
-          target.setAttribute("onclick", "follow(this, '" + escapeHTML(id) + "'" + strue + ")")
+          target.setAttribute("onclick", "follow(this, '" + escapeHTML(id) + "')")
           var followers = parseInt(target.getAttribute("data-followers") || "0", 10)
           followers = followers - 1
           target.setAttribute("data-followers", "" + followers)
           var p = document.getElementById("followerCount")
           if (p && p.lastChild) {
-            var newText = format(resource.user_profile_followers, followers)
+            var newText = format(folowersText, followers)
             p.lastChild.textContent = newText
           }
         }
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 410) {
-          toast(resource.user_profile_unfollow_conflict)
         }
       }
     })

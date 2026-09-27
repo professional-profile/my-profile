@@ -1,1 +1,36 @@
-<div>This is jobs page</div>
+<header>
+  <h3>{{resource.jobs}}</h3>
+</header>
+<div>
+  <form id="jobsForm" name="jobsForm" class="form" data-part="companyBody" novalidate>
+    <span class="hidden-message">{{message}}</span>
+    <section class="row search-group">
+      <label class="col s12 m6 search-input">{% include "partials/search.html" %}</label>
+      <div class="col s12 m6 l4 xl3 sort">
+        <button id="sortBtn" type="button" class="btn-sort" onclick="toggleSort(event)">{{sortText}}</button>
+        <div id="sortDropdown" class="dropdown">
+          {% for item in sorts %}
+          <a id="{{item.id}}" href="{{item.value}}" onclick="navigate(event, 'companyBody')">{{item.text}}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% include "partials/pagination.html"%}
+    </section>
+    <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+  </form>
+  <ul class="row list">
+    {% for item in list %}
+    <li class="col s12 m6 list-item">
+      <a href="/jobs/{{item.slug}}{{langSearch}}" onclick="navigate(event)">{{item.title}}</a>
+      <p class="center-align-items">
+        {{item.publishedAt}} {% if account %} {% if item.savedAt %}
+        <i class="material-icons" onclick="unsaveJob(this, '{{item.id}}')">bookmark</i>
+        {% else %}
+        <i class="material-icons" onclick="saveJob(this, '{{item.id}}')">bookmark_border</i>
+        {% endif %} {% endif %}
+      </p>
+      <p>{{item.location}} {{item.quantity}}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

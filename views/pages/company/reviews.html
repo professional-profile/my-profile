@@ -1,1 +1,23 @@
-<div>This is review page</div>
+<header>
+  <h3>{{resource.reviews}}</h3>
+</header>
+<div>
+  <div id="rateSummaryContainer" class="rating-summary-container">
+    {% include "partials/rating-summary.html" %}
+  </div>
+  {% if account %}
+  <div class="rate-header">
+    <button class="btn-review" onclick="openReview('rateModal')">{{resource.write_a_review}}</button>
+  </div>
+  {% endif %}
+  <div id="reviewBody">
+    {% include "pages/shared/reviews.html"%}
+  </div>
+  {% if account %}
+  <div id="rateModal" class="modal-bg">
+    <div class="modal">
+      {% include "partials/rating-form.html" %}
+    </div>
+  </div>
+  {% endif %}
+</div>

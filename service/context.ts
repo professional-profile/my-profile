@@ -84,10 +84,10 @@ export function useContext(pool: Pool, cfg: Config): ApplicationContext {
   const authenticator = new Authenticator(status, compare, auth.account, userRepository, undefined, auth.lockedMinutes, auth.maxPasswordFailed)
   const signin = new SigninController(
     authenticator,
-    "token",
+    "accessToken",
     cfg.token.secret,
     cfg.token.expires,
-    "remember",
+    "rememberToken",
     cfg.rememberToken.secret,
     cfg.rememberToken.expires,
   )

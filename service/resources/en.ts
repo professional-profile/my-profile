@@ -6,6 +6,7 @@ export const en = {
 
   articles: "Articles",
   saved_articles: "My saved articles",
+  saved_jobs: "My saved jobs",
   my_articles: "My articles",
   my_article: "My article",
   followers: "Followers",

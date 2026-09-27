@@ -25,9 +25,9 @@
         <button class="btn-detail"></button>
         <p class="center-align-items">
           {{item.industry}} {% if account %} {% if item.followedAt %}
-          <i class="material-icons" onclick="unfollow(this, '{{item.id}}')">bookmark</i>
+          <i class="material-icons" onclick="unfollowCompany(this, '{{item.id}}')">bookmark</i>
           {% else %}
-          <i class="material-icons" onclick="follow(this, '{{item.id}}')">bookmark_border</i>
+          <i class="material-icons" onclick="followCompany(this, '{{item.id}}')">bookmark_border</i>
           {% endif %} {% endif %}
         </p>
       </li>

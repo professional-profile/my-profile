@@ -25,9 +25,9 @@
         <button class="btn-detail"></button>
         <p class="center-align-items">
           {{item.occupation}} {% if account and account.id != item.id %} {% if item.followedAt %}
-          <i class="material-icons" onclick="unfollow(this, '{{item.id}}')">bookmark</i>
+          <i class="material-icons" onclick="unfollowUser(this, '{{item.id}}')">bookmark</i>
           {% else %}
-          <i class="material-icons" onclick="follow(this, '{{item.id}}')">bookmark_border</i>
+          <i class="material-icons" onclick="followUser(this, '{{item.id}}')">bookmark_border</i>
           {% endif %} {% endif %}
         </p>
       </li>

@@ -23,6 +23,7 @@ class resources {
   static token = "token"
   static partial = "partial"
   static subPartial = "sub"
+  static hiddenField?: string
   static lang = "lang"
   static page = "page"
   static limit = "limit"
@@ -428,7 +429,7 @@ function registerEvents(form: HTMLFormElement): void {
     }
   }
 }
-let debounceTimer: NodeJS.Timeout
+let debounceTimer: number
 
 function textChange(event: Event, url: string) {
   const target = event.target as HTMLInputElement

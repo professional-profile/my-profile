@@ -22,13 +22,13 @@
       {% if user.followedAt %}
       <button type="button" id="followBtn" name="followBtn" class="btn-follow"
         data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
-        data-followers="{{user.followerCount}}" onclick="unfollow(this, '{{user.id}}', true)">
+        data-followers="{{user.followerCount}}" onclick="unfollowUser(this, '{{user.id}}')">
         {{resource.button_unfollow}}
       </button>
       {% else %}
       <button type="button" id="followBtn" name="followBtn" class="btn-follow"
         data-follow-text="{{resource.button_follow}}" data-unfollow-text="{{resource.button_unfollow}}"
-        data-followers="{{user.followerCount}}" onclick="follow(this, '{{user.id}}', true)">
+        data-followers="{{user.followerCount}}" onclick="followUser(this, '{{user.id}}')">
         {{resource.button_follow}}
       </button>
       {% endif %} {% endif %}

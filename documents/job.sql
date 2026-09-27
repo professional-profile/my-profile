@@ -6,7 +6,7 @@ create table jobs (
   original_link varchar(300),
   published_at timestamptz,
   expired_at timestamptz,
-  company varchar(40),
+  company_id varchar(40),
   position varchar(100),
   quantity integer default 1,
   location varchar(1000),
@@ -14,16 +14,24 @@ create table jobs (
   skills character varying[],
   min_salary bigint,
   max_salary bigint,
+  status char(1),
   created_by varchar(40),
   created_at timestamptz,
   updated_by varchar(40),
   updated_at timestamptz
 );
 
-insert into jobs (id,slug,title,description,original_link,published_at,expired_at,company,position,quantity,location,applicant_count,skills,min_salary,max_salary,created_by,created_at,updated_by,updated_at) values
-	 ('GhuqiuKbTS','senior-software-engineer-technology-remote-triple-a-GhuqiuKbTS','Senior Software Engineer - Technology - Remote - Triple A','<h3>About Triple-A</h3>
+create table saved_jobs (
+  user_id varchar(40),
+  id varchar(80),
+  saved_at timestamptz,
+  primary key (user_id, id)
+);
+
+insert into jobs (id,slug,title,description,original_link,published_at,expired_at,company_id,position,quantity,location,applicant_count,skills,min_salary,max_salary,created_by,created_at,updated_by,updated_at) values
+	 ('GhuqiuKbTS','senior-software-engineer-technology-remote-kbtg-GhuqiuKbTS','Senior Software Engineer - Technology - Remote - KBTG','<h3>About KBTG</h3>
 <p>
-  Triple-A is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
+  KBTG is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
   both local and digital currencies.
 </p>
 <p>
@@ -33,8 +41,8 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Registered with the United States Financial Crimes Enforcement Network (FinCEN), licensed by the Monetary Authority of Singapore (MAS), and Banque
-  de France’s ACPR in Europe, Triple-A is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
-  cost-effective. For more information, visit www.triple-a.io.
+  de France’s ACPR in Europe, KBTG is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
+  cost-effective. For more information, visit www.kbtg.io.
 </p>
 <h4>Join the team</h4>
 <p>
@@ -43,7 +51,7 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Guided by our CEO, Eric Barbier, who brings 18 years of experience and a proven track record in building and scaling payment companies worldwide,
-  Triple-A is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
+  KBTG is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
 </p>
 <h4>You Will…</h4>
 <p>
@@ -100,15 +108,15 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 <h4>How to Apply</h4>
 <p>
   Passionate about technology and innovation in the financial sector? Ready to lead in a challenging yet rewarding environment? Send your resume to
-  hr@triple-a.io.
+  hr@kbtg.io.
 </p>
 <p>
   Join us in revolutionizing the payment industry, one transaction at a time. Be at the forefront of embracing both fiat and cryptocurrency to make a
   global impact.
-</p>','https://www.triple-a.io/careers?utm_medium=website&utm_source=Golangprojects&ref=Golangprojects&source=Golangprojects','2025-01-08 14:34:44+07',null,'Triple A','Senior Software Engineer',5,'Remote',1,'{GO,NATS,Kubernetes}',null,null,null,null,null,null),
-	 ('EEAysUeYIK','product-manager-singapore-triple-a-EEAysUeYIK','Product Manager - Singapore - Triple A','<h3>About Triple-A</h3>
+</p>','https://www.kbtg.io/careers?utm_medium=website&utm_source=Golangprojects&ref=Golangprojects&source=Golangprojects','2025-01-08 14:34:44+07',null,'kbtg','Senior Software Engineer',5,'Remote',1,'{GO,NATS,Kubernetes}',null,null,null,null,null,null),
+	 ('EEAysUeYIK','product-manager-singapore-kbtg-EEAysUeYIK','Product Manager - Singapore - KBTG','<h3>About KBTG</h3>
 <p>
-  Triple-A is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
+  KBTG is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
   both local and digital currencies.
 </p>
 <p>
@@ -118,8 +126,8 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Registered with the United States Financial Crimes Enforcement Network (FinCEN), licensed by the Monetary Authority of Singapore (MAS), and Banque
-  de France’s ACPR in Europe, Triple-A is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
-  cost-effective. For more information, visit www.triple-a.io.
+  de France’s ACPR in Europe, KBTG is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
+  cost-effective. For more information, visit www.kbtg.io.
 </p>
 <h4>Join the team</h4>
 <p>
@@ -128,7 +136,7 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Guided by our CEO, Eric Barbier, who brings 18 years of experience and a proven track record in building and scaling payment companies worldwide,
-  Triple-A is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
+  KBTG is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
 </p>
 <h4>About the Role:</h4>
 <p>
@@ -186,8 +194,8 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 <p>
   We are looking for a passionate and driven individual with a unique blend of sales enablement expertise and product marketing knowledge. If you’re
   excited about crypto and have the skills to empower our sales team with the knowledge to win, we encourage you to apply!
-</p>','https://www.triple-a.io/careers?utm_medium=website&utm_source=Golangprojects&ref=Golangprojects&source=Golangprojects','2025-01-08 14:34:44+07',null,'Triple A','Product Manager',1,'Singapore',1,'{Payment,Cryptocurrency,Blockchain,Fintech,E-commerce}',null,null,null,null,null,null),
-	 ('QlbWj12rx5','senior-software-engineer-network-remote-netbird-QlbWj12rx5','Senior Software Engineer (Network) - Remote - NetBird','<h3>Who we are</h3>
+</p>','https://www.kbtg.io/careers?utm_medium=website&utm_source=Golangprojects&ref=Golangprojects&source=Golangprojects','2025-01-08 14:34:44+07',null,'kbtg','Product Manager',1,'Singapore',1,'{Payment,Cryptocurrency,Blockchain,Fintech,E-commerce}',null,null,null,null,null,null),
+	 ('QlbWj12rx5','senior-software-engineer-network-remote-fpt-software-QlbWj12rx5','Senior Software Engineer (Network) - Remote - FPT Software','<h3>Who we are</h3>
 <h5>A team from Germany with the vision to make advanced network security accessible for everyone</h5>
 <p>
   We are a software company developing an open-source zero-trust network security platform that is both easy to use and affordable for teams of all
@@ -195,11 +203,11 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Since our launch on GitHub in 2021, we have gained trust among thousands of companies seeking secure and seamless solutions for connecting remote
-  employees and infrastructure. By replacing traditional centralized VPNs, NetBird has become a trusted choice for modern network security, connecting
+  employees and infrastructure. By replacing traditional centralized VPNs, FPT Software has become a trusted choice for modern network security, connecting
   today hundreds of thousands of users and machines worldwide. Our open-source, community-driven approach has been a key driver of our success. We
   listen to our users, and their input helps us make network security better for everyone.
 </p>
-<p>Want to see what we''re working on? Check out our GitHub repo at netbird or Networking Knowledge Hub - NetBird</p>
+<p>Want to see what we''re working on? Check out our GitHub repo at netbird or Networking Knowledge Hub - FPT Software</p>
 <h4>✏️ What you will do</h4>
 <p>
   As a Senior Software Engineer (Network), you’ll join a talented team of engineers working on an open-core platform that redefines how companies
@@ -269,11 +277,11 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
   https://www.notion.so/1466122c188d80dcb3c7cba09e0d41fb?pvs=21 . If you have any questions, feel free to reach out to hr@netbird.io
 </p>
 <p>
-  At NetBird, we value diversity and strive to provide all applicants with equal opportunities during our selection process—regardless of gender,
+  At FPT Software, we value diversity and strive to provide all applicants with equal opportunities during our selection process—regardless of gender,
   sexual identity, nationality, ethnicity, religion or belief, disability, or age. Please include only the information and documents relevant to
   evaluating your application (e.g., resume and relevant certificates or references). A photo is not required and can be omitted.
-</p>','https://careers.netbird.io/Senior-Software-Engineer-Network-1446122c188d813797c7c85884d0a246','2025-01-08 15:34:44+07',null,'NetBird','Senior Software Engineer (Network)',2,'Remote',1,'{Network,VPN,GO}',null,null,null,null,null,null),
-	 ('yUxaI3hjWA','frontend-software-engineer-remote-netbird-yUxaI3hjWA','Frontend Software Engineer - Remote - NetBird','<h3>Who we are</h3>
+</p>','https://careers.netbird.io/Senior-Software-Engineer-Network-1446122c188d813797c7c85884d0a246','2025-01-08 15:34:44+07',null,'fpt-software','Senior Software Engineer (Network)',2,'Remote',1,'{Network,VPN,GO}',null,null,null,null,null,null),
+	 ('yUxaI3hjWA','frontend-software-engineer-remote-fpt-software-yUxaI3hjWA','Frontend Software Engineer - Remote - FPT Software','<h3>Who we are</h3>
 <h5>A team from Germany with the vision to make advanced network security accessible for everyone</h5>
 <p>
   We are a software company developing an open-source zero-trust network security platform that is both easy to use and affordable for teams of all
@@ -281,14 +289,14 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Since our launch on GitHub in 2021, we have gained trust among thousands of companies seeking secure and seamless solutions for connecting remote
-  employees and infrastructure. By replacing traditional centralized VPNs, NetBird has become a trusted choice for modern network security, connecting
+  employees and infrastructure. By replacing traditional centralized VPNs, FPT Software has become a trusted choice for modern network security, connecting
   today hundreds of thousands of users and machines worldwide. Our open-source, community-driven approach has been a key driver of our success. We
   listen to our users, and their input helps us make network security better for everyone.
 </p>
-<p>Want to see what we''re working on? Check out our GitHub repo at netbird or Networking Knowledge Hub - NetBird</p>
+<p>Want to see what we''re working on? Check out our GitHub repo at netbird or Networking Knowledge Hub - FPT Software</p>
 <h4>✏️ What you will do</h4>
 <p>
-  As a Software Engineer (Frontend), you will play a key role in evolving NetBird’s product by designing and developing intuitive and responsive user
+  As a Software Engineer (Frontend), you will play a key role in evolving FPT Software’s product by designing and developing intuitive and responsive user
   interfaces. Your work will directly impact the usability, accessibility, and overall user experience of our platform, making it accessible to a
   broader audience. Specifically, you will:
 </p>
@@ -350,13 +358,13 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
   https://www.notion.so/1466122c188d80dcb3c7cba09e0d41fb?pvs=21 . If you have any questions, feel free to reach out to hr@netbird.io
 </p>
 <p>
-  At NetBird, we value diversity and strive to provide all applicants with equal opportunities during our selection process—regardless of gender,
+  At FPT Software, we value diversity and strive to provide all applicants with equal opportunities during our selection process—regardless of gender,
   sexual identity, nationality, ethnicity, religion or belief, disability, or age. Please include only the information and documents relevant to
   evaluating your application (e.g., resume and relevant certificates or references). A photo is not required and can be omitted.
-</p>','https://careers.netbird.io/Software-Engineer-Frontend-1456122c188d801eb74fde96307b0afb','2025-01-08 15:34:44+07',null,'NetBird','Frontend Software Engineer',1,'Remote',1,'{JavaScript,HTML5,CSS3,React,Nextjs}',null,null,null,null,null,null),
-	 ('STFyPb0ycn','go-lead-software-engineer-remote-triple-a-60k-150k-usd-STFyPb0ycn','GO - Lead Software Engineer - Remote - Triple A - 60k - 150k USD','<h3>About Triple-A</h3>
+</p>','https://careers.netbird.io/Software-Engineer-Frontend-1456122c188d801eb74fde96307b0afb','2025-01-08 15:34:44+07',null,'fpt-software','Frontend Software Engineer',1,'Remote',1,'{JavaScript,HTML5,CSS3,React,Nextjs}',null,null,null,null,null,null),
+	 ('STFyPb0ycn','go-lead-software-engineer-remote-kbtg-60k-150k-usd-STFyPb0ycn','GO - Lead Software Engineer - Remote - KBTG - 60k - 150k USD','<h3>About KBTG</h3>
 <p>
-  Triple-A is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
+  KBTG is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
   both local and digital currencies.
 </p>
 <p>
@@ -366,8 +374,8 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Registered with the United States Financial Crimes Enforcement Network (FinCEN), licensed by the Monetary Authority of Singapore (MAS), and Banque
-  de France’s ACPR in Europe, Triple-A is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
-  cost-effective. For more information, visit www.triple-a.io.
+  de France’s ACPR in Europe, KBTG is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
+  cost-effective. For more information, visit www.kbtg.io.
 </p>
 <h4>Join the team</h4>
 <p>
@@ -376,7 +384,7 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Guided by our CEO, Eric Barbier, who brings 18 years of experience and a proven track record in building and scaling payment companies worldwide,
-  Triple-A is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
+  KBTG is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
 </p>
 <h4>About the Role:</h4>
 <p>
@@ -413,20 +421,20 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 <h4>How to Apply</h4>
 <p>
   Passionate about technology and innovation in the financial sector? Ready to lead in a challenging yet rewarding environment? Send your resume to
-  hr@triple-a.io.
+  hr@kbtg.io.
 </p>
 <p>
   Join us in revolutionizing the payment industry, one transaction at a time. Be at the forefront of embracing both fiat and cryptocurrency to make a
   global impact.
-</p>','https://www.golangprojects.com/golang-go-job-gva-Remote-Lead-Software-Engineer-Singapore-Triple-a-remotework.html','2025-01-08 14:34:44+07',null,'Triple A','Lead Software Engineer',1,'Remote',1,'{GO,Typescript,Javascript,Web3,Microservices,Management}',60000,150000,null,null,null,null),
-	 ('wXh0XxJfM2','backend-engineer-remote-flourish-75k-to-120k-wXh0XxJfM2','Backend Engineer - Remote - Flourish - 75K to 120K','<h3>About Flourish</h3>
+</p>','https://www.golangprojects.com/golang-go-job-gva-Remote-Lead-Software-Engineer-Singapore-Triple-a-remotework.html','2025-01-08 14:34:44+07',null,'kbtg','Lead Software Engineer',1,'Remote',1,'{GO,Typescript,Javascript,Web3,Microservices,Management}',60000,150000,null,null,null,null),
+	 ('wXh0XxJfM2','backend-engineer-remote-tma-solutions-75k-to-120k-wXh0XxJfM2','Backend Engineer - Remote - TMA Solutions - 75K to 120K','<h3>About TMA Solutions</h3>
 <p>
-  Flourish Software is a leading cannabis supply chain and retail software company. We are working to empower the cannabis industry through better
+  TMA Solutions Software is a leading cannabis supply chain and retail software company. We are working to empower the cannabis industry through better
   technology.
 </p>
 <h4>What’s the opportunity?</h4>
 <p>
-  As a Backend Engineer at Flourish Software, you''ll play a pivotal role in developing mission-critical backend services that streamline compliance
+  As a Backend Engineer at TMA Solutions Software, you''ll play a pivotal role in developing mission-critical backend services that streamline compliance
   and operational processes for leading cannabis, CBD, and hemp businesses across North America. This position is for an engineer specializing in Go.
   You’ll work directly on third-party integrations with systems like Metrc and BioTrack, helping our clients stay compliant in a highly regulated
   market. This is an opportunity to solve complex, real-world challenges, collaborate with a talented team, and shape the future of a growing platform
@@ -494,10 +502,10 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
     Candidates outside the US: Compensation will be adjusted according to local market rates, with a typical range of $40,000 to $75,000 USD,
     depending on experience and region.
   </li>
-</ul>','https://www.flourishsoftware.com/careers/backend-engineer-go-remote','2025-01-08 15:34:44+07',null,'Flourish','GO Backend Engineer',3,'Remote',1,'{GO,AWS,SQL,Microservices}',75000,120000,null,null,null,null),
-	 ('woECZq5kyh','business-development-director-business-development-singapore-woECZq5kyh','Business Development Director - Business Development - Singapore - Triple A','<h3>About Triple-A</h3>
+</ul>','https://www.flourishsoftware.com/careers/backend-engineer-go-remote','2025-01-08 15:34:44+07',null,'tma-solutions','GO Backend Engineer',3,'Remote',1,'{GO,AWS,SQL,Microservices}',75000,120000,null,null,null,null),
+	 ('woECZq5kyh','business-development-director-business-development-singapore-woECZq5kyh','Business Development Director - Business Development - Singapore - KBTG','<h3>About KBTG</h3>
 <p>
-  Triple-A is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
+  KBTG is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
   both local and digital currencies.
 </p>
 <p>
@@ -507,8 +515,8 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Registered with the United States Financial Crimes Enforcement Network (FinCEN), licensed by the Monetary Authority of Singapore (MAS), and Banque
-  de France’s ACPR in Europe, Triple-A is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
-  cost-effective. For more information, visit www.triple-a.io.
+  de France’s ACPR in Europe, KBTG is trusted by over 20,000 businesses worldwide to make global crypto payments simple, secure, and
+  cost-effective. For more information, visit www.kbtg.io.
 </p>
 <h4>Join the team</h4>
 <p>
@@ -517,7 +525,7 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </p>
 <p>
   Guided by our CEO, Eric Barbier, who brings 18 years of experience and a proven track record in building and scaling payment companies worldwide,
-  Triple-A is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
+  KBTG is growing our team. If you’re bold, tenacious, and creative, we believe you’d be a perfect match for us!
 </p>
 <h4>You Will…</h4>
 <ul>
@@ -526,7 +534,7 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
     <ul>
       <li>Identify, qualify, and secure business opportunities.</li>
       <li>
-        Develop a customised sales strategy that aligns with Triple-A’s licensing regulations and client needs, ensuring a deep understanding of fund
+        Develop a customised sales strategy that aligns with KBTG’s licensing regulations and client needs, ensuring a deep understanding of fund
         flows and requirements.
       </li>
     </ul>
@@ -623,6 +631,8 @@ insert into jobs (id,slug,title,description,original_link,published_at,expired_a
 </ul>
 <h4>How to Apply</h4>
 <p>
-  If you would like to grow professionally within the FinTech and Web3 space, please send your application to hr@triple-a.io. We look forward to
+  If you would like to grow professionally within the FinTech and Web3 space, please send your application to hr@kbtg.io. We look forward to
   hearing from you!
-</p>','https://www.triple-a.io/careers?utm_medium=website&utm_source=Golangprojects&ref=Golangprojects&source=Golangprojects','2025-01-08 14:34:44+07',null,'Triple A','Business Development Director',1,'Singapore',1,'{Payment,Cryptocurrency,Blockchain}',null,null,null,null,null,null);
+</p>','https://www.kbtg.io/careers?utm_medium=website&utm_source=Golangprojects&ref=Golangprojects&source=Golangprojects','2025-01-08 14:34:44+07',null,'kbtg','Business Development Director',1,'Singapore',1,'{Payment,Cryptocurrency,Blockchain}',null,null,null,null,null,null);
+
+update jobs set status = 'P';

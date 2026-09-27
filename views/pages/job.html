@@ -4,8 +4,16 @@
     <h2>{{job.title}}</h2>
   </header>
   <div class="article-body">
+    <h4 class="article-description">{{resource.company}}: {{job.companyName}}</h4>
     <h3 class="article-description">{{resource.location}}: {{job.location}}</h3>
     <h4 class="article-meta">{{job.publishedAt}}</h4>
+    <h4 class="article-meta center-align-items">
+      {{job.publishedAt}} {% if account %} {% if job.savedAt %}
+      <i class="material-icons" onclick="unsaveJob(this, '{{job.id}}')">bookmark</i>
+      {% else %}
+      <i class="material-icons" onclick="saveJob(this, '{{job.id}}')">bookmark_border</i>
+      {% endif %} {% endif %}
+    </h4>
     <h4 class="article-meta">{{resource.quantity}}: {{job.quantity}}</h3>
       {% if isNotEmpty(job.skills) %}<h4 class="article-meta">{{resource.skills}}: {{generateTags(job.skills, true)}}
       </h4>{% endif %}

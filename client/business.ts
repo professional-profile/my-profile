@@ -1,7 +1,5 @@
-function saveArticle(target: HTMLElement, id: string, remove?: boolean) {
-  let url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  const strue = remove ? ", true" : ""
+function saveArticle(target: HTMLElement, id: string) {
+  const url = `/news/${id}`
   if (target.nodeName !== "I") {
     target = target.parentElement as HTMLElement
   }
@@ -13,16 +11,14 @@ function saveArticle(target: HTMLElement, id: string, remove?: boolean) {
   })
     .then((response) => {
       hideLoading()
-      if (response.ok) {
+      if (response.ok || response.status === 409) {
         toast(resource.article_save_success)
         target.onclick = null
         target.innerText = "bookmark"
-        target.setAttribute("onclick", `removeItem(this, '${escapeHTML(id)}'${strue})`)
+        target.setAttribute("onclick", `unsaveArticle(this, '${escapeHTML(id)}')`)
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 409) {
-          toast(resource.article_save_conflict)
         } else if (response.status === 422) {
           alertWarning(resource.article_save_fail)
         }
@@ -30,10 +26,8 @@ function saveArticle(target: HTMLElement, id: string, remove?: boolean) {
     })
     .catch((err) => handleError(err, resource.error_network))
 }
-function unsaveArticle(target: HTMLElement, id: string, remove?: boolean) {
-  let url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  const strue = remove ? ", true" : ""
+function unsaveArticle(target: HTMLElement, id: string) {
+  const url = `/news/${id}`
   if (target.nodeName !== "I") {
     target = target.parentElement as HTMLElement
   }
@@ -45,16 +39,68 @@ function unsaveArticle(target: HTMLElement, id: string, remove?: boolean) {
   })
     .then((response) => {
       hideLoading()
-      if (response.ok) {
+      if (response.ok || response.status === 410) {
         toast(resource.article_unsave_success)
         target.onclick = null
         target.innerText = "bookmark_border"
-        target.setAttribute("onclick", `saveItem(this, '${escapeHTML(id)}'${strue})`)
+        target.setAttribute("onclick", `saveArticle(this, '${escapeHTML(id)}')`)
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 410) {
-          toast(resource.article_unsave_success)
+        }
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
+}
+function saveJob(target: HTMLElement, id: string) {
+  const url = `/jobs/${id}`
+  if (target.nodeName !== "I") {
+    target = target.parentElement as HTMLElement
+  }
+  const resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "PATCH",
+    headers: getHttpHeaders(),
+  })
+    .then((response) => {
+      hideLoading()
+      if (response.ok || response.status === 409) {
+        toast(resource.job_save_success)
+        target.onclick = null
+        target.innerText = "bookmark"
+        target.setAttribute("onclick", `unsaveJob(this, '${escapeHTML(id)}')`)
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
+        } else if (response.status === 422) {
+          alertWarning(resource.job_save_fail)
+        }
+      }
+    })
+    .catch((err) => handleError(err, resource.error_network))
+}
+function unsaveJob(target: HTMLElement, id: string) {
+  const url = `/jobs/${id}`
+  if (target.nodeName !== "I") {
+    target = target.parentElement as HTMLElement
+  }
+  const resource = getResource()
+  showLoading()
+  fetch(url, {
+    method: "DELETE",
+    headers: getHttpHeaders(),
+  })
+    .then((response) => {
+      hideLoading()
+      if (response.ok || response.status === 410) {
+        toast(resource.job_unsave_success)
+        target.onclick = null
+        target.innerText = "bookmark_border"
+        target.setAttribute("onclick", `saveJob(this, '${escapeHTML(id)}')`)
+      } else {
+        if (response.status === 401) {
+          window.location.href = buildLoginUrl()
         }
       }
     })
@@ -125,13 +171,23 @@ function removeUseful(target: HTMLElement, id: string) {
     .catch((err) => handleError(err, resource.error_network))
 }
 
-function follow(target: HTMLElement, id: string, remove?: boolean) {
-  let url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  if (target.nodeName !== "I" && target.nodeName !== "BUTTON") {
-    target = target.parentElement as HTMLElement
-  }
-  const strue = remove ? ", true" : ""
+function followCompany(target: HTMLElement, id: string) {
+  const resource = getResource()
+  follow(target, id, `/companies/${id}`, "unfollowCompany", resource.company_followers, resource.company_follow_success)
+}
+function unfollowCompany(target: HTMLElement, id: string) {
+  const resource = getResource()
+  unfollow(target, id, `/companies/${id}`, "followCompany", resource.company_followers, resource.company_unfollow_success)
+}
+function followUser(target: HTMLElement, id: string) {
+  const resource = getResource()
+  follow(target, id, `/users/${id}`, "unfollowUser", resource.user_profile_followers, resource.user_profile_follow_success)
+}
+function unfollowUser(target: HTMLElement, id: string) {
+  const resource = getResource()
+  unfollow(target, id, `/users/${id}`, "followUser", resource.user_profile_followers, resource.user_profile_unfollow_success)
+}
+function follow(target: HTMLElement, id: string, url: string, unfollowFunction: string, folowersText: string, successMsg: string) {
   const resource = getResource()
   showLoading()
   fetch(url, {
@@ -140,39 +196,34 @@ function follow(target: HTMLElement, id: string, remove?: boolean) {
   })
     .then((response) => {
       hideLoading()
-      if (response.ok) {
-        toast(resource.user_profile_follow_success)
+      if (response.ok || response.status === 409) {
+        toast(successMsg)
         if (target.nodeName === "I") {
           target.onclick = null
           target.innerText = "bookmark"
-          target.setAttribute("onclick", `unfollow(this, '${escapeHTML(id)}'${strue})`)
+          target.setAttribute("onclick", `${unfollowFunction}(this, '${escapeHTML(id)}')`)
         } else if (target.nodeName === "BUTTON") {
           target.onclick = null
           target.innerText = target.getAttribute("data-unfollow-text") || ""
-          target.setAttribute("onclick", `unfollow(this, '${escapeHTML(id)}'${strue})`)
+          target.setAttribute("onclick", `${unfollowFunction}(this, '${escapeHTML(id)}')`)
           let followers = parseInt(target.getAttribute("data-followers") || "0", 10)
           followers = followers + 1
           target.setAttribute("data-followers", "" + followers)
           const p = document.getElementById("followerCount")
           if (p && p.lastChild) {
-            const newText = format(resource.user_profile_followers, followers)
+            const newText = format(folowersText, followers)
             p.lastChild.textContent = newText
           }
         }
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 409) {
-          toast(resource.user_profile_follow_conflict)
         }
       }
     })
     .catch((err) => handleError(err, resource.error_network))
 }
-function unfollow(target: HTMLElement, id: string, remove?: boolean) {
-  let url = getCurrentURL()
-  url = (remove ? removeLast(url) : url) + "/" + id
-  const strue = remove ? ", true" : ""
+function unfollow(target: HTMLElement, id: string, url: string, followFunction: string, folowersText: string, successMsg: string) {
   showLoading()
   fetch(url, {
     method: "DELETE",
@@ -180,30 +231,28 @@ function unfollow(target: HTMLElement, id: string, remove?: boolean) {
   })
     .then((response) => {
       hideLoading()
-      if (response.ok) {
-        toast(resource.user_profile_unfollow_success)
+      if (response.ok || response.status === 410) {
+        toast(successMsg)
         if (target.nodeName === "I") {
           target.onclick = null
           target.innerText = "bookmark_border"
-          target.setAttribute("onclick", `follow(this, '${escapeHTML(id)}'${strue})`)
+          target.setAttribute("onclick", `follow(this, '${escapeHTML(id)}')`)
         } else if (target.nodeName === "BUTTON") {
           target.onclick = null
           target.innerText = target.getAttribute("data-follow-text") || ""
-          target.setAttribute("onclick", `follow(this, '${escapeHTML(id)}'${strue})`)
+          target.setAttribute("onclick", `follow(this, '${escapeHTML(id)}')`)
           let followers = parseInt(target.getAttribute("data-followers") || "0", 10)
           followers = followers - 1
           target.setAttribute("data-followers", "" + followers)
           const p = document.getElementById("followerCount")
           if (p && p.lastChild) {
-            const newText = format(resource.user_profile_followers, followers)
+            const newText = format(folowersText, followers)
             p.lastChild.textContent = newText
           }
         }
       } else {
         if (response.status === 401) {
           window.location.href = buildLoginUrl()
-        } else if (response.status === 410) {
-          toast(resource.user_profile_unfollow_conflict)
         }
       }
     })

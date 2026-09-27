@@ -6,6 +6,7 @@ export const vi = {
 
   articles: "Bài viết",
   saved_articles: "Bài viết đã lưu",
+  saved_jobs: "Việc làm đã lưu",
   my_articles: "Bài viết của tôi",
   my_article: "Bài viết của tôi",
   followers: "Người theo dõi",

@@ -1,6 +1,8 @@
 import { Attributes, Filter, SearchResult } from "onecore"
 import { Article } from "../shared/article"
 import { Job, JobFilter } from "../shared/job"
+import { RateSummary } from "../shared/rate"
+import { Rate, RateFilter } from "../shared/rates"
 import { User } from "../shared/user"
 import { ArticleFilter } from "./article"
 import { UserFilter } from "./user"
@@ -43,6 +45,8 @@ export interface CompanyService {
   follow(id: string, companyId: string): Promise<number>
   unfollow(id: string, companyId: string): Promise<number>
   getFollowers(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>>
+  getRateSummary(id: string): Promise<RateSummary>
+  searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Rate>>
 }
 
 export const companyModel: Attributes = {
