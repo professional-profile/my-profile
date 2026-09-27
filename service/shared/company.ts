@@ -59,14 +59,14 @@ export const companyModel: Attributes = {
     noinsert: true,
     noupdate: true,
   },
-  followingAt: {
-    column: "following_at",
+  followedAt: {
+    column: "followed_at",
     type: "datetime",
     noinsert: true,
     noupdate: true,
   },
-  followedAt: {
-    column: "followed_at",
+  followingAt: {
+    column: "following_at",
     type: "datetime",
     noinsert: true,
     noupdate: true,

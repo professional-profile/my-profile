@@ -25,13 +25,12 @@ import { RateService, SubmittedRate } from "rate-service"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { Published } from "../shared/article"
+import { Company } from "../shared/company"
 import { JobFilter } from "../shared/job"
 import { calculatePercent, formatRate } from "../shared/rate"
 import { RateFilter } from "../shared/rates"
 import { render, renderError404, renderError500 } from "../template"
-import { ArticleFilter } from "./article"
-import { Company, CompanyFilter, CompanyService } from "./company"
-import { UserFilter } from "./user"
+import { ArticleFilter, CompanyFilter, CompanyService, UserFilter } from "./company"
 
 export class CompanyController extends FollowController {
   constructor(protected service: CompanyService, protected rateService: RateService) {
@@ -279,12 +278,12 @@ export class CompanyController extends FollowController {
 
       const sortSearch = removeSort(search)
       const prefix = sortSearch ? `?${sortSearch}&` : `?`
-      const sort1: Item = { id: "timeDescSort", value: "-followedAt", text: resource.sort_time_desc }
-      const sort2: Item = { id: "timeAscSort", value: "followedAt", text: resource.sort_time_asc }
-      const sort3: Item = { id: "nameAscSort", value: "displayName", text: resource.sort_name_asc }
-      const sort4: Item = { id: "nameDescSort", value: "-displayName", text: resource.sort_name_desc }
+      const sort1: Item = { id: "timeDescSort", value: "-followedAt", text: resource.sort_time_desc, fulltext: resource.sort_desc_time_desc }
+      const sort2: Item = { id: "timeAscSort", value: "followedAt", text: resource.sort_time_asc, fulltext: resource.sort_desc_time_asc }
+      const sort3: Item = { id: "nameAscSort", value: "displayName", text: resource.sort_name_asc, fulltext: resource.sort_desc_name_asc }
+      const sort4: Item = { id: "nameDescSort", value: "-displayName", text: resource.sort_name_desc, fulltext: resource.sort_desc_name_desc }
       const sorts = [sort1, sort2, sort3, sort4]
-      const sortText = getSortText(sorts, filter.sort, resource.sort_time_desc, true)
+      const sortText = getSortText(sorts, filter.sort, resource.sort_time_desc)
       buildSorts(sorts, `${prefix}${resources.sort}=`)
 
       const ctx: any = {

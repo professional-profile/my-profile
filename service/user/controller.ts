@@ -4,7 +4,6 @@ import {
   buildPages,
   buildPageSearch,
   buildSorts,
-  buildSortSearch,
   escape,
   escapeArray,
   FollowController,
@@ -23,9 +22,7 @@ import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getLangSearch, getResource } from "../resources"
 import { Published } from "../shared/article"
 import { render, renderError404, renderError500 } from "../template"
-import { ArticleFilter } from "./article"
-import { CompanyFilter } from "./company"
-import { User, UserFilter, UserService } from "./user"
+import { ArticleFilter, CompanyFilter, User, UserFilter, UserService } from "./user"
 
 const fields = ["id", "username", "email", "displayName", "status"]
 export class UserController extends FollowController {
@@ -47,7 +44,7 @@ export class UserController extends FollowController {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
     filter.userId = res.locals.userId
-    const { page, limit, sort } = filter
+    const { page, limit } = filter
     try {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)
@@ -67,7 +64,6 @@ export class UserController extends FollowController {
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
         langSearch,
-        sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })
     } catch (err) {
@@ -104,7 +100,7 @@ export class UserController extends FollowController {
     filter.userId = userId
     const id = await this.service.getIdBySlug(req.params.slug as string)
     filter.followedUserId = id
-    const { page, limit, sort } = filter
+    const { page, limit } = filter
     try {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)
@@ -116,6 +112,17 @@ export class UserController extends FollowController {
         })
       }
       const search = getSearch(req.url)
+
+      const sortSearch = removeSort(search)
+      const prefix = sortSearch ? `?${sortSearch}&` : `?`
+      const sort1: Item = { id: "followerDescSort", value: "-followedAt", text: resource.sort_time_desc, fulltext: resource.sort_desc_time_desc }
+      const sort2: Item = { id: "followerAscSort", value: "followedAt", text: resource.sort_time_asc, fulltext: resource.sort_desc_time_asc }
+      const sort3: Item = { id: "nameAscSort", value: "displayName", text: resource.sort_name_asc, fulltext: resource.sort_desc_name_asc }
+      const sort4: Item = { id: "nameDescSort", value: "-displayName", text: resource.sort_name_desc, fulltext: resource.sort_desc_name_desc }
+      const sorts = [sort1, sort2, sort3, sort4]
+      const sortText = getSortText(sorts, filter.sort, resource.sort_desc_time_desc)
+      buildSorts(sorts, `${prefix}${resources.sort}=`)
+
       const ctx: any = {
         resource,
         limits: resources.limits,
@@ -123,7 +130,8 @@ export class UserController extends FollowController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sorts,
+        sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       }
       const partial = isPartial(req)
@@ -153,7 +161,7 @@ export class UserController extends FollowController {
     filter.userId = userId
     const id = await this.service.getIdBySlug(req.params.slug as string)
     filter.followingUserId = id
-    const { page, limit, sort } = filter
+    const { page, limit } = filter
     try {
       const result = await this.service.search(filter, limit, page)
       const list = escapeArray(result.list)
@@ -165,6 +173,17 @@ export class UserController extends FollowController {
         })
       }
       const search = getSearch(req.url)
+
+      const sortSearch = removeSort(search)
+      const prefix = sortSearch ? `?${sortSearch}&` : `?`
+      const sort1: Item = { id: "followingDescSort", value: "-followingAt", text: resource.sort_time_desc, fulltext: resource.sort_desc_time_desc }
+      const sort2: Item = { id: "followingAscSort", value: "followingAt", text: resource.sort_time_asc, fulltext: resource.sort_desc_time_asc }
+      const sort3: Item = { id: "nameAscSort", value: "-displayName", text: resource.sort_name_asc, fulltext: resource.sort_desc_name_asc }
+      const sort4: Item = { id: "nameDescSort", value: "displayName", text: resource.sort_name_desc, fulltext: resource.sort_desc_name_desc }
+      const sorts = [sort1, sort2, sort3, sort4]
+      const sortText = getSortText(sorts, filter.sort, resource.sort_desc_time_desc)
+      buildSorts(sorts, `${prefix}${resources.sort}=`)
+
       const ctx: any = {
         resource,
         limits: resources.limits,
@@ -172,7 +191,8 @@ export class UserController extends FollowController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sorts,
+        sortText,
         message: buildMessage(resource, list, limit, page, result.total),
       }
       const partial = isPartial(req)
@@ -297,12 +317,12 @@ export class UserController extends FollowController {
 
       const sortSearch = removeSort(search)
       const prefix = sortSearch ? `?${sortSearch}&` : `?`
-      const sort1: Item = { id: "followingDescSort", value: "-followingAt", text: resource.sort_time_desc }
-      const sort2: Item = { id: "followingAscSort", value: "followingAt", text: resource.sort_time_asc }
-      const sort3: Item = { id: "nameAscSort", value: "name", text: resource.sort_name_asc }
-      const sort4: Item = { id: "nameDescSort", value: "-name", text: resource.sort_name_desc }
+      const sort1: Item = { id: "followingDescSort", value: "-followingAt", text: resource.sort_time_desc, fulltext: resource.sort_desc_time_desc }
+      const sort2: Item = { id: "followingAscSort", value: "followingAt", text: resource.sort_time_asc, fulltext: resource.sort_desc_time_asc }
+      const sort3: Item = { id: "nameAscSort", value: "name", text: resource.sort_name_asc, fulltext: resource.sort_desc_name_asc }
+      const sort4: Item = { id: "nameDescSort", value: "-name", text: resource.sort_name_desc, fulltext: resource.sort_desc_name_desc }
       const sorts = [sort1, sort2, sort3, sort4]
-      const sortText = getSortText(sorts, filter.sort, resource.sort_time_desc)
+      const sortText = getSortText(sorts, filter.sort, resource.sort_desc_time_desc)
       buildSorts(sorts, `${prefix}${resources.sort}=`)
 
       const ctx: any = {

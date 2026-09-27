@@ -1,14 +1,12 @@
 import { FollowService } from "follow-service"
 import { FollowRepository, SearchResult } from "onecore"
 import { Article } from "../shared/article"
+import { Company } from "../shared/company"
 import { Job, JobFilter } from "../shared/job"
 import { RateSummary, RateSummaryRepository, zeroSummary } from "../shared/rate"
 import { Rate, RateFilter, RatesRepository } from "../shared/rates"
 import { User } from "../shared/user"
-import { ArticleFilter, ArticleRepository } from "./article"
-import { Company, CompanyFilter, CompanyRepository, CompanyService } from "./company"
-import { JobRepository } from "./job"
-import { UserFilter, UserRepository } from "./user"
+import { ArticleFilter, ArticleRepository, CompanyFilter, CompanyRepository, CompanyService, JobRepository, UserFilter, UserRepository } from "./company"
 
 export class CompanyUseCase extends FollowService<string> implements CompanyService {
   constructor(private repository: CompanyRepository, protected articleRepository: ArticleRepository, protected jobRepository: JobRepository, protected userRepository: UserRepository, protected followRepository: FollowRepository<string>, protected rateSummaryRepository: RateSummaryRepository, protected ratesRepository: RatesRepository) {

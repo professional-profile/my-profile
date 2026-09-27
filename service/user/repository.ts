@@ -67,6 +67,7 @@ export function buildQuery(filter: UserFilter): Statement {
   let query: string
   let sub = ""
   if (filter.followingUserId) {
+    console.log("filter.followingUserId", filter.followingUserId)
     sub = ` inner join user_following ufm on ufm.id = ${param(i++)} and ufm.following = u.id `
     params.push(filter.followingUserId)
   } else if (filter.followedUserId) {
@@ -137,5 +138,6 @@ export function buildQuery(filter: UserFilter): Statement {
   if (orderBy) {
     query = query + ` order by ${orderBy}`
   }
+  console.log(query, params)
   return { query, params }
 }

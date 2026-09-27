@@ -1,41 +1,29 @@
-import { Attributes, Filter, SearchResult } from "onecore"
+import { Filter, SearchResult, TimeRange } from "onecore"
 import { Article } from "../shared/article"
+import { Company } from "../shared/company"
 import { Job, JobFilter } from "../shared/job"
 import { RateSummary } from "../shared/rate"
 import { Rate, RateFilter } from "../shared/rates"
 import { User } from "../shared/user"
-import { ArticleFilter } from "./article"
-import { UserFilter } from "./user"
 
-export interface Company {
-  id: string
-  slug: string
-  name: string
-  overview: string
-  website?: string
-  industry?: string
-  size?: string
-  logo?: string
-  coverURL?: string
-  status: string
-
-  followerCount?: number
-  followingAt?: Date
-  followedAt?: Date
-}
 export interface CompanyFilter extends Filter {
-  id?: string
-  slug?: string
   name?: string
   status?: string
   userId?: string
 }
-
-export interface CompanyRepository {
-  search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
-  load(slug: string, userId?: string): Promise<Company | null>
-  getIdBySlug(slug: string): Promise<string>
+export interface ArticleFilter extends Filter {
+  publishedAt: TimeRange
+  tags?: string[]
+  status?: string
+  authorId?: string
+  companyId?: string
+  userId?: string
 }
+export interface UserFilter extends Filter {
+  companyId?: string
+  userId?: string
+}
+
 export interface CompanyService {
   search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
   load(slug: string, userId?: string): Promise<Company | null>
@@ -49,52 +37,17 @@ export interface CompanyService {
   searchRates(filter: RateFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Rate>>
 }
 
-export const companyModel: Attributes = {
-  id: {
-    length: 40,
-    required: true,
-    key: true,
-  },
-  slug: {
-    length: 150,
-  },
-  name: {
-    length: 255,
-    q: true,
-  },
-  overview: {
-    length: 3000,
-  },
-  website: {
-    length: 255,
-  },
-  industry: {
-    length: 100,
-  },
-  size: {
-    length: 100,
-  },
-  logo: {
-    length: 300,
-  },
-  coverURL: {
-    column: "cover_url",
-    length: 500,
-  },
-  status: {
-    length: 1,
-  },
-
-  followerCount: {
-    column: "follower_count",
-    type: "integer",
-    noinsert: true,
-    noupdate: true,
-  },
-  followedAt: {
-    column: "followed_at",
-    type: "datetime",
-    noinsert: true,
-    noupdate: true,
-  },
+export interface CompanyRepository {
+  search(filter: CompanyFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Company>>
+  load(slug: string, userId?: string): Promise<Company | null>
+  getIdBySlug(slug: string): Promise<string>
+}
+export interface ArticleRepository {
+  search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
+}
+export interface JobRepository {
+  search(filter: JobFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Job>>
+}
+export interface UserRepository {
+  search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>>
 }

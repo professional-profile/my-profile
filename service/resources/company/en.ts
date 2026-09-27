@@ -5,6 +5,8 @@ export const en = {
 
   sort_name_asc: "Name",
   sort_name_desc: "Name Revert",
+  sort_desc_name_asc: "Sort by Name",
+  sort_desc_name_desc: "Sort by Name Revert",
 
   company_followers: "{0} followers",
   company_follow_success: "Follow successfully",

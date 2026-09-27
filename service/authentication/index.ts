@@ -89,7 +89,7 @@ export class SigninController {
 
             let redirectUrl = query(req, "redirectUrl")
             if (!redirectUrl || redirectUrl === "") {
-              redirectUrl = "/companies/fpt-software/review"
+              redirectUrl = "/news"
             }
             return res.redirect(redirectUrl)
           } else {
