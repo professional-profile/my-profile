@@ -18,14 +18,11 @@ export interface Article {
   savedAt?: Date
 }
 export interface ArticleFilter extends Filter {
-  id?: string
-  slug?: string
-  title?: string
-  description?: string
   status?: string
   publishedAt: TimeRange
   tags?: string[]
   authorId?: string
+
   userId?: string
   isSaved?: boolean
 }

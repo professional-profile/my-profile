@@ -78,17 +78,17 @@ export interface UserFilter extends Filter {
   followingUserId?: string
 }
 export interface ArticleFilter extends Filter {
+  status?: string
   publishedAt: TimeRange
   tags?: string[]
-  status?: string
   authorId?: string
+
   userId?: string
 }
 export interface CompanyFilter extends Filter {
-  status?: string
   userId?: string
   currentUserId?: string
-  isSaved?: boolean
+  status?: string
 }
 
 export interface UserService {

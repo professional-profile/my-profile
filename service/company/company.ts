@@ -12,10 +12,11 @@ export interface CompanyFilter extends Filter {
   userId?: string
 }
 export interface ArticleFilter extends Filter {
+  status?: string
   publishedAt: TimeRange
   tags?: string[]
-  status?: string
   authorId?: string
+
   companyId?: string
   userId?: string
 }
