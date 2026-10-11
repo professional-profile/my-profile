@@ -238,8 +238,19 @@ export class CompanyController extends FollowController {
   async getFollowers(req: Request, res: Response) {
     const lang = getLang(req)
     const resource = getResource(lang)
-    const slug = req.params.slug as string
+    const langSearch = getLangSearch(lang)
     const userId: string = res.locals.userId
+
+    let filter: UserFilter = { limit: resources.defaultLimit }
+    if (hasSearch(req)) {
+      filter = fromRequest<UserFilter>(req)
+    }
+    filter.userId = userId
+    if (!filter.sort) {
+      filter.sort = "-followedAt"
+    }
+
+    const slug = req.params.slug as string
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)
     const view = partial && subPartial ? "company/followers" : "company-followers"
@@ -255,15 +266,8 @@ export class CompanyController extends FollowController {
         }
         companyId = company.id
       }
-      let filter: UserFilter = { limit: resources.defaultLimit, companyId }
-      if (hasSearch(req)) {
-        filter = fromRequest<UserFilter>(req)
-      }
-      if (!filter.sort) {
-        filter.sort = "-followedAt"
-      }
-      filter.userId = userId
       filter.companyId = companyId
+
       const { page, limit } = filter
       const result = await this.service.getFollowers(filter, limit, page)
       const list = escapeArray(result.list)
@@ -311,6 +315,7 @@ export class CompanyController extends FollowController {
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const userId: string = res.locals.userId
+
     const slug = req.params.slug as string
     const partial = isPartial(req)
     const subPartial = isSubPartial(req)

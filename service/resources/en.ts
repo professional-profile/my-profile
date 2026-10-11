@@ -135,10 +135,13 @@ export const en = {
   quantity: "Quantity",
   location: "Location",
 
+  review_required_error: "Please select rating.",
+  review_success: "Review is submitted successfully.",
   reviews: "Reviews",
   ratings_and_reviews: "Ratings and Reviews",
   write_a_review: "Write a review",
   review_placeholder: "Share your experience",
+  useful_review_description: "It is useful",
 
   sort_useful_desc: "Most Useful",
   sort_time_desc: "Most Recent",
@@ -151,6 +154,11 @@ export const en = {
   sort_desc_time_asc: "Sort by Oldest",
   sort_desc_rate_desc: "Sort by Highest Rating",
   sort_desc_rate_asc: "Sort by Lowest Rating",
+
+  sort_name_asc: "Name",
+  sort_name_desc: "Name Revert",
+  sort_desc_name_asc: "Sort by Name",
+  sort_desc_name_desc: "Sort by Name Revert",
+
   all: "All",
-  useful_review_description: "It is useful"
 }

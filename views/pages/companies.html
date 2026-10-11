@@ -17,10 +17,10 @@
       </section>
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />
     </form>
-    <ul class="row list">
+    <ul class="row list card-grid">
       {% for item in list %}
       <li class="col s12 l6 img-item">
-        <img src="{{item.logo}}" alt="item logo" />
+        <img src="{{item.logo}}" alt="Company logo" />
         <a href="/companies/{{item.slug}}{{langSearch}}" onclick="navigate(event)">{{item.name}}</a>
         <button class="btn-detail"></button>
         <p class="center-align-items">

@@ -18,9 +18,11 @@ export interface Job {
   skills?: string[]
   minSalary?: number
   maxSalary?: number
+  status: string
   companyId?: string
   companyName?: string
-  status: string
+  logo?: string
+  savedAt?: Date
 }
 export interface JobFilter extends Filter {
   id?: string
@@ -91,24 +93,23 @@ export const jobModel: Attributes = {
   companyId: {
     column: "company_id",
   },
-  status: {
-  },
+  status: {},
 
   savedAt: {
     column: "saved_at",
     type: "datetime",
     noupdate: true,
-    noinsert: true
+    noinsert: true,
   },
   companyName: {
     column: "company_name",
     noupdate: true,
-    noinsert: true
+    noinsert: true,
   },
   logo: {
     noupdate: true,
-    noinsert: true
-  }
+    noinsert: true,
+  },
 }
 
 export function buildQuery(filter: JobFilter): Statement {
