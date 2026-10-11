@@ -4,6 +4,7 @@ export const vi = {
   profiles: "Hồ sơ",
   about: "Giới thiệu",
 
+  settings: "Cấu hình",
   articles: "Bài viết",
   saved_articles: "Bài viết đã lưu",
   saved_jobs: "Việc làm đã lưu",
@@ -120,9 +121,10 @@ export const vi = {
 
   keyword: "Keyword",
 
+  notification: "Thông báo",
+  email: "Thư điện tử",
   country: "Quốc gia",
   company: "Công ty",
-  email: "Thư điện tử",
   phone: "Số điện thoại",
   fullname: "Tên",
   job_title: "Chức danh",

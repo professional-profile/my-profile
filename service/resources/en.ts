@@ -4,6 +4,7 @@ export const en = {
   profiles: "Profiles",
   about: "About",
 
+  settings: "Settings",
   articles: "Articles",
   saved_articles: "My saved articles",
   saved_jobs: "My saved jobs",
@@ -120,9 +121,10 @@ export const en = {
 
   keyword: "Keyword",
 
+  notification: "Notification",
+  email: "Email",
   country: "Country",
   company: "Company",
-  email: "Email",
   phone: "Telephone",
   fullname: "Full Name",
   job_title: "Job Title",

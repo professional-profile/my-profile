@@ -24,7 +24,6 @@ import { Published } from "../shared/article"
 import { render, renderError404, renderError500 } from "../template"
 import { ArticleFilter, CompanyFilter, User, UserFilter, UserService } from "./user"
 
-const fields = ["id", "username", "email", "displayName", "status"]
 export class UserController extends FollowController {
   constructor(protected service: UserService) {
     super(service, "id", "userId")
@@ -289,7 +288,7 @@ export class UserController extends FollowController {
       filter = fromRequest<CompanyFilter>(req)
     }
     if (!filter.sort) {
-      filter.sort = "-following_at"
+      filter.sort = "-followingAt"
     }
     filter.status = Published
     filter.currentUserId = res.locals.userId

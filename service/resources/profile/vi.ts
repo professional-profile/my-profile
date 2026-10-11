@@ -1,7 +1,7 @@
 export const vi = {
-  settings: "Settings",
   my_profile: "My profile",
   my_password: "My password",
+
   skills: "Kỹ năng",
   interests: "Quan tâm",
   achievements: "Thành tựu",

@@ -1,7 +1,7 @@
 export const en = {
-  settings: "Settings",
   my_profile: "My profile",
   my_password: "My password",
+
   skills: "Skills",
   interests: "Interests",
   achievements: "Achievements",
