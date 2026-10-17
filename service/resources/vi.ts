@@ -134,9 +134,6 @@ export const vi = {
   published_at_from: "Đăng sau khi",
   published_at_to: "Đăng trước khi",
 
-  quantity: "Số lượng",
-  location: "Vị trí",
-
   review_required_error: "Vui lòng đánh giá.",
   review_success: "Đánh giá đã được gửi thành công.",
   reviews: "Đánh giá",

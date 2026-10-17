@@ -8,6 +8,8 @@ import { vi as authenticationVI } from "./authentication/vi"
 import { en as companyEN } from "./company/en"
 import { vi as companyVI } from "./company/vi"
 import { en as commonEN } from "./en"
+import { en as jobEN } from "./job/en"
+import { vi as jobVI } from "./job/vi"
 import { en as profileEN } from "./profile/en"
 import { vi as profileVI } from "./profile/vi"
 import { vi as commonVI } from "./vi"
@@ -30,14 +32,16 @@ const en: StringMap = {
   ...authenticationEN,
   ...articleEN,
   ...profileEN,
-  ...companyEN
+  ...companyEN,
+  ...jobEN,
 }
 const vi: StringMap = {
   ...commonVI,
   ...authenticationVI,
   ...articleVI,
   ...profileVI,
-  ...companyVI
+  ...companyVI,
+  ...jobVI,
 }
 
 export const resources: Resources = {

@@ -2,6 +2,7 @@ import { merge } from "config-plus"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
+import { TokenVerifier } from "express-jsonwebtoken"
 import { resources as expressResources, generateStarChips, generateTags } from "express-web-kit"
 import http from "http"
 import { createLogger } from "logger-core"
@@ -9,7 +10,7 @@ import nunjucks from "nunjucks"
 import { Pool } from "pg"
 import { datetimeToString } from "ui-formatter"
 import { config, env } from "./config"
-import { route, TokenVerifier } from "./service"
+import { route } from "./service"
 import { useContext } from "./service/context"
 import { resources } from "./service/template"
 
@@ -38,7 +39,7 @@ app.set("view engine", "html")
 const logger = createLogger(cfg.log)
 resources.log = logger.error
 
-const verifier = new TokenVerifier("account", "accessToken", cfg.token.secret, cfg.token.expires, "rememberToken", cfg.rememberToken.secret)
+const verifier = new TokenVerifier("account", "userId", "id", "accessToken", cfg.token.secret, cfg.token.expires, "lax", "rememberToken", cfg.rememberToken.secret)
 app.use(cookieParser(), verifier.verify)
 
 // const middleware = new MiddlewareLogger(logger.info, cfg.middleware)

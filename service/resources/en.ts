@@ -134,9 +134,6 @@ export const en = {
   published_at_from: "Published At From",
   published_at_to: "Published At To",
 
-  quantity: "Quantity",
-  location: "Location",
-
   review_required_error: "Please select rating.",
   review_success: "Review is submitted successfully.",
   reviews: "Reviews",

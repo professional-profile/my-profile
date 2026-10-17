@@ -11,8 +11,6 @@ export const vi = {
   draft: "Nháp",
 
   article_save_success: "Lưu bài viết thành công",
-  article_save_conflict: "Không có thay đổi. Bạn đã bỏ lưu bài viết này trước đó.",
   article_save_fail: "Bạn đã đạt đến giới hạn số lượng bài viết đã lưu: 200. Hãy xóa một số bài viết để có thêm vị trí lưu.",
   article_unsave_success: "Bỏ lưu bài viết thành công.",
-  article_unsave_conflict: "Không có thay đổi. Bạn đã lưu bài viết này trước đó.",
 }
